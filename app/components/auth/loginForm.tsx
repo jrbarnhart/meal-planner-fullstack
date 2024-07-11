@@ -12,7 +12,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,6 +19,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { Link } from "@remix-run/react";
 
 export default function LoginForm() {
   const loginForm = useForm<z.infer<typeof loginFormSchema>>({
@@ -81,7 +81,13 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Log In</Button>
+            <div className="space-x-2">
+              <Button type="submit">Log In</Button>
+              <Button type="button">Sign Up</Button>
+              <Link to={"/meals"}>
+                <Button type="button">Try Out</Button>
+              </Link>
+            </div>
           </form>
         </Form>
       </CardContent>
