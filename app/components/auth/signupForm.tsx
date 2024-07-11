@@ -37,8 +37,10 @@ export default function SignupForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Welcome to Munchlify!</CardTitle>
-        <CardDescription>Existing users can log in below.</CardDescription>
+        <CardTitle>Create Account</CardTitle>
+        <CardDescription>
+          Also, feel free to try the app out first.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...signupForm}>
