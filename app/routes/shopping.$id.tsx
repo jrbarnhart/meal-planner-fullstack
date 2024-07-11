@@ -1,6 +1,6 @@
 import { useParams } from "@remix-run/react";
 
-export default function Recipes() {
+export default function ShoppingList() {
   const params = useParams();
 
   return (
