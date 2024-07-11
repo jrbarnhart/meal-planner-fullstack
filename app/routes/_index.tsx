@@ -1,10 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import LoginForm from "~/components/auth/loginForm";
 
 export const meta: MetaFunction = () => {
   return [
@@ -16,12 +11,7 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div className="font-sans p-4">
-      <Card>
-        <CardHeader>
-          <CardTitle>Welcome to Munchlify!</CardTitle>
-          <CardDescription>Existing users can log in below.</CardDescription>
-        </CardHeader>
-      </Card>
+      <LoginForm />
     </div>
   );
 }
