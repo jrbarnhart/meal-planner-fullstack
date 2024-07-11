@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { z } from "zod";
-import { loginFormSchema } from "~/lib/zodSchemas/loginFormSchema";
+import { loginFormSchema } from "~/lib/zodSchemas/authFormSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
