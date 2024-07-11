@@ -83,7 +83,9 @@ export default function LoginForm() {
             />
             <div className="space-x-2">
               <Button type="submit">Log In</Button>
-              <Button type="button">Sign Up</Button>
+              <Link to={"/signup"}>
+                <Button type="button">Sign Up</Button>
+              </Link>
               <Link to={"/meals"}>
                 <Button type="button">Try Out</Button>
               </Link>
