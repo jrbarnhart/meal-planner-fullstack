@@ -21,12 +21,6 @@ module.exports = {
   },
   ignorePatterns: ["!**/.server", "!**/.client"],
 
-  rules: {
-    // Fix typescript eslint plugin not recognizing className even though it is defined
-    // Since TS does type checking this rule is redundant anyways
-    "react/prop-types": "ignore",
-  },
-
   // Base config
   extends: ["eslint:recommended"],
 
@@ -41,6 +35,11 @@ module.exports = {
         "plugin:react-hooks/recommended",
         "plugin:jsx-a11y/recommended",
       ],
+      rules: {
+        // Fix typescript eslint plugin not recognizing className even though it is defined
+        // Since TS does type checking this rule is redundant anyways
+        "react/prop-types": "off",
+      },
       settings: {
         react: {
           version: "detect",
