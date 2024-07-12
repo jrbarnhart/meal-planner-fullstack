@@ -1,7 +1,9 @@
 export default function Icon({
-  props = {},
+  ...props
 }: {
-  props: { height?: number; width?: number; className?: string };
+  height?: number;
+  width?: number;
+  className?: string;
 }) {
   const { height, width, className } = props;
   return (
