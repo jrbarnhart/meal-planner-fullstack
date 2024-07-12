@@ -2,6 +2,23 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Link, useLocation } from "@remix-run/react";
+import Icon from "~/svg/icon";
+
+function InfoHeader({ username }: { username?: string }) {
+  return (
+    <div className="px-4 py-2 flex justify-between items-center">
+      <Link to={"/"}>
+        <Icon height={32} width={32} />
+      </Link>
+      <div className="flex flex-col items-end">
+        <p>Welcome, {username ?? "Guest"}</p>
+        {username ? (
+          <p className="text-sm justify-end text-blue-600">Logout</p>
+        ) : null}
+      </div>
+    </div>
+  );
+}
 
 function Nav() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -50,11 +67,14 @@ function Nav() {
 
 export default function MainLayout({
   children,
+  username,
 }: {
   children: React.ReactNode;
+  username?: string;
 }) {
   return (
     <div className="relative h-full">
+      <InfoHeader username={username} />
       {children}
       <Nav />
     </div>
