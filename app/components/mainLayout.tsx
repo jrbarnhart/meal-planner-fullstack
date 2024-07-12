@@ -11,19 +11,21 @@ function Nav() {
   return (
     <Card
       className={`absolute bottom-1/4 right-0 p-2 bg-card transition-all duration-300 ease-in-out rounded-r-none ${
-        isOpen ? "w-48" : "w-12"
+        isOpen ? "w-48" : "w-16"
       }`}
     >
       <nav className="flex items-center gap-2">
         <Button
-          className="h-20 w-12 flex-shrink-0"
+          className={`h-28 flex-shrink-0 ${
+            isOpen ? "w-12" : "w-16"
+          } transition-all duration-300 ease-in-out`}
           onMouseDown={() => setIsOpen((prev) => !prev)}
         >
           {isOpen ? ">" : "<"}
         </Button>
         <div
           className={`flex flex-col space-y-2 overflow-hidden transition-all duration-300 ${
-            isOpen ? "w-36 opacity-100" : "w-0 opacity-0"
+            isOpen ? "w-44 opacity-100" : "w-0 opacity-0"
           }`}
         >
           <Link to={pathname.startsWith("/recipes") ? "/" : "/recipes"}>
