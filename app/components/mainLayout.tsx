@@ -6,9 +6,9 @@ import Icon from "~/svg/icon";
 
 function InfoHeader({ username }: { username?: string }) {
   return (
-    <div className="px-4 py-2 flex justify-between items-center">
+    <div className="px-4 py-2 shadow-md flex justify-between items-center">
       <Link to={"/"}>
-        <Icon height={32} width={32} />
+        <Icon height={48} width={48} />
       </Link>
       <div className="flex flex-col items-end">
         <p>Welcome, {username ?? "Guest"}</p>
