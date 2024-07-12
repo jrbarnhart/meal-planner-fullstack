@@ -7,6 +7,17 @@ import {
 } from "@remix-run/react";
 import "./tailwind.css";
 import MainLayout from "./components/mainLayout";
+import { LinksFunction } from "@remix-run/node";
+
+export const links: LinksFunction = () => {
+  return [
+    {
+      rel: "icon",
+      type: "image/svg+xml",
+      href: "/favicon.svg",
+    },
+  ];
+};
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
