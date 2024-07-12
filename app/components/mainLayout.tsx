@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
+import { Link, useLocation } from "@remix-run/react";
 
 function Nav() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const { pathname } = useLocation();
+
   return (
     <Card
-      className={`absolute bottom-1/4 right-0 p-2 bg-card transition-all duration-300 ease-in-out ${
+      className={`absolute bottom-1/4 right-0 p-2 bg-card transition-all duration-300 ease-in-out rounded-r-none ${
         isOpen ? "w-48" : "w-12"
       }`}
     >
@@ -23,8 +26,16 @@ function Nav() {
             isOpen ? "w-36 opacity-100" : "w-0 opacity-0"
           }`}
         >
-          <Button>Recipes</Button>
-          <Button>Shopping</Button>
+          <Link to={pathname.startsWith("/recipes") ? "/" : "/recipes"}>
+            <Button className="w-full">
+              {pathname.startsWith("/recipes") ? "Home" : "Recipes"}
+            </Button>
+          </Link>
+          <Link to={pathname.startsWith("/shopping") ? "/" : "/shopping"}>
+            <Button className="w-full">
+              {pathname.startsWith("/shopping") ? "Home" : "Shopping"}
+            </Button>
+          </Link>
         </div>
       </nav>
     </Card>
