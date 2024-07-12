@@ -19,7 +19,13 @@ function Nav() {
           className={`h-28 flex-shrink-0 w-14`}
           onMouseDown={() => setIsOpen((prev) => !prev)}
         >
-          {isOpen ? ">" : "<"}
+          <p
+            className={`${
+              isOpen ? "rotate-180" : ""
+            } transition-all duration-300 ease-in-out`}
+          >
+            &lt;
+          </p>
         </Button>
         <div
           className={`flex flex-col space-y-2 overflow-hidden transition-all duration-300 ${
