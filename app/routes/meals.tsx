@@ -11,7 +11,7 @@ export default function Meals() {
     // Fast Day Carousel
     // Detail Day Carousel
     // Meals Interface
-    <div className="flex flex-col items-center p-3 h-full">
+    <div className="flex flex-col items-center p-3 h-full overflow-hidden">
       <MonthSelector />
       <DaySlider />
       <DayInterface />
