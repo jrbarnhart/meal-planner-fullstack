@@ -4,7 +4,7 @@ import { Separator } from "../ui/separator";
 
 function MealEntry() {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between items-center">
       <p>Recipe Name</p>
       <p>00:00</p>
       <p>4</p>
@@ -20,7 +20,7 @@ export default function DayInterface() {
         <p>Date</p>
       </CardHeader>
       <Separator />
-      <CardContent className="p-2 space-y-2 overflow-y-scroll h-full">
+      <CardContent className="p-2 pb-8 grid gap-y-2 overflow-y-scroll h-full">
         <MealEntry />
         <MealEntry />
         <MealEntry />
