@@ -8,7 +8,7 @@ function MealEntry() {
       <p className="truncate">Recipe Name</p>
       <p>00:00</p>
       <p>4</p>
-      <Button>...</Button>
+      <Button variant={"secondary"}>...</Button>
     </div>
   );
 }
@@ -33,6 +33,7 @@ export default function DayInterface() {
         <MealEntry />
         <MealEntry />
         <MealEntry />
+        <Button className="w-36 h-12 my-4 justify-self-center">+</Button>
       </CardContent>
     </Card>
   );
