@@ -28,12 +28,14 @@ function Nav() {
   return (
     <Card
       className={`absolute bottom-1/4 right-0 p-2 bg-card transition-all duration-300 ease-in-out rounded-r-none ${
-        isOpen ? "w-48" : "w-20"
+        isOpen
+          ? "w-48"
+          : "w-20 shadow-none border-none bg-transparent opacity-55"
       }`}
     >
       <nav className="flex items-center gap-2">
         <Button
-          className={`h-28 flex-shrink-0 w-14`}
+          className={`h-28 flex-shrink-0 w-14 ${isOpen ? "" : "opacity-35"}`}
           onMouseDown={() => setIsOpen((prev) => !prev)}
         >
           <p
