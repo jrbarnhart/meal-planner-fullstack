@@ -1,3 +1,4 @@
+import DayInterface from "~/components/meals/dayInterface";
 import DaySlider from "~/components/meals/daySlider";
 import MonthSelector from "~/components/meals/monthSelector";
 
@@ -13,6 +14,7 @@ export default function Meals() {
     <div className="flex flex-col items-center mt-4 px-3">
       <MonthSelector />
       <DaySlider />
+      <DayInterface />
     </div>
   );
 }
