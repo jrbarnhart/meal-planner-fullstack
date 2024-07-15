@@ -24,7 +24,7 @@ export default function DaySlider() {
         {Array.from({ length: 31 }).map((_, index) => (
           <CarouselItem key={index} className="pl-0 basis-1/2">
             <div className="p-1">
-              <Card className="h-[33vh]">
+              <Card className="h-[25vh]">
                 <CardHeader className="flex items-center justify-center p-1">
                   <CardTitle>
                     <p className="text-lg font-semibold">
