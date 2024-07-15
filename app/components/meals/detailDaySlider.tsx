@@ -24,16 +24,12 @@ function SmallRecipeEntry() {
 
 export default function DetailDaySlider() {
   return (
-    <Carousel
-      className="w-full mt-12"
-      orientation="vertical"
-      opts={{ align: "start" }}
-    >
-      <CarouselContent className="-ml-0 h-[45vh]">
+    <Carousel className="w-full mt-4" opts={{ align: "start" }}>
+      <CarouselContent className="-ml-0">
         {Array.from({ length: 31 }).map((_, index) => (
-          <CarouselItem key={index} className="pl-0 basis-1/2">
+          <CarouselItem key={index} className="pl-0">
             <div className="p-1">
-              <Card className="h-[188px]">
+              <Card className="h-[33vh]">
                 <CardHeader className="flex items-center justify-center p-0">
                   <CardTitle>
                     <p className="text-lg font-semibold">
