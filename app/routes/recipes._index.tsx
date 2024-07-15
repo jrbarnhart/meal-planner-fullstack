@@ -7,15 +7,16 @@ import {
   CardDescription,
   CardHeader,
 } from "~/components/ui/card";
+import { Separator } from "~/components/ui/separator";
 
 export default function Recipes() {
   return (
     <RouteContent>
-      <div className="flex items-center justify-between w-full">
+      <div className="flex items-center justify-between w-full overflow-hidden">
+        <Button className="h-12">Add Recipe</Button>
         <h1 className="text-xl">My Recipes</h1>
-        <Button>Add Recipe</Button>
       </div>
-      <Card className="w-full h-full">
+      <Card className="w-full h-full overflow-hidden">
         <CardHeader>
           <CardDescription className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr]">
             <span>Name</span>
@@ -24,7 +25,19 @@ export default function Recipes() {
             <span>Actions</span>
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <Separator />
+        <CardContent className="overflow-y-scroll h-full space-y-2 pb-20 pt-2">
+          <RecipeEntry />
+          <RecipeEntry />
+          <RecipeEntry />
+          <RecipeEntry />
+          <RecipeEntry />
+          <RecipeEntry />
+          <RecipeEntry />
+          <RecipeEntry />
+          <RecipeEntry />
+          <RecipeEntry />
+          <RecipeEntry />
           <RecipeEntry />
         </CardContent>
       </Card>
