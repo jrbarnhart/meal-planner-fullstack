@@ -17,6 +17,7 @@ function SmallRecipeEntry() {
   return (
     <div className="overflow-hidden text-nowrap bg-secondary flex justify-between">
       <p>Recipe Name</p>
+      <p>&#x2713;</p>
     </div>
   );
 }
