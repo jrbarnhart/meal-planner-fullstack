@@ -1,6 +1,7 @@
 import DayInterface from "~/components/meals/dayInterface";
 import DaySlider from "~/components/meals/daySlider";
 import MonthSelector from "~/components/meals/monthSelector";
+import RouteContent from "~/components/routeContent";
 
 export default function Meals() {
   // Get the range that would be valid for meal plans. This will be the users first meal record date (or today -1 month if less than that or if null) through 5 years from now.
@@ -11,10 +12,10 @@ export default function Meals() {
     // Fast Day Carousel
     // Detail Day Carousel
     // Meals Interface
-    <div className="flex flex-col items-center p-3 h-full overflow-hidden">
+    <RouteContent>
       <MonthSelector />
       <DaySlider />
       <DayInterface />
-    </div>
+    </RouteContent>
   );
 }
