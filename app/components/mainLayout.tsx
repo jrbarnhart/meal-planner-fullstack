@@ -52,12 +52,12 @@ function Nav() {
           }`}
         >
           <Link to={pathname.startsWith("/recipes") ? "/meals" : "/recipes"}>
-            <Button className="w-full">
+            <Button className="w-full" onClick={() => setIsOpen(false)}>
               {pathname.startsWith("/recipes") ? "Meals" : "Recipes"}
             </Button>
           </Link>
           <Link to={pathname.startsWith("/shopping") ? "/meals" : "/shopping"}>
-            <Button className="w-full">
+            <Button className="w-full" onClick={() => setIsOpen(false)}>
               {pathname.startsWith("/shopping") ? "Meals" : "Shopping"}
             </Button>
           </Link>
