@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -12,10 +6,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel";
+import { Separator } from "../ui/separator";
 
 function SmallRecipeEntry() {
   return (
-    <div className="overflow-hidden text-nowrap bg-secondary flex justify-between">
+    <div className="overflow-hidden text-nowrap bg-secondary flex justify-between rounded-sm px-1">
       <p>Recipe Name</p>
       <p>&#x2713;</p>
     </div>
@@ -30,7 +25,7 @@ export default function DaySlider() {
           <CarouselItem key={index} className="pl-0 basis-1/2">
             <div className="p-1">
               <Card className="h-[33vh]">
-                <CardHeader className="flex items-center justify-center p-0">
+                <CardHeader className="flex items-center justify-center p-1">
                   <CardTitle>
                     <p className="text-lg font-semibold">
                       {index + 1 >= 10 && index + 1 <= 13
@@ -44,10 +39,7 @@ export default function DaySlider() {
                         : `${index + 1}th`}
                     </p>
                   </CardTitle>
-                  <CardDescription className="w-full flex justify-between px-2">
-                    <span>Recipe</span>
-                    <span>Shopped</span>
-                  </CardDescription>
+                  <Separator />
                 </CardHeader>
                 <CardContent className="grid grid-flow-col gap-2 px-2">
                   <SmallRecipeEntry />
