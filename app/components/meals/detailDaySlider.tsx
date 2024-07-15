@@ -25,7 +25,7 @@ function SmallRecipeEntry() {
 export default function DetailDaySlider() {
   return (
     <Carousel
-      className="w-full max-w-[90vw] mt-12"
+      className="w-full mt-12"
       orientation="vertical"
       opts={{ align: "start" }}
     >

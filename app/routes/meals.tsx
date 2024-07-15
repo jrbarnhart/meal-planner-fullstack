@@ -1,4 +1,5 @@
 import DetailDaySlider from "~/components/meals/detailDaySlider";
+import MonthSelector from "~/components/meals/monthSelector";
 
 export default function Meals() {
   // Get the range that would be valid for meal plans. This will be the users first meal record date (or today -1 month if less than that or if null) through 5 years from now.
@@ -9,7 +10,8 @@ export default function Meals() {
     // Fast Day Carousel
     // Detail Day Carousel
     // Meals Interface
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center mt-4 px-3">
+      <MonthSelector />
       <DetailDaySlider />
     </div>
   );
