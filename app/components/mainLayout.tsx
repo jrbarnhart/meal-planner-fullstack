@@ -27,10 +27,10 @@ function Nav() {
 
   return (
     <Card
-      className={`absolute bottom-1/4 right-0 p-2 bg-card transition-all duration-300 ease-in-out rounded-r-none ${
+      className={`absolute bottom-1/4 left-0 p-2 bg-card transition-all duration-300 ease-in-out rounded-l-none ${
         isOpen
           ? "w-48"
-          : "w-20 shadow-none border-none bg-transparent opacity-55"
+          : "w-20 shadow-none border-transparent bg-transparent opacity-55"
       }`}
     >
       <nav className="flex items-center gap-2">
@@ -43,7 +43,7 @@ function Nav() {
               isOpen ? "rotate-180" : ""
             } transition-all duration-300 ease-in-out`}
           >
-            &lt;
+            &gt;
           </p>
         </Button>
         <div
