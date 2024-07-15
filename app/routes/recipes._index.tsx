@@ -1,4 +1,4 @@
-import RouteContent from "~/components/routeContent";
+import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
 
 export default function Recipes() {
