@@ -24,7 +24,7 @@ function SmallRecipeEntry() {
 
 export default function DaySlider() {
   return (
-    <Carousel className="w-full mt-4" opts={{ align: "start" }}>
+    <Carousel className="w-full mt-4 mb-12" opts={{ align: "start" }}>
       <CarouselContent className="-ml-0">
         {Array.from({ length: 31 }).map((_, index) => (
           <CarouselItem key={index} className="pl-0 basis-1/2">
