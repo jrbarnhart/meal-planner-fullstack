@@ -7,7 +7,8 @@ import { format } from "date-fns";
 import { Calendar } from "../ui/calendar";
 
 export default function MonthSelector() {
-  const [date, setDate] = useState<Date>();
+  const today = new Date();
+  const [date, setDate] = useState<Date | undefined>(today);
 
   return (
     <Popover>
