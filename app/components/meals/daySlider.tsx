@@ -11,7 +11,7 @@ import { Separator } from "../ui/separator";
 function SmallRecipeEntry() {
   return (
     <div className="overflow-hidden text-nowrap bg-secondary flex justify-between rounded-sm px-1 h-min">
-      <p>Recipe Name</p>
+      <p className="truncate">Recipe Name</p>
       <p>&#x2713;</p>
     </div>
   );
