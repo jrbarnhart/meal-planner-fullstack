@@ -22,7 +22,7 @@ function SmallRecipeEntry() {
   );
 }
 
-export default function DetailDaySlider() {
+export default function DaySlider() {
   return (
     <Carousel className="w-full mt-4" opts={{ align: "start" }}>
       <CarouselContent className="-ml-0">
