@@ -9,6 +9,8 @@ export default function Meals() {
     // Fast Day Carousel
     // Detail Day Carousel
     // Meals Interface
-    <DetailDaySlider />
+    <div className="flex flex-col items-center">
+      <DetailDaySlider />
+    </div>
   );
 }
