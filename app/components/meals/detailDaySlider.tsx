@@ -27,7 +27,7 @@ export default function DetailDaySlider() {
     <Carousel className="w-full mt-4" opts={{ align: "start" }}>
       <CarouselContent className="-ml-0">
         {Array.from({ length: 31 }).map((_, index) => (
-          <CarouselItem key={index} className="pl-0">
+          <CarouselItem key={index} className="pl-0 basis-1/2">
             <div className="p-1">
               <Card className="h-[33vh]">
                 <CardHeader className="flex items-center justify-center p-0">
