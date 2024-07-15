@@ -10,7 +10,7 @@ import { Separator } from "../ui/separator";
 
 function SmallRecipeEntry() {
   return (
-    <div className="overflow-hidden text-nowrap bg-secondary flex justify-between rounded-sm px-1">
+    <div className="overflow-hidden text-nowrap bg-secondary flex justify-between rounded-sm px-1 h-min">
       <p>Recipe Name</p>
       <p>&#x2713;</p>
     </div>
@@ -24,7 +24,7 @@ export default function DaySlider() {
         {Array.from({ length: 31 }).map((_, index) => (
           <CarouselItem key={index} className="pl-0 basis-1/2">
             <div className="p-1">
-              <Card className="h-[25vh]">
+              <Card className="h-[25vh] overflow-hidden">
                 <CardHeader className="flex items-center justify-center p-1">
                   <CardTitle>
                     <p className="text-lg font-semibold">
@@ -41,7 +41,13 @@ export default function DaySlider() {
                   </CardTitle>
                   <Separator />
                 </CardHeader>
-                <CardContent className="grid grid-flow-col gap-2 px-2">
+                <CardContent className="grid gap-2 px-2 h-[18vh] overflow-y-auto">
+                  <SmallRecipeEntry />
+                  <SmallRecipeEntry />
+                  <SmallRecipeEntry />
+                  <SmallRecipeEntry />
+                  <SmallRecipeEntry />
+                  <SmallRecipeEntry />
                   <SmallRecipeEntry />
                 </CardContent>
               </Card>
