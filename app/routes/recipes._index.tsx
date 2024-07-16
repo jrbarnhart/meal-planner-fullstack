@@ -1,6 +1,6 @@
 import RouteContent from "~/components/layout/routeContent";
+import NewRecipeButton from "~/components/recipes/newRecipeButton";
 import RecipeEntry from "~/components/recipes/recipeEntry";
-import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,7 +13,7 @@ export default function Recipes() {
   return (
     <RouteContent>
       <div className="flex items-center justify-between w-full overflow-hidden">
-        <Button className="h-12">Add Recipe</Button>
+        <NewRecipeButton />
         <h1 className="text-xl">My Recipes</h1>
       </div>
       <Card className="w-full h-full overflow-hidden">
