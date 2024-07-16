@@ -37,10 +37,10 @@ export default function NewRecipeButton() {
         </DialogHeader>
         <div className="grid grid-flow-col grid-cols-2 gap-8">
           <Link to={"/recipes/library"}>
-            <Button>All Our Recipes</Button>
+            <Button className="w-full">All Our Recipes</Button>
           </Link>
           <Link to={"/recipes/add"}>
-            <Button>Add Custom Recipe</Button>
+            <Button className="w-full">Add Custom Recipe</Button>
           </Link>
         </div>
         <Combobox items={phDefaultRecipies} setOpen={setOpen} />
