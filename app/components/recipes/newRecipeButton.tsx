@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Link } from "@remix-run/react";
 
 const phDefaultRecipies = [
   { value: "scrambledEggs", label: "Scrambled Eggs" },
@@ -35,10 +36,14 @@ export default function NewRecipeButton() {
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-flow-col grid-cols-2 gap-8">
-          <Button>All Our Recipes</Button>
-          <Button>Add Custom Recipe</Button>
+          <Link to={"/recipes/library"}>
+            <Button>All Our Recipes</Button>
+          </Link>
+          <Link to={"/recipes/add"}>
+            <Button>Add Custom Recipe</Button>
+          </Link>
         </div>
-        <Combobox items={phDefaultRecipies} />
+        <Combobox items={phDefaultRecipies} setOpen={setOpen} />
       </DialogContent>
     </Dialog>
   );
@@ -46,8 +51,10 @@ export default function NewRecipeButton() {
 
 export function Combobox({
   items,
+  setOpen,
 }: {
   items: { value: string; label: string }[];
+  setOpen: React.Dispatch<SetStateAction<boolean>>;
 }) {
   return (
     <>
@@ -58,7 +65,7 @@ export function Combobox({
           <option value={item.label} key={item.value} />
         ))}
       </datalist>
-      <Button>Add Recipe</Button>
+      <Button onClick={() => setOpen(false)}>Add Recipe</Button>
     </>
   );
 }
