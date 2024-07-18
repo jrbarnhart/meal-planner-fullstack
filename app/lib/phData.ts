@@ -263,19 +263,6 @@ export const phRecipes: PHRecipe[] = [
   },
 ];
 
-export const phRecipeTypes: PHRecipeTypes = [
-  { label: "Breakfast", id: 1 },
-  { label: "Brunch", id: 2 },
-  { label: "Lunch", id: 3 },
-  { label: "Dinner", id: 4 },
-  { label: "Desert", id: 5 },
-  { label: "Snacks", id: 6 },
-  { label: "Snacks2", id: 7 },
-  { label: "Snacks3", id: 8 },
-  { label: "Snacks4", id: 9 },
-  { label: "Snacks5", id: 10 },
-];
-
 export type PHRecipe = {
   name: string;
   descriptions: string;
@@ -289,8 +276,3 @@ export type PHRecipe = {
   postNotes: string;
   ingredients: string[];
 };
-
-export type PHRecipeTypes = {
-  label: string;
-  id: number;
-}[];
