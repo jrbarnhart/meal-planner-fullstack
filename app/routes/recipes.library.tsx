@@ -10,21 +10,45 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { phRecipes, PHRecipeTypes, phRecipeTypes } from "~/lib/phData";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { phRecipes } from "~/lib/phData";
 
-function RecipeFilters({
-  filters,
-  filterOptions,
-}: {
-  filters: Filters;
-  filterOptions: FilterOptions;
-}) {
+function RecipeFilters() {
   return (
     <Form method="get" className="grid grid-cols-4 gap-2 w-full absolute px-4">
       <Popover>
         <PopoverTrigger asChild>
           <Button className="col-start-4">Sort</Button>
         </PopoverTrigger>
+        <PopoverContent className="grid gap-2">
+          <RadioGroup>
+            <div className="flex items-center space-x-3">
+              <RadioGroupItem value="alpha" id="r1" className="h-6 w-6" />
+              <Label htmlFor="r1" className="text-2xl">
+                A-Z
+              </Label>
+            </div>
+            <div className="flex items-center space-x-3">
+              <RadioGroupItem value="feeds" id="r2" className="h-6 w-6" />
+              <Label htmlFor="r2" className="text-2xl">
+                Feeds #
+              </Label>
+            </div>
+            <div className="flex items-center space-x-3">
+              <RadioGroupItem value="time" id="r3" className="h-6 w-6" />
+              <Label htmlFor="r3" className="text-2xl">
+                Prep Time
+              </Label>
+            </div>
+            <div className="flex items-center space-x-3">
+              <RadioGroupItem value="complexity" id="r4" className="h-6 w-6" />
+              <Label htmlFor="r4" className="text-2xl">
+                Complexity
+              </Label>
+            </div>
+          </RadioGroup>
+          <Button>Reverse</Button>
+        </PopoverContent>
       </Popover>
       <Popover>
         <PopoverTrigger asChild>
@@ -58,14 +82,6 @@ type Filters = {
   sort: string;
 };
 
-type FilterOptions = {
-  type: PHRecipeTypes;
-  feeds: undefined;
-  ingredients: undefined;
-  time: undefined;
-  sort: undefined;
-};
-
 export async function loader({ request }: LoaderFunctionArgs) {
   // Get filter data from url
   const url = new URL(request.url);
@@ -78,15 +94,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   };
 
   // This uses placeholder data for now
-  // Get recipe filter options
-  const filterOptions = { type: phRecipeTypes };
   // Get default recipes that match these options
   const recipes = phRecipes; // Not filtered yet
-  return { filters, filterOptions, recipes };
+  return { filters, recipes };
 }
 
 export default function RecipesLibrary() {
-  const { filters, filterOptions, recipes } = useLoaderData<typeof loader>();
+  const { filters, recipes } = useLoaderData<typeof loader>();
   const submit = useSubmit();
   const transition = useTransition();
 
@@ -100,7 +114,7 @@ export default function RecipesLibrary() {
   return (
     <RouteContent>
       <h1 className="text-2xl font-bold w-full">Recipe Library</h1>
-      <RecipeFilters filterOptions={filterOptions} filters={filters} />
+      <RecipeFilters />
     </RouteContent>
   );
 }
