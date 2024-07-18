@@ -1,4 +1,4 @@
-export const recipes: PHRecipe[] = [
+export const phRecipes: PHRecipe[] = [
   {
     name: "Simple Pancakes",
     descriptions: "A quick and easy recipe for fluffy pancakes.",
