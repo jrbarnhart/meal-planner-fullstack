@@ -1,4 +1,6 @@
-import { useLoaderData } from "@remix-run/react";
+import { LoaderFunctionArgs } from "@remix-run/node";
+import { Form, useLoaderData, useSubmit } from "@remix-run/react";
+import { useTransition } from "react";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
@@ -8,58 +10,97 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
+import { phRecipes, PHRecipeTypes, phRecipeTypes } from "~/lib/phData";
 
-// This will be replaced with data from the server eventually
-const phRecipeTypes = [
-  { label: "Breakfast", id: 1 },
-  { label: "Brunch", id: 2 },
-  { label: "Lunch", id: 3 },
-  { label: "Dinner", id: 4 },
-  { label: "Desert", id: 5 },
-  { label: "Snacks", id: 6 },
-  { label: "Snacks", id: 7 },
-  { label: "Snacks", id: 8 },
-  { label: "Snacks", id: 9 },
-  { label: "Snacks", id: 10 },
-];
-
-type PHRecipeTypes = {
-  label: string;
-  id: number;
-}[];
-
-function LibraryFilters({ filterOptions }: { filterOptions: PHRecipeTypes }) {
+function RecipeFilters({
+  filters,
+  filterOptions,
+}: {
+  filters: Filters;
+  filterOptions: FilterOptions;
+}) {
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button className="text-lg">Types</Button>
-      </PopoverTrigger>
-      <PopoverContent className="flex flex-col gap-4 max-h-[50vh] overflow-y-auto">
-        {filterOptions.map((option) => (
-          <div key={option.id} className="flex items-center gap-3">
-            <Checkbox id={option.label} className="h-10 w-10"></Checkbox>
-            <Label htmlFor={option.label} className="text-lg">
-              {option.label}
-            </Label>
-          </div>
-        ))}
-      </PopoverContent>
-    </Popover>
+    <Form method="get" className="grid grid-cols-4 gap-2 w-full absolute px-4">
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button className="col-start-4">Sort</Button>
+        </PopoverTrigger>
+      </Popover>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button>Type</Button>
+        </PopoverTrigger>
+      </Popover>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button>Feeds</Button>
+        </PopoverTrigger>
+      </Popover>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button>Ingredients</Button>
+        </PopoverTrigger>
+      </Popover>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button>Prep Time</Button>
+        </PopoverTrigger>
+      </Popover>
+    </Form>
   );
 }
 
-export async function loader() {
-  const filterOptions: PHRecipeTypes = phRecipeTypes;
-  return { filterOptions };
+type Filters = {
+  type: string;
+  feeds: string;
+  ingredients: string;
+  time: string;
+  sort: string;
+};
+
+type FilterOptions = {
+  type: PHRecipeTypes;
+  feeds: undefined;
+  ingredients: undefined;
+  time: undefined;
+  sort: undefined;
+};
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  // Get filter data from url
+  const url = new URL(request.url);
+  const filters: Filters = {
+    type: url.searchParams.get("type") || "",
+    feeds: url.searchParams.get("feeds") || "",
+    ingredients: url.searchParams.get("ingredients") || "",
+    time: url.searchParams.get("time") || "",
+    sort: url.searchParams.get("sort") || "",
+  };
+
+  // This uses placeholder data for now
+  // Get recipe filter options
+  const filterOptions = { type: phRecipeTypes };
+  // Get default recipes that match these options
+  const recipes = phRecipes; // Not filtered yet
+  return { filters, filterOptions, recipes };
 }
 
 export default function RecipesLibrary() {
-  const { filterOptions } = useLoaderData<typeof loader>();
+  const { filters, filterOptions, recipes } = useLoaderData<typeof loader>();
+  const submit = useSubmit();
+  const transition = useTransition();
+
+  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const form = event.currentTarget.form;
+    if (form) {
+      submit(form);
+    }
+  };
 
   return (
     <RouteContent>
-      <h1 className="text-2xl font-bold">Recipe Library</h1>
-      <LibraryFilters filterOptions={filterOptions} />
+      <h1 className="text-2xl font-bold w-full">Recipe Library</h1>
+      <RecipeFilters filterOptions={filterOptions} filters={filters} />
     </RouteContent>
   );
 }
