@@ -32,13 +32,15 @@ function LibraryFilters({ filterOptions }: { filterOptions: PHRecipeTypes }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button>Types</Button>
+        <Button className="text-lg">Types</Button>
       </PopoverTrigger>
-      <PopoverContent className="flex flex-col gap-4">
+      <PopoverContent className="flex flex-col gap-4 max-h-[50vh] overflow-y-auto">
         {filterOptions.map((option) => (
           <div key={option.id} className="flex items-center gap-3">
             <Checkbox id={option.label} className="h-10 w-10"></Checkbox>
-            <Label htmlFor={option.label}>{option.label}</Label>
+            <Label htmlFor={option.label} className="text-lg">
+              {option.label}
+            </Label>
           </div>
         ))}
       </PopoverContent>
@@ -56,7 +58,7 @@ export default function RecipesLibrary() {
 
   return (
     <RouteContent>
-      <h1 className="text-lg font-bold">Munchlify Recipe Library</h1>
+      <h1 className="text-2xl font-bold">Recipe Library</h1>
       <LibraryFilters filterOptions={filterOptions} />
     </RouteContent>
   );
