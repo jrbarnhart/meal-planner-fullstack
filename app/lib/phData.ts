@@ -276,7 +276,7 @@ export const phRecipeTypes: PHRecipeTypes = [
   { label: "Snacks5", id: 10 },
 ];
 
-type PHRecipe = {
+export type PHRecipe = {
   name: string;
   descriptions: string;
   types: string[];
@@ -290,7 +290,7 @@ type PHRecipe = {
   ingredients: string[];
 };
 
-type PHRecipeTypes = {
+export type PHRecipeTypes = {
   label: string;
   id: number;
 }[];
