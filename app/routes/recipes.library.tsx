@@ -1,120 +1,62 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { Form, useLoaderData, useSubmit } from "@remix-run/react";
-import { useTransition } from "react";
 import RouteContent from "~/components/layout/routeContent";
-import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
-import { Label } from "~/components/ui/label";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
-import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
-import { phRecipes } from "~/lib/phData";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import { PHRecipe, phRecipes } from "~/lib/phData";
 
-function RecipeFilters() {
-  return (
-    <Form method="get" className="grid grid-cols-4 gap-2 w-full absolute px-4">
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button className="col-start-4">Sort</Button>
-        </PopoverTrigger>
-        <PopoverContent className="grid gap-2">
-          <RadioGroup>
-            <div className="flex items-center space-x-3">
-              <RadioGroupItem value="alpha" id="r1" className="h-6 w-6" />
-              <Label htmlFor="r1" className="text-2xl">
-                A-Z
-              </Label>
-            </div>
-            <div className="flex items-center space-x-3">
-              <RadioGroupItem value="feeds" id="r2" className="h-6 w-6" />
-              <Label htmlFor="r2" className="text-2xl">
-                Feeds #
-              </Label>
-            </div>
-            <div className="flex items-center space-x-3">
-              <RadioGroupItem value="time" id="r3" className="h-6 w-6" />
-              <Label htmlFor="r3" className="text-2xl">
-                Prep Time
-              </Label>
-            </div>
-            <div className="flex items-center space-x-3">
-              <RadioGroupItem value="complexity" id="r4" className="h-6 w-6" />
-              <Label htmlFor="r4" className="text-2xl">
-                Complexity
-              </Label>
-            </div>
-          </RadioGroup>
-          <Button>Reverse</Button>
-        </PopoverContent>
-      </Popover>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button>Type</Button>
-        </PopoverTrigger>
-      </Popover>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button>Feeds</Button>
-        </PopoverTrigger>
-      </Popover>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button>Ingredients</Button>
-        </PopoverTrigger>
-      </Popover>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button>Prep Time</Button>
-        </PopoverTrigger>
-      </Popover>
-    </Form>
-  );
-}
+export default function RecipeLibrary() {
+  const recipes = phRecipes;
 
-type Filters = {
-  type: string;
-  feeds: string;
-  ingredients: string;
-  time: string;
-  sort: string;
-};
+  const calculateComplexity = (recipe: PHRecipe) => {
+    const { time } = recipe;
+    const totalRequirements = recipe.requirements.length;
+    const totalSteps = recipe.steps.length;
+    const totalIngredients = recipe.ingredients.length;
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  // Get filter data from url
-  const url = new URL(request.url);
-  const filters: Filters = {
-    type: url.searchParams.get("type") || "",
-    feeds: url.searchParams.get("feeds") || "",
-    ingredients: url.searchParams.get("ingredients") || "",
-    time: url.searchParams.get("time") || "",
-    sort: url.searchParams.get("sort") || "",
-  };
-
-  // This uses placeholder data for now
-  // Get default recipes that match these options
-  const recipes = phRecipes; // Not filtered yet
-  return { filters, recipes };
-}
-
-export default function RecipesLibrary() {
-  const { filters, recipes } = useLoaderData<typeof loader>();
-  const submit = useSubmit();
-  const transition = useTransition();
-
-  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const form = event.currentTarget.form;
-    if (form) {
-      submit(form);
-    }
+    // Range should be 1-5 based on time and totals
+    // Time shouldn't matter after 3 hours and should account for half the value
+    const timeCeiling = 180;
+    const requirementsCeiling = 8;
+    const stepsCeiling = 15;
+    const ingredientsCeiling = 10;
+    const complexity =
+      0.33 * (time / timeCeiling) +
+      0.2 * (totalRequirements / requirementsCeiling) +
+      0.15 * (totalIngredients / ingredientsCeiling) +
+      0.32 * (totalSteps / stepsCeiling);
+    console.log(complexity);
+    if (complexity > 0.9) {
+      return "5 - Advanced";
+    } else if (complexity > 0.75) {
+      return "4 - Challenging";
+    } else if (complexity > 0.4) {
+      return "3 - Intermediate";
+    } else if (complexity > 0.3) {
+      return "2 - Basic";
+    } else return "1 - Easy";
   };
 
   return (
     <RouteContent>
-      <h1 className="text-2xl font-bold w-full">Recipe Library</h1>
-      <RecipeFilters />
+      <div className="overflow-y-auto">
+        {recipes.map((recipe) => (
+          <Card key={recipe.id}>
+            <CardHeader>
+              <CardTitle>{recipe.name}</CardTitle>
+              <CardDescription className="flex gap-4">
+                <span>{recipe.time} Min</span>
+                <span>Feeds {recipe.feeds}</span>
+                <span>{calculateComplexity(recipe)}</span>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>{recipe.description}</CardContent>
+          </Card>
+        ))}
+      </div>
     </RouteContent>
   );
 }
