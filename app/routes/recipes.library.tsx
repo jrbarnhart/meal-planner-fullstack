@@ -16,9 +16,6 @@ export default function RecipeLibrary() {
     const totalRequirements = recipe.requirements.length;
     const totalSteps = recipe.steps.length;
     const totalIngredients = recipe.ingredients.length;
-
-    // Range should be 1-5 based on time and totals
-    // Time shouldn't matter after 3 hours and should account for half the value
     const timeCeiling = 180;
     const requirementsCeiling = 8;
     const stepsCeiling = 15;
@@ -28,7 +25,6 @@ export default function RecipeLibrary() {
       0.2 * (totalRequirements / requirementsCeiling) +
       0.15 * (totalIngredients / ingredientsCeiling) +
       0.32 * (totalSteps / stepsCeiling);
-    console.log(complexity);
     if (complexity > 0.9) {
       return "5 - Advanced";
     } else if (complexity > 0.75) {
