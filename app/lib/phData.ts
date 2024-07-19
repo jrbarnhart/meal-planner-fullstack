@@ -2,7 +2,7 @@ export const phRecipes: PHRecipe[] = [
   {
     id: 1,
     name: "Simple Pancakes",
-    descriptions: "A quick and easy recipe for fluffy pancakes.",
+    description: "A quick and easy recipe for fluffy pancakes.",
     types: ["Breakfast"],
     time: 900,
     feeds: 4,
@@ -29,7 +29,7 @@ export const phRecipes: PHRecipe[] = [
   {
     id: 2,
     name: "Grilled Cheese Sandwich",
-    descriptions:
+    description:
       "A classic grilled cheese sandwich with a crispy golden crust.",
     types: ["Brunch", "Lunch"],
     time: 600,
@@ -50,7 +50,7 @@ export const phRecipes: PHRecipe[] = [
   {
     id: 3,
     name: "Spaghetti Aglio e Olio",
-    descriptions:
+    description:
       "A simple and flavorful Italian pasta dish with garlic and olive oil.",
     types: ["Dinner"],
     time: 1200,
@@ -79,7 +79,7 @@ export const phRecipes: PHRecipe[] = [
   {
     id: 4,
     name: "Chicken Salad",
-    descriptions: "A light and refreshing chicken salad with a tangy dressing.",
+    description: "A light and refreshing chicken salad with a tangy dressing.",
     types: ["Brunch", "Lunch"],
     time: 600,
     feeds: 2,
@@ -105,7 +105,7 @@ export const phRecipes: PHRecipe[] = [
   {
     id: 5,
     name: "Fruit Smoothie",
-    descriptions: "A refreshing and healthy fruit smoothie.",
+    description: "A refreshing and healthy fruit smoothie.",
     types: ["Breakfast", "Snack", "Desert"],
     time: 300,
     feeds: 2,
@@ -128,7 +128,7 @@ export const phRecipes: PHRecipe[] = [
   {
     id: 6,
     name: "Omelette",
-    descriptions: "A quick and easy omelette with your choice of fillings.",
+    description: "A quick and easy omelette with your choice of fillings.",
     types: ["Breakfast", "Brunch"],
     time: 600,
     feeds: 1,
@@ -154,7 +154,7 @@ export const phRecipes: PHRecipe[] = [
   {
     id: 7,
     name: "Tomato Basil Soup",
-    descriptions: "A creamy and flavorful tomato basil soup.",
+    description: "A creamy and flavorful tomato basil soup.",
     types: ["Brunch", "Lunch", "Dinner"],
     time: 1200,
     feeds: 4,
@@ -185,7 +185,7 @@ export const phRecipes: PHRecipe[] = [
   {
     id: 8,
     name: "Quick Stir-Fry Vegetables",
-    descriptions: "A fast and healthy vegetable stir-fry.",
+    description: "A fast and healthy vegetable stir-fry.",
     types: ["Dinner"],
     time: 900,
     feeds: 2,
@@ -211,7 +211,7 @@ export const phRecipes: PHRecipe[] = [
   {
     id: 9,
     name: "Banana Bread",
-    descriptions: "A moist and delicious banana bread with a hint of cinnamon.",
+    description: "A moist and delicious banana bread with a hint of cinnamon.",
     types: ["Desert", "Brunch"],
     time: 3600,
     feeds: 8,
@@ -243,7 +243,7 @@ export const phRecipes: PHRecipe[] = [
   {
     id: 10,
     name: "Caesar Salad",
-    descriptions:
+    description:
       "A classic Caesar salad with creamy dressing and crunchy croutons.",
     types: ["Lunch", "Dinner"],
     time: 600,
@@ -276,7 +276,7 @@ export const phRecipes: PHRecipe[] = [
 export type PHRecipe = {
   name: string;
   id: number;
-  descriptions: string;
+  description: string;
   types: string[];
   // Prep time in seconds
   time: number;
