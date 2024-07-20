@@ -22,7 +22,7 @@ export default function Recipes() {
 
   return (
     <RouteContent>
-      <div className="flex items-center justify-between w-full overflow-hidden">
+      <div className="flex items-center justify-between w-full">
         <NewRecipeButton recipes={recipes} />
         <h1 className="text-xl">My Recipes</h1>
       </div>
