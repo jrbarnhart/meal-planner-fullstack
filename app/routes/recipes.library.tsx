@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
@@ -123,7 +124,7 @@ export default function RecipeLibrary() {
         </Popover>
         <h1 className="text-xl">Recipe Library</h1>
       </div>
-      <div className="overflow-y-auto">
+      <div className="overflow-y-auto space-y-2">
         {recipes.map((recipe) => (
           <Card key={recipe.id}>
             <CardHeader>
@@ -135,6 +136,14 @@ export default function RecipeLibrary() {
               </CardDescription>
             </CardHeader>
             <CardContent>{recipe.description}</CardContent>
+            <CardFooter className="flex gap-4 justify-end">
+              <Link to={"/recipes"}>
+                <Button>Add</Button>
+              </Link>
+              <Link to={`/recipes/${recipe.id}`}>
+                <Button>Details</Button>
+              </Link>
+            </CardFooter>
           </Card>
         ))}
       </div>
