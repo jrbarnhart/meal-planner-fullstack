@@ -29,12 +29,12 @@ export default function NewRecipeButton({ recipes }: { recipes: PHRecipe[] }) {
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-flow-col grid-cols-2 gap-8">
-          <Link to={"/recipes/library"}>
-            <Button className="w-full">All Our Recipes</Button>
-          </Link>
-          <Link to={"/recipes/add"}>
-            <Button className="w-full">Add Custom Recipe</Button>
-          </Link>
+          <Button asChild>
+            <Link to={"/recipes/library"}>Recipe Library</Link>
+          </Button>
+          <Button asChild>
+            <Link to={"/recipes/add"}>Add Custom Recipe</Link>
+          </Button>
         </div>
         <Combobox
           items={recipes.map((recipe) => ({
@@ -43,6 +43,7 @@ export default function NewRecipeButton({ recipes }: { recipes: PHRecipe[] }) {
           }))}
           setOpen={setOpen}
         />
+        <Button onClick={() => setOpen(false)}>Add Recipe</Button>
       </DialogContent>
     </Dialog>
   );
@@ -50,7 +51,6 @@ export default function NewRecipeButton({ recipes }: { recipes: PHRecipe[] }) {
 
 export function Combobox({
   items,
-  setOpen,
 }: {
   items: { id: number; label: string }[];
   setOpen: React.Dispatch<SetStateAction<boolean>>;
@@ -64,7 +64,6 @@ export function Combobox({
           <option value={item.label} key={item.id} />
         ))}
       </datalist>
-      <Button onClick={() => setOpen(false)}>Add Recipe</Button>
     </>
   );
 }
