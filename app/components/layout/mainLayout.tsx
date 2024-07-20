@@ -51,16 +51,18 @@ function Nav() {
             isOpen ? "w-44 opacity-100" : "w-0 opacity-0"
           }`}
         >
-          <Link to={pathname.startsWith("/recipes") ? "/meals" : "/recipes"}>
-            <Button className="w-full" onClick={() => setIsOpen(false)}>
+          <Button className="w-full" onClick={() => setIsOpen(false)} asChild>
+            <Link to={pathname.startsWith("/recipes") ? "/meals" : "/recipes"}>
               {pathname.startsWith("/recipes") ? "Meals" : "Recipes"}
-            </Button>
-          </Link>
-          <Link to={pathname.startsWith("/shopping") ? "/meals" : "/shopping"}>
-            <Button className="w-full" onClick={() => setIsOpen(false)}>
+            </Link>
+          </Button>
+          <Button className="w-full" onClick={() => setIsOpen(false)} asChild>
+            <Link
+              to={pathname.startsWith("/shopping") ? "/meals" : "/shopping"}
+            >
               {pathname.startsWith("/shopping") ? "Meals" : "Shopping"}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </nav>
     </Card>
