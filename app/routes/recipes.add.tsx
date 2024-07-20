@@ -24,6 +24,10 @@ export async function action({ request }: ActionFunctionArgs) {
       if (!values.requirements) {
         values["requirements"] = formData.getAll("requirements[]");
       }
+    } else if (key === "steps[]") {
+      if (!values.steps) {
+        values["steps"] = formData.getAll("steps[]");
+      }
     } else {
       values[key] = value;
     }
@@ -36,6 +40,9 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function CreateRecipe() {
   const [requirements, setRequirements] = useState<string[]>([]);
   const requirementsInputRef = useRef<HTMLInputElement>(null);
+
+  const [steps, setSteps] = useState<string[]>([]);
+  const stepsInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <RouteContent>
@@ -131,6 +138,30 @@ export default function CreateRecipe() {
               values={requirements}
               setValues={setRequirements}
             />
+            <div>
+              <Label htmlFor="preNotes">Notes before starting</Label>
+              <Textarea
+                id="preNotes"
+                name="preNotes"
+                placeholder="Before you begin..."
+              ></Textarea>
+            </div>
+            <InputMany
+              inputRef={stepsInputRef}
+              name="steps"
+              label="Steps"
+              values={steps}
+              setValues={setSteps}
+              placeholder="First..."
+            />
+            <div>
+              <Label htmlFor="postNotes">Notes when finishing up</Label>
+              <Textarea
+                id="postNotes"
+                name="postNotes"
+                placeholder="Now that you are done..."
+              ></Textarea>
+            </div>
             <Button type="submit">Add Recipe</Button>
           </Form>
         </CardContent>
