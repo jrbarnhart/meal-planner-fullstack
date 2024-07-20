@@ -8,12 +8,13 @@ import {
   CardHeader,
 } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
+import { phRecipes } from "~/lib/phData";
 
 export default function Recipes() {
   return (
     <RouteContent>
       <div className="flex items-center justify-between w-full overflow-hidden">
-        <NewRecipeButton />
+        <NewRecipeButton recipes={phRecipes} />
         <h1 className="text-xl">My Recipes</h1>
       </div>
       <Card className="w-full h-full overflow-hidden">

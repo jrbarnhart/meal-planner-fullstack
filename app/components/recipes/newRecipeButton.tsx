@@ -11,16 +11,9 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Link } from "@remix-run/react";
+import { PHRecipe } from "~/lib/phData";
 
-const phDefaultRecipies = [
-  { value: "scrambledEggs", label: "Scrambled Eggs" },
-  { value: "poachedEggs", label: "Poached Eggs" },
-  { value: "sunnySideEggs", label: "Sunny Side Up Eggs" },
-  { value: "cheeseyEggs", label: "Cheesey Eggs" },
-  { value: "deviledEggs", label: "Deviled Eggs" },
-];
-
-export default function NewRecipeButton() {
+export default function NewRecipeButton({ recipes }: { recipes: PHRecipe[] }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -43,7 +36,13 @@ export default function NewRecipeButton() {
             <Button className="w-full">Add Custom Recipe</Button>
           </Link>
         </div>
-        <Combobox items={phDefaultRecipies} setOpen={setOpen} />
+        <Combobox
+          items={recipes.map((recipe) => ({
+            id: recipe.id,
+            label: recipe.name,
+          }))}
+          setOpen={setOpen}
+        />
       </DialogContent>
     </Dialog>
   );
@@ -53,7 +52,7 @@ export function Combobox({
   items,
   setOpen,
 }: {
-  items: { value: string; label: string }[];
+  items: { id: number; label: string }[];
   setOpen: React.Dispatch<SetStateAction<boolean>>;
 }) {
   return (
@@ -62,7 +61,7 @@ export function Combobox({
       <Input id="search" name="search" list="items" autoComplete="off" />
       <datalist id="items">
         {items.map((item) => (
-          <option value={item.label} key={item.value} />
+          <option value={item.label} key={item.id} />
         ))}
       </datalist>
       <Button onClick={() => setOpen(false)}>Add Recipe</Button>
