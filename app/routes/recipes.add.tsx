@@ -6,6 +6,7 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
+import InputMany from "~/components/ui/inputMany";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 
@@ -122,56 +123,14 @@ export default function CreateRecipe() {
                 </fieldset>
               </Card>
             </div>
-            <div>
-              <Label htmlFor="reqInput">Requirements</Label>
-              <Input
-                ref={requirementsInputRef}
-                id="reqInput"
-                name="reqInput"
-                placeholder="Requirement..."
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    setRequirements((prev) => [
-                      ...prev,
-                      requirementsInputRef?.current?.value || "",
-                    ]);
-                    if (requirementsInputRef.current) {
-                      requirementsInputRef.current.value = "";
-                    }
-                  }
-                }}
-              ></Input>
-              <Button
-                type="button"
-                onClick={() => {
-                  setRequirements((prev) => [
-                    ...prev,
-                    requirementsInputRef?.current?.value || "",
-                  ]);
-                }}
-                variant={"secondary"}
-                className="my-3"
-              >
-                Add Requirement
-              </Button>
-              {requirements.length > 0 ? (
-                <Card className="p-4">
-                  {requirements.map((requirement, index) => (
-                    <div key={index}>
-                      <p>{requirement}</p>
-                      <input
-                        hidden
-                        value={requirement}
-                        readOnly
-                        name="requirements[]"
-                        className="w-full"
-                      />
-                    </div>
-                  ))}
-                </Card>
-              ) : null}
-            </div>
+            <InputMany
+              inputRef={requirementsInputRef}
+              name="requirements"
+              label="Requirements"
+              placeholder="Mixing bowl"
+              values={requirements}
+              setValues={setRequirements}
+            />
             <Button type="submit">Add Recipe</Button>
           </Form>
         </CardContent>
