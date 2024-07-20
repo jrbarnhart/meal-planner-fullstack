@@ -25,9 +25,17 @@ export default function InputMany({
         name={`${name}Input`}
         placeholder={placeholder || ""}
         onKeyDown={(event) => {
-          if (event.key === "Enter" || event.key === " ") {
+          if (event.key === "Enter") {
             event.preventDefault();
-            setValues((prev) => [...prev, inputRef?.current?.value || ""]);
+            if (
+              inputRef.current &&
+              !values.includes(inputRef.current.value.trim())
+            ) {
+              setValues((prev) => [
+                ...prev,
+                inputRef?.current?.value.trim() || "",
+              ]);
+            }
             if (inputRef.current) {
               inputRef.current.value = "";
             }
@@ -37,7 +45,15 @@ export default function InputMany({
       <Button
         type="button"
         onClick={() => {
-          setValues((prev) => [...prev, inputRef?.current?.value || ""]);
+          if (
+            inputRef.current &&
+            !values.includes(inputRef.current.value.trim())
+          ) {
+            setValues((prev) => [
+              ...prev,
+              inputRef?.current?.value.trim() || "",
+            ]);
+          }
           if (inputRef.current) {
             inputRef.current.value = "";
           }
@@ -48,10 +64,18 @@ export default function InputMany({
         Add
       </Button>
       {values.length > 0 ? (
-        <Card className="p-4">
+        <Card className="p-4 space-y-4">
           {values.map((value, index) => (
-            <div key={index}>
-              <p>{value}</p>
+            <div key={index} className="flex items-center gap-3">
+              <Button
+                type="button"
+                onClick={() => {
+                  setValues((prev) => prev.filter((v) => v !== value));
+                }}
+              >
+                -
+              </Button>
+              <p className="truncate">{value}</p>
               <input
                 hidden
                 value={value}
