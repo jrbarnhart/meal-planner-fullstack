@@ -1,3 +1,4 @@
+import { json, useLoaderData } from "@remix-run/react";
 import RouteContent from "~/components/layout/routeContent";
 import NewRecipeButton from "~/components/recipes/newRecipeButton";
 import RecipeEntry from "~/components/recipes/recipeEntry";
@@ -10,11 +11,19 @@ import {
 import { Separator } from "~/components/ui/separator";
 import { phRecipes } from "~/lib/phData";
 
+export async function loader() {
+  const recipes = phRecipes;
+
+  return json(recipes);
+}
+
 export default function Recipes() {
+  const recipes = useLoaderData<typeof loader>();
+
   return (
     <RouteContent>
       <div className="flex items-center justify-between w-full overflow-hidden">
-        <NewRecipeButton recipes={phRecipes} />
+        <NewRecipeButton recipes={recipes} />
         <h1 className="text-xl">My Recipes</h1>
       </div>
       <Card className="w-full h-full overflow-hidden">

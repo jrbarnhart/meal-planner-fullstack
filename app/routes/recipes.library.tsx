@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { json, Link, useLoaderData } from "@remix-run/react";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
 import {
@@ -19,8 +19,14 @@ import {
 import { Slider } from "~/components/ui/slider";
 import { PHRecipe, phRecipes } from "~/lib/phData";
 
-export default function RecipeLibrary() {
+export async function loader() {
   const recipes = phRecipes;
+
+  return json(recipes);
+}
+
+export default function RecipeLibrary() {
+  const recipes = useLoaderData<typeof loader>();
 
   const calculateComplexity = (recipe: PHRecipe) => {
     const { time } = recipe;
