@@ -19,7 +19,7 @@ export default function NewRecipeButton({ recipes }: { recipes: PHRecipe[] }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="h-12">Add Recipe</Button>
+        <Button>Add Recipe</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
