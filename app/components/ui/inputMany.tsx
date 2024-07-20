@@ -24,6 +24,7 @@ export default function InputMany({
         id={`${name}Input`}
         name={`${name}Input`}
         placeholder={placeholder || ""}
+        enterKeyHint="done"
         onKeyDown={(event) => {
           if (event.key === "Enter") {
             event.preventDefault();
