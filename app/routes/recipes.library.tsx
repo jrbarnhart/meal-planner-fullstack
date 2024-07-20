@@ -56,9 +56,9 @@ export default function RecipeLibrary() {
   return (
     <RouteContent>
       <div className="flex items-center justify-between gap-3 w-full">
-        <Link to={"/recipes"}>
-          <Button>My Recipes</Button>
-        </Link>
+        <Button asChild>
+          <Link to={"/recipes"}>My Recipes</Link>
+        </Button>
         <Popover>
           <PopoverTrigger asChild>
             <Button className="flex-grow">Filter</Button>
@@ -143,12 +143,12 @@ export default function RecipeLibrary() {
             </CardHeader>
             <CardContent>{recipe.description}</CardContent>
             <CardFooter className="flex gap-4 justify-end">
-              <Link to={"/recipes"}>
-                <Button>Add</Button>
-              </Link>
-              <Link to={`/recipes/${recipe.id}`}>
-                <Button>Details</Button>
-              </Link>
+              <Button asChild>
+                <Link to={"/recipes"}>Add</Link>
+              </Button>
+              <Button asChild>
+                <Link to={`/recipes/${recipe.id}`}>Details</Link>
+              </Button>
             </CardFooter>
           </Card>
         ))}
