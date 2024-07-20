@@ -36,7 +36,7 @@ function Nav() {
       <nav className="flex items-center gap-2">
         <Button
           className={`h-28 flex-shrink-0 w-14 ${isOpen ? "" : "opacity-35"}`}
-          onMouseDown={() => setIsOpen((prev) => !prev)}
+          onClick={() => setIsOpen((prev) => !prev)}
         >
           <p
             className={`${
