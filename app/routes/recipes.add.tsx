@@ -1,5 +1,6 @@
 import { ActionFunctionArgs } from "@remix-run/node";
 import { Form, Link } from "@remix-run/react";
+import { useState, useRef } from "react";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
@@ -15,7 +16,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
   for (const [key, value] of formData.entries()) {
     if (key === "types[]") {
-      values["types"] = formData.getAll("types[]");
+      if (!values.types) {
+        values["types"] = formData.getAll("types[]");
+      }
+    } else if (key === "requirements[]") {
+      if (!values.requirements) {
+        values["requirements"] = formData.getAll("requirements[]");
+      }
     } else {
       values[key] = value;
     }
@@ -26,6 +33,9 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function CreateRecipe() {
+  const [requirements, setRequirements] = useState<string[]>([]);
+  const requirementsInputRef = useRef<HTMLInputElement>(null);
+
   return (
     <RouteContent>
       <div className="w-full flex justify-between">
@@ -111,6 +121,56 @@ export default function CreateRecipe() {
                   </div>
                 </fieldset>
               </Card>
+            </div>
+            <div>
+              <Label htmlFor="reqInput">Requirements</Label>
+              <Input
+                ref={requirementsInputRef}
+                id="reqInput"
+                name="reqInput"
+                placeholder="Requirement..."
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setRequirements((prev) => [
+                      ...prev,
+                      requirementsInputRef?.current?.value || "",
+                    ]);
+                    if (requirementsInputRef.current) {
+                      requirementsInputRef.current.value = "";
+                    }
+                  }
+                }}
+              ></Input>
+              <Button
+                type="button"
+                onClick={() => {
+                  setRequirements((prev) => [
+                    ...prev,
+                    requirementsInputRef?.current?.value || "",
+                  ]);
+                }}
+                variant={"secondary"}
+                className="my-3"
+              >
+                Add Requirement
+              </Button>
+              {requirements.length > 0 ? (
+                <Card className="p-4">
+                  {requirements.map((requirement, index) => (
+                    <div key={index}>
+                      <p>{requirement}</p>
+                      <input
+                        hidden
+                        value={requirement}
+                        readOnly
+                        name="requirements[]"
+                        className="w-full"
+                      />
+                    </div>
+                  ))}
+                </Card>
+              ) : null}
             </div>
             <Button type="submit">Add Recipe</Button>
           </Form>
