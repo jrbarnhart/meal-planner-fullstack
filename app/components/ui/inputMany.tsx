@@ -38,6 +38,9 @@ export default function InputMany({
         type="button"
         onClick={() => {
           setValues((prev) => [...prev, inputRef?.current?.value || ""]);
+          if (inputRef.current) {
+            inputRef.current.value = "";
+          }
         }}
         variant={"secondary"}
         className="my-3"
