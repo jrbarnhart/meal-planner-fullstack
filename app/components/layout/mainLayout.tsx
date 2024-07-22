@@ -52,8 +52,8 @@ function Nav() {
           }`}
         >
           <Button className="w-full" onClick={() => setIsOpen(false)} asChild>
-            <Link to={pathname.startsWith("/recipes") ? "/meals" : "/recipes"}>
-              {pathname.startsWith("/recipes") ? "Meals" : "My Recipes"}
+            <Link to={pathname.endsWith("/recipes") ? "/meals" : "/recipes"}>
+              {pathname.endsWith("/recipes") ? "Meals" : "My Recipes"}
             </Link>
           </Button>
           <Button className="w-full" onClick={() => setIsOpen(false)} asChild>
