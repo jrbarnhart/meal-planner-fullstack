@@ -60,7 +60,7 @@ export default function InputMany({
           }
         }}
         variant={"secondary"}
-        className="my-3"
+        className="my-3 w-full"
       >
         Add
       </Button>
@@ -70,6 +70,7 @@ export default function InputMany({
             <div key={index} className="flex items-center gap-3">
               <Button
                 type="button"
+                className="aspect-square"
                 onClick={() => {
                   setValues((prev) => prev.filter((v) => v !== value));
                 }}

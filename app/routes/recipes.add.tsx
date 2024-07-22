@@ -173,7 +173,9 @@ export default function CreateRecipe() {
                 placeholder="Now that you are done..."
               ></Textarea>
             </div>
-            <Button type="submit">Add Recipe</Button>
+            <Button type="submit" className="w-full">
+              Add Recipe
+            </Button>
           </Form>
         </CardContent>
       </Card>
