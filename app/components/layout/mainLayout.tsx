@@ -53,14 +53,20 @@ function Nav() {
         >
           <Button className="w-full" onClick={() => setIsOpen(false)} asChild>
             <Link to={pathname.startsWith("/recipes") ? "/meals" : "/recipes"}>
-              {pathname.startsWith("/recipes") ? "Meals" : "Recipes"}
+              {pathname.startsWith("/recipes") ? "Meals" : "My Recipes"}
             </Link>
           </Button>
           <Button className="w-full" onClick={() => setIsOpen(false)} asChild>
             <Link
-              to={pathname.startsWith("/shopping") ? "/meals" : "/shopping"}
+              to={
+                pathname.startsWith("/recipes/library")
+                  ? "/meals"
+                  : "/recipes/library"
+              }
             >
-              {pathname.startsWith("/shopping") ? "Meals" : "Shopping"}
+              {pathname.startsWith("/recipes/library")
+                ? "Meals"
+                : "Recipe Library"}
             </Link>
           </Button>
         </div>
