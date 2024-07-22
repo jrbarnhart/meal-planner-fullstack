@@ -53,7 +53,7 @@ export default function CreateRecipe() {
 
   return (
     <RouteContent>
-      <div className="w-full flex justify-between">
+      <div className="w-full flex justify-between items-center">
         <Button asChild>
           <Link to={"/recipes"}>My Recipes</Link>
         </Button>
