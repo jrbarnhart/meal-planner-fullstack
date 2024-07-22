@@ -11,7 +11,7 @@ import {
 import { phRecipes } from "~/lib/phData";
 
 export async function loader() {
-  const recipe = phRecipes[6]; // Replace with DB query
+  const recipe = phRecipes[6]; // Replace with DB query and useParams id
   return json(recipe);
 }
 
