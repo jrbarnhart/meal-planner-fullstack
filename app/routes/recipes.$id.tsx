@@ -11,7 +11,7 @@ import {
 import { phRecipes } from "~/lib/phData";
 
 export async function loader() {
-  const recipe = phRecipes[0]; // Replace with DB query
+  const recipe = phRecipes[6]; // Replace with DB query
   return json(recipe);
 }
 
@@ -29,63 +29,73 @@ export default function RecipeDetails() {
       <Card className="w-full overflow-y-scroll">
         <CardHeader>
           <CardTitle>{recipe.name}</CardTitle>
-          <CardDescription>{recipe.description}</CardDescription>
+          <CardDescription>
+            <span className="flex flex-wrap gap-x-2">
+              {recipe.types.map((type, index) => (
+                <span key={index}>{type}</span>
+              ))}
+            </span>
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-x-2">
-            {recipe.types.map((type, index) => (
-              <p key={index}>{type}</p>
-            ))}
+        <CardContent className="space-y-4">
+          <p>{recipe.description}</p>
+          <div>
+            <p className="italic">Prep Time: {recipe.time} min</p>
+            <p className="italic">Feeds: {recipe.feeds}</p>
           </div>
-          <p>Prep Time: {recipe.time} min</p>
-          <p>Feeds: {recipe.feeds}</p>
-          <h2>Requirements:</h2>
-          <Card className="p-2">
-            <CardContent className="p-0">
-              <ul className="list-disc pl-4">
-                {recipe.requirements.map((requirement, index) => (
-                  <li key={index}>
-                    <p>{requirement}</p>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-          <h2>Ingredients:</h2>
-          <Card className="p-2">
-            <CardContent className="p-0">
-              <ul className="list-disc pl-4">
-                {recipe.ingredients.map((ingredient, index) => (
-                  <li key={index}>
-                    <p>{ingredient}</p>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+          <div>
+            <h2 className="font-bold">Requirements:</h2>
+            <Card className="p-2">
+              <CardContent className="p-0">
+                <ul className="list-disc pl-4 space-y-2">
+                  {recipe.requirements.map((requirement, index) => (
+                    <li key={index}>
+                      <p>{requirement}</p>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+          <div>
+            <h2 className="font-bold">Ingredients:</h2>
+            <Card className="p-2">
+              <CardContent className="p-0">
+                <ul className="list-disc pl-4 space-y-2">
+                  {recipe.ingredients.map((ingredient, index) => (
+                    <li key={index}>
+                      <p>{ingredient}</p>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
           {recipe.preNotes ? (
-            <>
-              <h2>Before you start:</h2>
+            <div>
+              <h2 className="font-bold">Before you start:</h2>
               <p>{recipe.preNotes}</p>
-            </>
+            </div>
           ) : null}
-          <h2>Steps:</h2>
-          <Card className="p-2">
-            <CardContent className="p-0">
-              <ul className="list-decimal pl-4">
-                {recipe.steps.map((step, index) => (
-                  <li key={index}>
-                    <p>{step}</p>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+          <div>
+            <h2 className="font-bold">Steps:</h2>
+            <Card className="p-2">
+              <CardContent className="p-0">
+                <ul className="list-decimal pl-4 space-y-3">
+                  {recipe.steps.map((step, index) => (
+                    <li key={index}>
+                      <p>{step}</p>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
           {recipe.postNotes ? (
-            <>
-              <h2>After you are finished:</h2>
+            <div>
+              <h2 className="font-bold">After you are finished:</h2>
               <p>{recipe.postNotes}</p>
-            </>
+            </div>
           ) : null}
         </CardContent>
       </Card>
