@@ -32,6 +32,11 @@ export default function RecipeDetails() {
           <CardDescription>{recipe.description}</CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="flex flex-wrap gap-x-2">
+            {recipe.types.map((type, index) => (
+              <p key={index}>{type}</p>
+            ))}
+          </div>
           <p>Prep Time: {recipe.time} min</p>
           <p>Feeds: {recipe.feeds}</p>
           {recipe.preNotes ? (
