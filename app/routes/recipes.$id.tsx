@@ -39,12 +39,6 @@ export default function RecipeDetails() {
           </div>
           <p>Prep Time: {recipe.time} min</p>
           <p>Feeds: {recipe.feeds}</p>
-          {recipe.preNotes ? (
-            <>
-              <h2>Before you start:</h2>
-              <p>{recipe.preNotes}</p>
-            </>
-          ) : null}
           <h2>Requirements:</h2>
           <Card className="p-2">
             <CardContent className="p-0">
@@ -69,6 +63,30 @@ export default function RecipeDetails() {
               </ul>
             </CardContent>
           </Card>
+          {recipe.preNotes ? (
+            <>
+              <h2>Before you start:</h2>
+              <p>{recipe.preNotes}</p>
+            </>
+          ) : null}
+          <h2>Steps:</h2>
+          <Card className="p-2">
+            <CardContent className="p-0">
+              <ul className="list-decimal pl-4">
+                {recipe.steps.map((step, index) => (
+                  <li key={index}>
+                    <p>{step}</p>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+          {recipe.postNotes ? (
+            <>
+              <h2>After you are finished:</h2>
+              <p>{recipe.postNotes}</p>
+            </>
+          ) : null}
         </CardContent>
       </Card>
     </RouteContent>
