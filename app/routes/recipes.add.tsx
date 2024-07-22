@@ -44,6 +44,9 @@ export default function CreateRecipe() {
   const [steps, setSteps] = useState<string[]>([]);
   const stepsInputRef = useRef<HTMLInputElement>(null);
 
+  const [ingredients, setIngredients] = useState<string[]>([]);
+  const ingredientsInputRef = useRef<HTMLInputElement>(null);
+
   return (
     <RouteContent>
       <div className="w-full flex justify-between">
@@ -137,6 +140,14 @@ export default function CreateRecipe() {
               placeholder="Mixing bowl"
               values={requirements}
               setValues={setRequirements}
+            />
+            <InputMany
+              inputRef={ingredientsInputRef}
+              name="ingredients"
+              label="Ingredients"
+              placeholder="1 cup water"
+              values={ingredients}
+              setValues={setIngredients}
             />
             <div>
               <Label htmlFor="preNotes">Notes before starting</Label>
