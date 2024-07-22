@@ -28,6 +28,10 @@ export async function action({ request }: ActionFunctionArgs) {
       if (!values.steps) {
         values["steps"] = formData.getAll("steps[]");
       }
+    } else if (key === "ingredients[]") {
+      if (!values.ingredients) {
+        values["ingredients"] = formData.getAll("ingredients[]");
+      }
     } else {
       values[key] = value;
     }
