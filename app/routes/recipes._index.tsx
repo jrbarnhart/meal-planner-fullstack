@@ -1,4 +1,6 @@
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import RouteContent from "~/components/layout/routeContent";
 import NewRecipeButton from "~/components/recipes/newRecipeButton";
 import RecipeEntry from "~/components/recipes/recipeEntry";
@@ -9,21 +11,37 @@ import {
   CardHeader,
 } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
-import { phRecipes } from "~/lib/phData";
+import { PHRecipe, phRecipes } from "~/lib/phData";
+import { getSession } from "~/sessions";
 
-export async function loader() {
-  const recipes = phRecipes;
+export async function loader({ request }: LoaderFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
 
-  return json(recipes);
+  const isLoggedIn = session.has("userId");
+
+  let recipes: PHRecipe[] = [];
+  if (isLoggedIn) {
+    // set recipes using db query for user's recipes
+    recipes = [];
+  }
+
+  return json({ recipes, isLoggedIn });
 }
 
 export default function Recipes() {
-  const recipes = useLoaderData<typeof loader>();
+  const { recipes, isLoggedIn } = useLoaderData<typeof loader>();
+  const [currentRecipes, setCurrentRecipes] = useState<PHRecipe[]>(recipes);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setCurrentRecipes(phRecipes);
+    }
+  }, [isLoggedIn]);
 
   return (
     <RouteContent>
       <div className="flex items-center justify-between w-full">
-        <NewRecipeButton recipes={recipes} />
+        <NewRecipeButton recipes={currentRecipes} />
         <h1 className="text-xl">My Recipes</h1>
       </div>
       <Card className="w-full h-full overflow-hidden">
@@ -37,18 +55,9 @@ export default function Recipes() {
         </CardHeader>
         <Separator />
         <CardContent className="overflow-y-scroll h-full space-y-2 pb-20 pt-2">
-          <RecipeEntry />
-          <RecipeEntry />
-          <RecipeEntry />
-          <RecipeEntry />
-          <RecipeEntry />
-          <RecipeEntry />
-          <RecipeEntry />
-          <RecipeEntry />
-          <RecipeEntry />
-          <RecipeEntry />
-          <RecipeEntry />
-          <RecipeEntry />
+          {currentRecipes.map((recipe) => (
+            <RecipeEntry key={recipe.id} recipe={recipe} />
+          ))}
         </CardContent>
       </Card>
     </RouteContent>
