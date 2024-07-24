@@ -11,7 +11,8 @@ import {
   CardHeader,
 } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
-import { PHRecipe, phRecipes } from "~/lib/phData";
+import { PHRecipe } from "~/lib/phData";
+import { recipeArraySchema } from "~/lib/zodSchemas/recipeSchema";
 import { getSession } from "~/sessions";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -33,8 +34,24 @@ export default function Recipes() {
   const [currentRecipes, setCurrentRecipes] = useState<PHRecipe[]>(recipes);
 
   useEffect(() => {
+    const localRecipesString = localStorage.getItem("localRecipes");
+
+    if (!localRecipesString) {
+      return console.log("No recipe data found in local storage.");
+    }
+
+    const localRecipes = JSON.parse(localRecipesString);
+
+    const zodResults = recipeArraySchema.safeParse(localRecipes);
+
+    if (!zodResults.success) {
+      return console.error(
+        "Error parsing recipe data. Ensure data in local storage has not been modified manually."
+      );
+    }
+
     if (!isLoggedIn) {
-      setCurrentRecipes(phRecipes);
+      setCurrentRecipes(zodResults.data);
     }
   }, [isLoggedIn]);
 
