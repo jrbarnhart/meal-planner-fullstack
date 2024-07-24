@@ -73,7 +73,12 @@ export default function Recipes() {
         <Separator />
         <CardContent className="overflow-y-scroll h-full space-y-2 pb-20 pt-2">
           {currentRecipes.map((recipe) => (
-            <RecipeEntry key={recipe.id} recipe={recipe} />
+            <RecipeEntry
+              key={recipe.id}
+              recipe={recipe}
+              isLoggedIn={isLoggedIn}
+              setCurrentRecipes={setCurrentRecipes}
+            />
           ))}
         </CardContent>
       </Card>
