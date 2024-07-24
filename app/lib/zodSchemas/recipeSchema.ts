@@ -13,3 +13,5 @@ export const recipeSchema = z.object({
   steps: z.array(z.string().trim()),
   postNotes: z.string().trim(),
 });
+
+export const recipeArraySchema = z.array(recipeSchema);
