@@ -12,9 +12,7 @@ export default function RecipeEntry({ recipe }: { recipe: PHRecipe }) {
       <p>{`${time} min`}</p>
       <p>{feeds}</p>
       <Popover>
-        <PopoverTrigger>
-          <Button variant={"secondary"}>...</Button>
-        </PopoverTrigger>
+        <PopoverTrigger>...</PopoverTrigger>
         <PopoverContent className="flex flex-col gap-3 w-40">
           <p>{name}</p>
           <Button asChild>
