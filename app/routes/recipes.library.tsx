@@ -1,4 +1,6 @@
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { json, Link, useLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
 import {
@@ -17,16 +19,56 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { Slider } from "~/components/ui/slider";
+import { addLocalRecipe } from "~/lib/localStorageUtils";
 import { PHRecipe, phRecipes } from "~/lib/phData";
+import { recipeArraySchema } from "~/lib/zodSchemas/recipeSchema";
+import { getSession } from "~/sessions";
 
-export async function loader() {
-  const recipes = phRecipes;
+export async function loader({ request }: LoaderFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
 
-  return json(recipes);
+  const isLoggedIn = session.has("userId");
+
+  let userRecipes: PHRecipe[] = [];
+
+  if (isLoggedIn) {
+    userRecipes = []; // Replace with db query
+  }
+
+  const defaultRecipes = phRecipes; // Replace with db query
+
+  return json({ isLoggedIn, defaultRecipes, userRecipes });
 }
 
 export default function RecipeLibrary() {
-  const recipes = useLoaderData<typeof loader>();
+  const { isLoggedIn, defaultRecipes, userRecipes } =
+    useLoaderData<typeof loader>();
+  const [currentUserRecipes, setCurrentUserRecipes] =
+    useState<PHRecipe[]>(userRecipes);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      const localRecipesString = localStorage.getItem("localRecipes");
+
+      if (!localRecipesString) {
+        return console.log("No recipe data found in local storage.");
+      }
+
+      const localRecipes = JSON.parse(localRecipesString);
+
+      const zodResults = recipeArraySchema.safeParse(localRecipes);
+
+      if (!zodResults.success) {
+        return console.error(
+          "Error parsing recipe data. Ensure data in local storage has not been modified manually."
+        );
+      }
+
+      if (!isLoggedIn) {
+        setCurrentUserRecipes(zodResults.data);
+      }
+    }
+  }, [isLoggedIn]);
 
   const calculateComplexity = (recipe: PHRecipe) => {
     const { time } = recipe;
@@ -131,7 +173,7 @@ export default function RecipeLibrary() {
         <h1 className="text-xl">Recipe Library</h1>
       </div>
       <div className="overflow-y-auto space-y-2">
-        {recipes.map((recipe) => (
+        {defaultRecipes.map((recipe) => (
           <Card key={recipe.id}>
             <CardHeader>
               <CardTitle>{recipe.name}</CardTitle>
@@ -152,9 +194,30 @@ export default function RecipeLibrary() {
               <p className="pt-3">{recipe.description}</p>
             </CardContent>
             <CardFooter className="flex gap-4 justify-end">
-              <Button asChild>
-                <Link to={"/recipes"}>Add</Link>
-              </Button>
+              {currentUserRecipes.some((curRec) => curRec.id === recipe.id) ? (
+                <Button variant={"outline"}>In Library</Button>
+              ) : (
+                <Button
+                  onClick={
+                    isLoggedIn
+                      ? () => {
+                          return; /* replace with db query */
+                        }
+                      : () => {
+                          addLocalRecipe(recipe);
+                          const updatedRecipes = [
+                            ...currentUserRecipes,
+                            recipe,
+                          ];
+                          setCurrentUserRecipes(updatedRecipes);
+                        }
+                  }
+                  asChild
+                >
+                  <Link to={"/recipes/library"}>Add</Link>
+                </Button>
+              )}
+
               <Button asChild>
                 <Link to={`/recipes/${recipe.id}`}>Details</Link>
               </Button>
