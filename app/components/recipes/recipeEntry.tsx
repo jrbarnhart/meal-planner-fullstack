@@ -4,14 +4,16 @@ import { Card } from "../ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { PHRecipe } from "~/lib/phData";
 import { deleteLocalRecipe } from "~/lib/localStorageUtils";
+import { SetStateAction } from "react";
 
 export default function RecipeEntry({
   ...props
 }: {
   recipe: PHRecipe;
   isLoggedIn: boolean;
+  setCurrentRecipes: React.Dispatch<SetStateAction<PHRecipe[]>>;
 }) {
-  const { recipe, isLoggedIn } = props;
+  const { recipe, isLoggedIn, setCurrentRecipes } = props;
   const { id, name, time, feeds } = recipe;
   return (
     <Card className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr] items-center p-2">
@@ -32,7 +34,12 @@ export default function RecipeEntry({
                     // Replace with db query
                     return;
                   }
-                : () => deleteLocalRecipe(recipe)
+                : () => {
+                    deleteLocalRecipe(recipe);
+                    setCurrentRecipes((prev) =>
+                      prev.filter((rec) => rec.id !== recipe.id)
+                    );
+                  }
             }
             variant={"destructive"}
           >
