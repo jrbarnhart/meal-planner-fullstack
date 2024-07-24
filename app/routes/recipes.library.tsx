@@ -136,12 +136,21 @@ export default function RecipeLibrary() {
             <CardHeader>
               <CardTitle>{recipe.name}</CardTitle>
               <CardDescription className="flex gap-3">
-                <span>{recipe.time} Min</span>
-                <span>Feeds {recipe.feeds}</span>
-                <span>Difficulty: {calculateComplexity(recipe)}</span>
+                <span className="flex flex-wrap gap-x-2">
+                  {recipe.types.map((type, index) => (
+                    <span key={index}>{type}</span>
+                  ))}
+                </span>
               </CardDescription>
             </CardHeader>
-            <CardContent>{recipe.description}</CardContent>
+            <CardContent>
+              <p className="italic text-sm">{`Feeds: ${recipe.feeds}`}</p>
+              <p className="italic text-sm">{`Prep time: ${recipe.time} min`}</p>
+              <p className="italic text-sm">{`Complexity: ${calculateComplexity(
+                recipe
+              )}`}</p>
+              <p className="pt-3">{recipe.description}</p>
+            </CardContent>
             <CardFooter className="flex gap-4 justify-end">
               <Button asChild>
                 <Link to={"/recipes"}>Add</Link>
