@@ -48,3 +48,25 @@ export function deleteLocalRecipe(recipe: PHRecipe) {
   );
   localStorage.setItem("localRecipes", JSON.stringify(newLocalRecipes));
 }
+
+export function getLocalId() {
+  const currentIdString = localStorage.getItem("currentId");
+
+  if (!currentIdString) {
+    localStorage.setItem("currentId", "-1");
+    return -1;
+  }
+
+  const currentId = parseInt(currentIdString);
+
+  if (isNaN(currentId)) {
+    return console.error(
+      "Error while parsing current id. Altering data manually may cause errors."
+    );
+  }
+
+  const nextId = currentId - 1;
+  localStorage.setItem("currentId", nextId.toString());
+
+  return nextId;
+}
