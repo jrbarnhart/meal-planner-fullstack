@@ -1,5 +1,5 @@
-import { ActionFunctionArgs } from "@remix-run/node";
-import { Form, Link } from "@remix-run/react";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 import { useState, useRef } from "react";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
@@ -9,10 +9,10 @@ import { Input } from "~/components/ui/input";
 import InputMany from "~/components/ui/inputMany";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
+import { recipeSchema } from "~/lib/zodSchemas/recipeSchema";
+import { getSession } from "~/sessions";
 
-export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-
+function formatFormData(formData: FormData) {
   const values: Record<string, FormDataEntryValue | FormDataEntryValue[]> = {};
 
   for (const [key, value] of formData.entries()) {
@@ -37,11 +37,50 @@ export async function action({ request }: ActionFunctionArgs) {
     }
   }
 
+  return values;
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  const isLoggedIn = session.has("userId");
+
+  return { isLoggedIn };
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  const values = formatFormData(formData);
+
   console.log(values);
   return null;
 }
 
-export default function CreateRecipe() {
+function handleLocalSubmit(
+  event: React.MouseEvent<HTMLButtonElement>,
+  ref: React.RefObject<HTMLFormElement>
+) {
+  event.preventDefault();
+
+  if (!ref.current) {
+    return console.error("Missing form ref. Form will not function.");
+  }
+
+  const formData = new FormData(ref.current);
+
+  const formattedData = formatFormData(formData);
+
+  const zodResult = recipeSchema.safeParse(formattedData);
+
+  console.log(zodResult.success);
+}
+
+export default function AddRecipe() {
+  const { isLoggedIn } = useLoaderData<typeof loader>();
+
+  const formRef = useRef<HTMLFormElement>(null);
+
   const [requirements, setRequirements] = useState<string[]>([]);
   const requirementsInputRef = useRef<HTMLInputElement>(null);
 
@@ -61,7 +100,7 @@ export default function CreateRecipe() {
       </div>
       <Card className="w-full overflow-y-auto">
         <CardContent>
-          <Form method="post" className="space-y-4">
+          <Form method="post" className="space-y-4" ref={formRef}>
             <div>
               <Label htmlFor="name">Name</Label>
               <Input id="name" name="name" placeholder="Recipe Name"></Input>
@@ -177,9 +216,19 @@ export default function CreateRecipe() {
                 placeholder="Now that you are done..."
               ></Textarea>
             </div>
-            <Button type="submit" className="w-full">
-              Add Recipe
-            </Button>
+            {isLoggedIn ? (
+              <Button type="submit" className="w-full">
+                Add Recipe
+              </Button>
+            ) : (
+              <Button
+                onClick={(e) => handleLocalSubmit(e, formRef)}
+                type="button"
+                className="w-full"
+              >
+                Add Local Recipe
+              </Button>
+            )}
           </Form>
         </CardContent>
       </Card>
