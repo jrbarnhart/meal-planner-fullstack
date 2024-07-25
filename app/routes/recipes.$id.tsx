@@ -1,4 +1,6 @@
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { json, Link, useLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
 import {
@@ -8,15 +10,46 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { phRecipes } from "~/lib/phData";
+import { findLocalRecipeById } from "~/lib/localStorageUtils";
+import { PHRecipe, phRecipes } from "~/lib/phData";
 
-export async function loader() {
-  const recipe = phRecipes[6]; // Replace with DB query and useParams id
-  return json(recipe);
+export async function loader({ params }: LoaderFunctionArgs) {
+  const id = params.id;
+  const idNum = parseInt(id || "");
+  let serverRecipe;
+  if (isNaN(idNum)) {
+    return serverRecipe;
+  }
+
+  // If the id is > 0 use db (ph data for now)
+  if (idNum > 0) {
+    serverRecipe = phRecipes.find((phRec) => phRec.id === idNum);
+  }
+  return json({ serverRecipe, idNum });
 }
 
 export default function RecipeDetails() {
-  const recipe = useLoaderData<typeof loader>();
+  const { serverRecipe, idNum } = useLoaderData<typeof loader>();
+  const [recipe, setRecipe] = useState<PHRecipe | undefined>(serverRecipe);
+
+  useEffect(() => {
+    if (!serverRecipe) {
+      setRecipe(findLocalRecipeById(idNum));
+    }
+  }, [idNum, serverRecipe]);
+
+  if (!recipe) {
+    return (
+      <RouteContent>
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Not found.</CardTitle>
+          </CardHeader>
+          <CardContent>This recipe id was not found.</CardContent>
+        </Card>
+      </RouteContent>
+    );
+  }
 
   return (
     <RouteContent>
