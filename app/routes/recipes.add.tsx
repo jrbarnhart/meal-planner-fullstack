@@ -9,7 +9,7 @@ import { Input } from "~/components/ui/input";
 import InputMany from "~/components/ui/inputMany";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
-import { recipeSchema } from "~/lib/zodSchemas/recipeSchema";
+import { localRecipeSchema } from "~/lib/zodSchemas/recipeSchema";
 import { getSession } from "~/sessions";
 
 function formatFormData(formData: FormData) {
@@ -71,9 +71,9 @@ function handleLocalSubmit(
 
   const formattedData = formatFormData(formData);
 
-  const zodResult = recipeSchema.safeParse(formattedData);
+  const zodResult = localRecipeSchema.safeParse(formattedData);
 
-  console.log(zodResult.success);
+  console.log(zodResult.success, zodResult.data, formattedData);
 }
 
 export default function AddRecipe() {

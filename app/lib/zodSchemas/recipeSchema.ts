@@ -1,7 +1,8 @@
 import { z } from "zod";
 
-export const recipeSchema = z.object({
-  id: z.number().int().min(0),
+export const localRecipeSchema = z.object({
+  // -int to prevent clashes with db ids
+  id: z.number().int().max(-1),
   name: z.string().trim().min(1).max(256),
   description: z.string().trim(),
   types: z.array(z.string().trim()),
@@ -14,4 +15,4 @@ export const recipeSchema = z.object({
   postNotes: z.string().trim(),
 });
 
-export const recipeArraySchema = z.array(recipeSchema);
+export const recipeArraySchema = z.array(localRecipeSchema);
