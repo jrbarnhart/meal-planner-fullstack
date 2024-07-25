@@ -1,6 +1,24 @@
 import { PHRecipe } from "./phData";
 import { recipeArraySchema } from "./zodSchemas/recipeSchema";
 
+export function findLocalRecipeById(id: number) {
+  const localRecipesString = localStorage.getItem("localRecipes");
+
+  if (!localRecipesString) return;
+
+  const localRecipes = JSON.parse(localRecipesString);
+  const zodResults = recipeArraySchema.safeParse(localRecipes);
+
+  if (!zodResults.success) {
+    console.error(
+      "Error parsing localRecipes from local storage. Incorrect data format."
+    );
+    return;
+  }
+  const verifiedRecipes = zodResults.data;
+  return verifiedRecipes.find((verRec) => verRec.id === id);
+}
+
 export function addLocalRecipe(recipe: PHRecipe) {
   const localRecipesString = localStorage.getItem("localRecipes");
 
