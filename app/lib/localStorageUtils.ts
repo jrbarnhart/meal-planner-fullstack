@@ -60,9 +60,11 @@ export function getLocalId() {
   const currentId = parseInt(currentIdString);
 
   if (isNaN(currentId)) {
-    return console.error(
-      "Error while parsing current id. Altering data manually may cause errors."
+    console.error(
+      "Error while parsing current id. Resetting to default value (-1)."
     );
+    localStorage.setItem("currentId", "-1");
+    return -1;
   }
 
   const nextId = currentId - 1;
