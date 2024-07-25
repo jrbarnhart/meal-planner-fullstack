@@ -21,8 +21,14 @@ export const addLocalRecipeSchema = z.object({
   name: z.string().trim().min(1).max(256),
   description: z.string().trim().optional(),
   types: z.array(z.string().trim()),
-  time: z.number().int().min(1),
-  feeds: z.number().int().min(1),
+  time: z
+    .string()
+    .transform((val) => parseInt(val))
+    .pipe(z.number().min(1)),
+  feeds: z
+    .string()
+    .transform((val) => parseInt(val))
+    .pipe(z.number().min(1)),
   requirements: z.array(z.string().trim()),
   ingredients: z.array(z.string().trim()),
   preNotes: z.string().trim().optional(),
