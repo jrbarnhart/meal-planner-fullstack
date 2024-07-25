@@ -19,7 +19,7 @@ export const addLocalRecipeSchema = z.object({
   // -int to prevent clashes with db ids
   id: z.number().int().max(-1),
   name: z.string().trim().min(1).max(256),
-  description: z.string().trim().optional(),
+  description: z.string().trim(),
   types: z.array(z.string().trim()),
   time: z
     .string()
@@ -31,9 +31,9 @@ export const addLocalRecipeSchema = z.object({
     .pipe(z.number().min(1)),
   requirements: z.array(z.string().trim()),
   ingredients: z.array(z.string().trim()),
-  preNotes: z.string().trim().optional(),
+  preNotes: z.string().trim(),
   steps: z.array(z.string().trim()),
-  postNotes: z.string().trim().optional(),
+  postNotes: z.string().trim(),
 });
 
 export const recipeArraySchema = z.array(localRecipeSchema);
