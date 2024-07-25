@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { useState, useRef } from "react";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
@@ -9,7 +9,8 @@ import { Input } from "~/components/ui/input";
 import InputMany from "~/components/ui/inputMany";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
-import { localRecipeSchema } from "~/lib/zodSchemas/recipeSchema";
+import { addLocalRecipe, getLocalId } from "~/lib/localStorageUtils";
+import { addLocalRecipeSchema } from "~/lib/zodSchemas/recipeSchema";
 import { getSession } from "~/sessions";
 
 function formatFormData(formData: FormData) {
@@ -57,26 +58,35 @@ export async function action({ request }: ActionFunctionArgs) {
   return null;
 }
 
-function handleLocalSubmit(
-  event: React.MouseEvent<HTMLButtonElement>,
-  ref: React.RefObject<HTMLFormElement>
-) {
-  event.preventDefault();
+export default function AddRecipe() {
+  const navigate = useNavigate();
+  function handleLocalSubmit(
+    event: React.MouseEvent<HTMLButtonElement>,
+    ref: React.RefObject<HTMLFormElement>
+  ) {
+    event.preventDefault();
 
-  if (!ref.current) {
-    return console.error("Missing form ref. Form will not function.");
+    if (!ref.current) {
+      return console.error("Missing form ref. Form will not function.");
+    }
+
+    const formData = new FormData(ref.current);
+
+    const formattedData = formatFormData(formData);
+
+    const dataWithId = { ...formattedData, id: getLocalId() };
+
+    const zodResult = addLocalRecipeSchema.safeParse(dataWithId);
+
+    if (!zodResult.success) {
+      // Handle form errors locally?
+      return;
+    }
+
+    addLocalRecipe(zodResult.data);
+    navigate("/recipes");
   }
 
-  const formData = new FormData(ref.current);
-
-  const formattedData = formatFormData(formData);
-
-  const zodResult = localRecipeSchema.safeParse(formattedData);
-
-  console.log(zodResult.success, zodResult.data, formattedData);
-}
-
-export default function AddRecipe() {
   const { isLoggedIn } = useLoaderData<typeof loader>();
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -115,23 +125,11 @@ export default function AddRecipe() {
             </div>
             <div>
               <Label htmlFor="time">Prep Time - Minutes</Label>
-              <Input
-                id="time"
-                name="time"
-                type="number"
-                min={1}
-                placeholder="1"
-              ></Input>
+              <Input id="time" name="time" type="number" min={1}></Input>
             </div>
             <div>
               <Label htmlFor="feeds">Feeds</Label>
-              <Input
-                id="feeds"
-                name="feeds"
-                type="number"
-                min={1}
-                placeholder="1"
-              ></Input>
+              <Input id="feeds" name="feeds" type="number" min={1}></Input>
             </div>
             <div>
               <Label htmlFor="types">Type(s):</Label>
