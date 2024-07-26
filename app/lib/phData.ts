@@ -288,7 +288,7 @@ export type PHRecipe = {
   ingredients: string[];
 };
 
-export type PHMeal = {
+export type PHMealPlan = {
   id: number;
   date: Date;
   recipes: PHRecipe[];
