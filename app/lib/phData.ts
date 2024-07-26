@@ -287,3 +287,9 @@ export type PHRecipe = {
   postNotes: string;
   ingredients: string[];
 };
+
+export type PHMeal = {
+  id: number;
+  date: Date;
+  recipes: PHRecipe[];
+};
