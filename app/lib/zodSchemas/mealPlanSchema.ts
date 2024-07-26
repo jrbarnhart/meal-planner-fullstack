@@ -6,3 +6,5 @@ export const mealPlanSchema = z.object({
   date: z.date(),
   recipes: recipeArraySchema,
 });
+
+export const mealPlanArraySchema = z.array(mealPlanSchema);
