@@ -1,12 +1,13 @@
 import DayInterface from "~/components/meals/dayInterface";
 import RouteContent from "~/components/layout/routeContent";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { PHMealPlan } from "~/lib/phData";
+import { PHMealPlan, PHRecipe } from "~/lib/phData";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { getSession } from "~/sessions";
 import { mealPlanArraySchema } from "~/lib/zodSchemas/mealPlanSchema";
 import { Calendar } from "~/components/ui/calendar";
+import { recipeArraySchema } from "~/lib/zodSchemas/recipeSchema";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -14,15 +15,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const isLoggedIn = session.has("userId");
 
   let mealPlans: PHMealPlan[] = [];
+  let recipes: PHRecipe[] = [];
   if (isLoggedIn) {
-    mealPlans = []; // Replace with db query
+    // Replace with db query
+    mealPlans = [];
+    recipes = [];
   }
 
-  return json({ mealPlans, isLoggedIn });
+  return json({ mealPlans, recipes, isLoggedIn });
 }
 
 export default function Meals() {
-  const { mealPlans, isLoggedIn } = useLoaderData<typeof loader>();
+  const { mealPlans, recipes, isLoggedIn } = useLoaderData<typeof loader>();
   const mealPlansWithDates = mealPlans.map((plan) => ({
     ...plan,
     date: new Date(plan.date),
@@ -34,26 +38,38 @@ export default function Meals() {
 
   const [currentMealPlans, setCurrentMealPlans] =
     useState<PHMealPlan[]>(mealPlansWithDates);
+  const [currentRecipes, setCurrentRecipes] = useState<PHRecipe[]>(recipes);
 
   useEffect(() => {
     const localMealsString = localStorage.getItem("localMeals");
+    const localRecipesString = localStorage.getItem("localRecipes");
 
-    if (!localMealsString) {
+    if ((!localMealsString && !localRecipesString) || isLoggedIn) {
       return;
     }
 
-    const localMeals = JSON.parse(localMealsString);
-
-    const zodResults = mealPlanArraySchema.safeParse(localMeals);
-
-    if (!zodResults.success) {
-      return console.error(
-        "Error parsing meal data. Ensure data in local storage has not been modified manually."
-      );
+    if (localMealsString) {
+      const localMeals = JSON.parse(localMealsString);
+      const zodResultsMeals = mealPlanArraySchema.safeParse(localMeals);
+      if (!zodResultsMeals.success) {
+        console.error(
+          "Error parsing data. Ensure data in local storage has not been modified manually."
+        );
+      } else {
+        setCurrentMealPlans(zodResultsMeals.data);
+      }
     }
 
-    if (!isLoggedIn) {
-      setCurrentMealPlans(zodResults.data);
+    if (localRecipesString) {
+      const localRecipes = JSON.parse(localRecipesString);
+      const zodResultsRecipes = recipeArraySchema.safeParse(localRecipes);
+      if (!zodResultsRecipes.success) {
+        console.error(
+          "Error parsing data. Ensure data in local storage has not been modified manually."
+        );
+      } else {
+        setCurrentRecipes(zodResultsRecipes.data);
+      }
     }
   }, [isLoggedIn]);
 
@@ -74,6 +90,7 @@ export default function Meals() {
       <DayInterface
         selectedDate={selectedDate || new Date()}
         currentMealPlans={currentMealPlans}
+        recipes={currentRecipes}
       />
     </RouteContent>
   );
