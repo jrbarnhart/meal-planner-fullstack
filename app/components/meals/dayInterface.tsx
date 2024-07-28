@@ -40,6 +40,7 @@ function AddMealButton({ recipes }: { recipes: PHRecipe[] }) {
           <DialogDescription>Select from your recipes.</DialogDescription>
         </DialogHeader>
         <select>
+          <option value="">--Select a Recipe--</option>
           {recipes.map((recipe) => (
             <option key={recipe.id} value={recipe.id}>
               {recipe.name[0].toUpperCase() + recipe.name.slice(1)}
