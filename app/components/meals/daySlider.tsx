@@ -8,8 +8,15 @@ import {
   CarouselPrevious,
 } from "../ui/carousel";
 import { Separator } from "../ui/separator";
-import { SetStateAction, useEffect, useMemo, useState } from "react";
+import {
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { formatDateForTitle, getDaysFromDateRange } from "~/lib/utils";
+import useEmblaCarousel from "embla-carousel-react";
 
 function SmallRecipeEntry({ recipe }: { recipe: PHRecipe }) {
   return (
@@ -27,7 +34,6 @@ export default function DaySlider({
   setSelectedDate: React.Dispatch<SetStateAction<Date>>;
 }) {
   const { currentMealPlans, selectedDate, setSelectedDate } = props;
-
   const mealPlanMap = useMemo(() => {
     return new Map(
       currentMealPlans.map((plan) => [plan.date.toDateString(), plan])
@@ -38,27 +44,63 @@ export default function DaySlider({
   defaultEnd.setDate(defaultEnd.getDate() + 30);
   const defaultStart = new Date(selectedDate);
   defaultStart.setDate(defaultStart.getDate() - 7);
-
   const [range, setRange] = useState<{ start: Date; end: Date }>({
     start: defaultStart,
     end: defaultEnd,
   });
 
-  useEffect(() => {
-    const end = new Date(selectedDate);
-    end.setDate(end.getDate() + 30);
-    const start = new Date(selectedDate);
-    start.setDate(start.getDate() - 7);
-    setRange({ start, end });
-  }, [selectedDate]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start" });
 
-  // Determine the range that should be used to create the date entries in the slider
-  // Use a startDate and endDate
-  // Default range = one week ago - 30 days out
-  // Selecting a new date in the other component should update the range
+  const scrollToSelectedDate = useCallback(() => {
+    if (!emblaApi) return;
+
+    const findSelectedDateIndex = (start: Date, end: Date, selected: Date) => {
+      const totalDays = getDaysFromDateRange(start, end);
+      for (let i = 0; i < totalDays; i++) {
+        const currentDate = new Date(start.getTime() + i * 24 * 3600 * 1000);
+        if (currentDate.toDateString() === selected.toDateString()) {
+          return i;
+        }
+      }
+      return -1;
+    };
+
+    const selectedIndex = findSelectedDateIndex(
+      range.start,
+      range.end,
+      selectedDate
+    );
+    if (selectedIndex !== -1) {
+      emblaApi.scrollTo(selectedIndex, true);
+      console.log("Scrolled to index:", selectedIndex);
+    } else {
+      const newStart = new Date(selectedDate);
+      newStart.setDate(newStart.getDate() - 7);
+      const newEnd = new Date(selectedDate);
+      newEnd.setDate(newEnd.getDate() + 30);
+      setRange({ start: newStart, end: newEnd });
+    }
+  }, [emblaApi, range.start, range.end, selectedDate]);
+
+  useEffect(() => {
+    if (emblaApi) {
+      emblaApi.on("init", () => {
+        scrollToSelectedDate();
+        console.log("Init");
+      });
+    }
+  }, [emblaApi, scrollToSelectedDate]);
+
+  useEffect(() => {
+    scrollToSelectedDate();
+  }, [selectedDate, scrollToSelectedDate]);
 
   return (
-    <Carousel className="w-full mt-4 mb-12" opts={{ align: "start" }}>
+    <Carousel
+      ref={emblaRef}
+      className="w-full mt-4 mb-12"
+      opts={{ align: "start" }}
+    >
       <CarouselContent className="-ml-0">
         {Array.from({
           length: getDaysFromDateRange(range.start, range.end),
