@@ -3,6 +3,15 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardDescription, CardHeader } from "../ui/card";
 import { Separator } from "../ui/separator";
 import { PHMealPlan, PHRecipe } from "~/lib/phData";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 
 function MealEntry({ recipe }: { recipe: PHRecipe }) {
   return (
@@ -15,13 +24,42 @@ function MealEntry({ recipe }: { recipe: PHRecipe }) {
   );
 }
 
+function AddMealButton({ recipes }: { recipes: PHRecipe[] }) {
+  const [open, setOpen] = useState<boolean>(false);
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button className="w-36 h-12 my-4 justify-self-center">
+          Add Recipe
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Add Recipe</DialogTitle>
+          <DialogDescription>Select from your recipes.</DialogDescription>
+        </DialogHeader>
+        <select>
+          {recipes.map((recipe) => (
+            <option key={recipe.id} value={recipe.id}>
+              {recipe.name[0].toUpperCase() + recipe.name.slice(1)}
+            </option>
+          ))}
+        </select>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export default function DayInterface({
   ...props
 }: {
   selectedDate: Date;
   currentMealPlans: PHMealPlan[];
+  recipes: PHRecipe[];
 }) {
-  const { selectedDate, currentMealPlans } = props;
+  const { selectedDate, currentMealPlans, recipes } = props;
+
   return (
     <Card className="p-2 w-full overflow-hidden">
       <CardHeader className="p-1 text-lg font-semibold flex items-center">
@@ -40,7 +78,7 @@ export default function DayInterface({
           ?.recipes.map((recipe, index) => (
             <MealEntry recipe={recipe} key={index} />
           ))}
-        <Button className="w-36 h-12 my-4 justify-self-center">+</Button>
+        <AddMealButton recipes={recipes} />
       </CardContent>
     </Card>
   );
