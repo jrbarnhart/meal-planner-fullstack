@@ -1,3 +1,4 @@
+import { PHMealPlan } from "~/lib/phData";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   Carousel,
@@ -7,6 +8,7 @@ import {
   CarouselPrevious,
 } from "../ui/carousel";
 import { Separator } from "../ui/separator";
+import { SetStateAction, useEffect, useState } from "react";
 
 function SmallRecipeEntry() {
   return (
@@ -17,7 +19,38 @@ function SmallRecipeEntry() {
   );
 }
 
-export default function DaySlider() {
+export default function DaySlider({
+  ...props
+}: {
+  currentMealPlans: PHMealPlan[];
+  selectedDate: Date;
+  setSelectedDate: React.Dispatch<SetStateAction<Date>>;
+}) {
+  const { currentMealPlans, selectedDate, setSelectedDate } = props;
+
+  const defaultEnd = new Date(selectedDate);
+  defaultEnd.setDate(defaultEnd.getDate() + 30);
+  const defaultStart = new Date(selectedDate);
+  defaultStart.setDate(defaultStart.getDate() - 7);
+
+  const [range, setRange] = useState<{ start: Date; end: Date }>({
+    start: defaultStart,
+    end: defaultEnd,
+  });
+
+  useEffect(() => {
+    const end = new Date(selectedDate);
+    end.setDate(end.getDate() + 30);
+    const start = new Date(selectedDate);
+    start.setDate(start.getDate() - 7);
+    setRange({ start, end });
+  }, [selectedDate]);
+
+  // Determine the range that should be used to create the date entries in the slider
+  // Use a startDate and endDate
+  // Default range = one week ago - 30 days out
+  // Selecting a new date in the other component should update the range
+
   return (
     <Carousel className="w-full mt-4 mb-12" opts={{ align: "start" }}>
       <CarouselContent className="-ml-0">
@@ -42,13 +75,7 @@ export default function DaySlider() {
                   <Separator />
                 </CardHeader>
                 <CardContent className="grid gap-2 px-2 h-[18vh] overflow-y-auto">
-                  <SmallRecipeEntry />
-                  <SmallRecipeEntry />
-                  <SmallRecipeEntry />
-                  <SmallRecipeEntry />
-                  <SmallRecipeEntry />
-                  <SmallRecipeEntry />
-                  <SmallRecipeEntry />
+                  {/* map shit */}
                 </CardContent>
               </Card>
             </div>

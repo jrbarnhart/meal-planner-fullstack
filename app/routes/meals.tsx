@@ -29,6 +29,8 @@ export default function Meals() {
     date: new Date(plan.date),
   }));
 
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
   const [currentMealPlans, setCurrentMealPlans] =
     useState<PHMealPlan[]>(mealPlansWithDates);
 
@@ -64,7 +66,11 @@ export default function Meals() {
     // Meals Interface
     <RouteContent>
       <MonthSelector />
-      <DaySlider />
+      <DaySlider
+        currentMealPlans={currentMealPlans}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
       <DayInterface />
     </RouteContent>
   );
