@@ -9,6 +9,7 @@ import {
 } from "../ui/carousel";
 import { Separator } from "../ui/separator";
 import { SetStateAction, useEffect, useState } from "react";
+import { formatDateForTitle, getDaysFromDateRange } from "~/lib/utils";
 
 function SmallRecipeEntry() {
   return (
@@ -54,28 +55,26 @@ export default function DaySlider({
   return (
     <Carousel className="w-full mt-4 mb-12" opts={{ align: "start" }}>
       <CarouselContent className="-ml-0">
-        {Array.from({ length: 31 }).map((_, index) => (
+        {Array.from({
+          length: getDaysFromDateRange(range.start, range.end),
+        }).map((_, index) => (
           <CarouselItem key={index} className="pl-0 basis-1/2">
             <div className="p-1">
               <Card className="h-[25vh] overflow-hidden">
                 <CardHeader className="flex items-center justify-center p-1">
                   <CardTitle>
                     <p className="text-lg font-semibold">
-                      {index + 1 >= 10 && index + 1 <= 13
-                        ? `${index + 1}th`
-                        : (index + 1).toString().endsWith("1")
-                        ? `${index + 1}st`
-                        : (index + 1).toString().endsWith("2")
-                        ? `${index + 1}nd`
-                        : (index + 1).toString().endsWith("3")
-                        ? `${index + 1}rd`
-                        : `${index + 1}th`}
+                      {formatDateForTitle(
+                        new Date(
+                          range.start.getTime() + index * 24 * 3600 * 1000
+                        )
+                      )}
                     </p>
                   </CardTitle>
                   <Separator />
                 </CardHeader>
                 <CardContent className="grid gap-2 px-2 h-[18vh] overflow-y-auto">
-                  {/* map shit */}
+                  {/* map small recipe */}
                 </CardContent>
               </Card>
             </div>
