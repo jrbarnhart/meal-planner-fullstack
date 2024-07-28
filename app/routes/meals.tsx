@@ -1,6 +1,4 @@
 import DayInterface from "~/components/meals/dayInterface";
-import DaySlider from "~/components/meals/daySlider";
-import MonthSelector from "~/components/meals/monthSelector";
 import RouteContent from "~/components/layout/routeContent";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { PHMealPlan } from "~/lib/phData";
@@ -8,6 +6,7 @@ import { useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { getSession } from "~/sessions";
 import { mealPlanArraySchema } from "~/lib/zodSchemas/mealPlanSchema";
+import { Calendar } from "~/components/ui/calendar";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -29,7 +28,9 @@ export default function Meals() {
     date: new Date(plan.date),
   }));
 
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date()
+  );
 
   const [currentMealPlans, setCurrentMealPlans] =
     useState<PHMealPlan[]>(mealPlansWithDates);
@@ -65,13 +66,15 @@ export default function Meals() {
     // Detail Day Carousel
     // Meals Interface
     <RouteContent>
-      <MonthSelector />
-      <DaySlider
-        currentMealPlans={currentMealPlans}
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
+      <Calendar
+        mode="single"
+        selected={selectedDate}
+        onSelect={setSelectedDate}
       />
-      <DayInterface />
+      <DayInterface
+        selectedDate={selectedDate || new Date()}
+        currentMealPlans={currentMealPlans}
+      />
     </RouteContent>
   );
 }
