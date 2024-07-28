@@ -1,4 +1,4 @@
-import { PHMealPlan } from "~/lib/phData";
+import { PHMealPlan, PHRecipe } from "~/lib/phData";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   Carousel,
@@ -8,14 +8,13 @@ import {
   CarouselPrevious,
 } from "../ui/carousel";
 import { Separator } from "../ui/separator";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useEffect, useMemo, useState } from "react";
 import { formatDateForTitle, getDaysFromDateRange } from "~/lib/utils";
 
-function SmallRecipeEntry() {
+function SmallRecipeEntry({ recipe }: { recipe: PHRecipe }) {
   return (
     <div className="overflow-hidden text-nowrap bg-secondary flex justify-between rounded-sm px-1 h-min">
-      <p className="truncate">Recipe Name</p>
-      <p>&#x2713;</p>
+      <p className="truncate">{recipe.name}</p>
     </div>
   );
 }
@@ -28,6 +27,12 @@ export default function DaySlider({
   setSelectedDate: React.Dispatch<SetStateAction<Date>>;
 }) {
   const { currentMealPlans, selectedDate, setSelectedDate } = props;
+
+  const mealPlanMap = useMemo(() => {
+    return new Map(
+      currentMealPlans.map((plan) => [plan.date.toDateString(), plan])
+    );
+  }, [currentMealPlans]);
 
   const defaultEnd = new Date(selectedDate);
   defaultEnd.setDate(defaultEnd.getDate() + 30);
@@ -57,29 +62,48 @@ export default function DaySlider({
       <CarouselContent className="-ml-0">
         {Array.from({
           length: getDaysFromDateRange(range.start, range.end),
-        }).map((_, index) => (
-          <CarouselItem key={index} className="pl-0 basis-1/2">
-            <div className="p-1">
-              <Card className="h-[25vh] overflow-hidden">
-                <CardHeader className="flex items-center justify-center p-1">
-                  <CardTitle>
-                    <p className="text-lg font-semibold">
-                      {formatDateForTitle(
-                        new Date(
-                          range.start.getTime() + index * 24 * 3600 * 1000
-                        )
-                      )}
-                    </p>
-                  </CardTitle>
-                  <Separator />
-                </CardHeader>
-                <CardContent className="grid gap-2 px-2 h-[18vh] overflow-y-auto">
-                  {/* map small recipe */}
-                </CardContent>
-              </Card>
-            </div>
-          </CarouselItem>
-        ))}
+        }).map((_, index) => {
+          const currentItemDate = new Date(
+            range.start.getTime() + index * 24 * 3600 * 1000
+          );
+          const currentItemDateString = currentItemDate.toString();
+          const mealPlan = mealPlanMap.get(currentItemDateString);
+
+          return (
+            <CarouselItem key={index} className="pl-0 basis-1/2">
+              <div className="p-1">
+                <Card className="h-[25vh] overflow-hidden">
+                  <CardHeader className="flex items-center justify-center p-1">
+                    <CardTitle>
+                      <button
+                        onClick={() => setSelectedDate(currentItemDate)}
+                        className="text-lg font-semibold"
+                      >
+                        {formatDateForTitle(
+                          new Date(
+                            range.start.getTime() + index * 24 * 3600 * 1000
+                          )
+                        )}
+                      </button>
+                    </CardTitle>
+                    <Separator />
+                  </CardHeader>
+                  <CardContent className="grid gap-2 px-2 h-[18vh] overflow-y-auto">
+                    {mealPlan ? (
+                      mealPlan.recipes.map((recipe, recipeIndex) => (
+                        <SmallRecipeEntry recipe={recipe} key={recipeIndex} />
+                      ))
+                    ) : (
+                      <div className="overflow-hidden text-nowrap bg-secondary flex justify-between rounded-sm px-1 h-min">
+                        <p className="truncate">No meals planned</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            </CarouselItem>
+          );
+        })}
       </CarouselContent>
       <CarouselPrevious />
       <CarouselNext />
