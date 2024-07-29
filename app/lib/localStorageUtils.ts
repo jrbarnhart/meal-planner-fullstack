@@ -1,4 +1,5 @@
-import { PHRecipe } from "./phData";
+import { PHMealPlan, PHRecipe } from "./phData";
+import { mealPlanArraySchema } from "./zodSchemas/mealPlanSchema";
 import { recipeArraySchema } from "./zodSchemas/recipeSchema";
 
 export function findLocalRecipeById(id: number) {
@@ -89,4 +90,33 @@ export function getLocalId() {
   localStorage.setItem("currentId", nextId.toString());
 
   return nextId;
+}
+
+export function addLocaMealPlan(mealPlan: PHMealPlan) {
+  const localMealsString = localStorage.getItem("localMeals");
+
+  if (!localMealsString) {
+    const localMeals = [mealPlan];
+    localStorage.setItem("localMeals", JSON.stringify(localMeals));
+  } else {
+    const localMeals = JSON.parse(localMealsString);
+    const zodResults = mealPlanArraySchema.safeParse(localMeals);
+    if (!zodResults.success) {
+      return console.error(
+        "Error parsing localMeals from local storage. Incorrect data format."
+      );
+    }
+    const verifiedMeals = zodResults.data;
+    const existingMealIndex = verifiedMeals.findIndex(
+      (verMeal) => verMeal.id === mealPlan.id
+    );
+    if (existingMealIndex !== -1) {
+      const newLocalMeals = [...verifiedMeals];
+      newLocalMeals[existingMealIndex] = mealPlan;
+      localStorage.setItem("localMeals", JSON.stringify(newLocalMeals));
+    } else {
+      const newLocalMeals = [...verifiedMeals, mealPlan];
+      localStorage.setItem("localMeals", JSON.stringify(newLocalMeals));
+    }
+  }
 }
