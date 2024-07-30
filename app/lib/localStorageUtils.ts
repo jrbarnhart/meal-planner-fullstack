@@ -92,15 +92,10 @@ export function getLocalId() {
   return nextId;
 }
 
-export function createLocalMealPlan(targetDate: Date) {
+export function createLocalMealPlan(newMealPlan: PHMealPlan) {
   const localMealsString = localStorage.getItem("localMeals");
 
   const makePlan = () => {
-    const newMealPlan: PHMealPlan = {
-      id: getLocalId(),
-      date: targetDate,
-      recipes: [],
-    };
     const localMeals = [newMealPlan];
     localStorage.setItem("localMeals", JSON.stringify(localMeals));
   };
@@ -117,7 +112,7 @@ export function createLocalMealPlan(targetDate: Date) {
     }
     const verifiedMealPlans = zodResults.data;
     const existingMealPlan = verifiedMealPlans.find(
-      (plan) => new Date(plan.date).getDate() === targetDate.getDate()
+      (plan) => new Date(plan.date).getDate() === newMealPlan.date.getDate()
     );
     if (existingMealPlan) {
       return console.error(
