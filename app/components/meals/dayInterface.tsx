@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardDescription, CardHeader } from "../ui/card";
 import { Separator } from "../ui/separator";
 import { PHMealPlan, PHRecipe } from "~/lib/phData";
-import { useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { addLocaMealPlan, getLocalId } from "~/lib/localStorageUtils";
+import {
+  addRecipeToPlan,
+  createLocalMealPlan,
+  getLocalId,
+} from "~/lib/localStorageUtils";
 
 function MealEntry({ recipe }: { recipe: PHRecipe }) {
   return (
@@ -31,42 +35,33 @@ function AddMealButton({
   recipes: PHRecipe[];
   date: Date;
   isLoggedIn: boolean;
+  setLocalStorageVersion: React.Dispatch<SetStateAction<number>>;
   mealPlan?: PHMealPlan;
 }) {
-  const { recipes, date, isLoggedIn, mealPlan } = props;
+  const { recipes, date, isLoggedIn, setLocalStorageVersion, mealPlan } = props;
   const [open, setOpen] = useState<boolean>(false);
 
   const onLocalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    // If mealPlan then add recipe to it
+    const recipeToAdd = recipes.find(
+      (rec) => rec.id === parseInt(event.target.value)
+    );
+    if (!recipeToAdd) {
+      return console.error(
+        "Recipe was not found in your recipes data. Local storage data may have been manually edited."
+      );
+    }
+
     if (mealPlan) {
-      const recipeToAdd = recipes.find(
-        (rec) => rec.id === parseInt(event.target.value)
-      );
-      if (!recipeToAdd) {
-        return console.error(
-          "Recipe was not found in your recipes data. Local storage data may have been manually edited."
-        );
-      }
-      const updatedMealPlan = {
-        ...mealPlan,
-        recipes: [...mealPlan.recipes, recipeToAdd],
-      };
-      addLocaMealPlan(updatedMealPlan);
+      addRecipeToPlan(mealPlan, recipeToAdd);
+      setLocalStorageVersion((prev) => prev + 1);
     } else {
-      const recipeToAdd = recipes.find(
-        (rec) => rec.id === parseInt(event.target.value)
-      );
-      if (!recipeToAdd) {
-        return console.error(
-          "Recipe was not found in your recipes data. Local storage data may have been manually edited."
-        );
-      }
       const newMealPlan: PHMealPlan = {
         id: getLocalId(),
         date,
         recipes: [recipeToAdd],
       };
-      addLocaMealPlan(newMealPlan);
+      createLocalMealPlan(newMealPlan);
+      setLocalStorageVersion((prev) => prev + 1);
     }
   };
 
@@ -111,11 +106,25 @@ export default function DayInterface({
   currentMealPlans: PHMealPlan[];
   recipes: PHRecipe[];
   isLoggedIn: boolean;
+  setLocalStorageVersion: React.Dispatch<SetStateAction<number>>;
 }) {
-  const { selectedDate, currentMealPlans, recipes, isLoggedIn } = props;
-  const currentMealPlan = currentMealPlans.find(
-    (meal) => meal.date.getDate() === selectedDate.getDate()
-  );
+  const {
+    selectedDate,
+    currentMealPlans,
+    recipes,
+    isLoggedIn,
+    setLocalStorageVersion,
+  } = props;
+
+  const [thisMealPlan, setThisMealPlan] = useState<PHMealPlan | undefined>();
+
+  useEffect(() => {
+    setThisMealPlan(
+      currentMealPlans.find(
+        (meal) => meal.date.getDate() === selectedDate.getDate()
+      )
+    );
+  }, [currentMealPlans, selectedDate]);
 
   return (
     <Card className="p-2 w-full overflow-hidden">
@@ -130,14 +139,17 @@ export default function DayInterface({
       </CardHeader>
       <Separator />
       <CardContent className="p-2 pb-16 grid gap-y-2 overflow-y-scroll h-full">
-        {currentMealPlan?.recipes.map((recipe, index) => (
+        {thisMealPlan?.recipes.map((recipe, index) => (
           <MealEntry recipe={recipe} key={index} />
         ))}
         <AddMealButton
           recipes={recipes}
           date={selectedDate}
           isLoggedIn={isLoggedIn}
-          mealPlan={currentMealPlan}
+          mealPlan={currentMealPlans.find(
+            (meal) => meal.date.getDate() === selectedDate.getDate()
+          )}
+          setLocalStorageVersion={setLocalStorageVersion}
         />
       </CardContent>
     </Card>
