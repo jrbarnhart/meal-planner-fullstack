@@ -40,6 +40,8 @@ export default function Meals() {
     useState<PHMealPlan[]>(mealPlansWithDates);
   const [currentRecipes, setCurrentRecipes] = useState<PHRecipe[]>(recipes);
 
+  const [localStorageVersion, setLocalStorageVersion] = useState(0);
+
   useEffect(() => {
     const localMealsString = localStorage.getItem("localMeals");
     const localRecipesString = localStorage.getItem("localRecipes");
@@ -78,10 +80,7 @@ export default function Meals() {
         setCurrentRecipes(zodResultsRecipes.data);
       }
     }
-  }, [isLoggedIn]);
-
-  // Get the range that would be valid for meal plans. This will be the users first meal record date (or today -1 month if less than that or if null) through 5 years from now.
-  // This range should be used to dynamically populate the Carousel below.
+  }, [isLoggedIn, localStorageVersion]);
 
   return (
     // Month Name Date Picker
@@ -99,6 +98,7 @@ export default function Meals() {
         currentMealPlans={currentMealPlans}
         recipes={currentRecipes}
         isLoggedIn={isLoggedIn}
+        setLocalStorageVersion={setLocalStorageVersion}
       />
     </RouteContent>
   );
