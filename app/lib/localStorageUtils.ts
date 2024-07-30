@@ -95,13 +95,9 @@ export function getLocalId() {
 export function createLocalMealPlan(newMealPlan: PHMealPlan) {
   const localMealsString = localStorage.getItem("localMeals");
 
-  const makePlan = () => {
+  if (!localMealsString) {
     const localMeals = [newMealPlan];
     localStorage.setItem("localMeals", JSON.stringify(localMeals));
-  };
-
-  if (!localMealsString) {
-    makePlan();
   } else {
     const localMeals = JSON.parse(localMealsString);
     const zodResults = mealPlanArraySchema.safeParse(localMeals);
@@ -119,7 +115,8 @@ export function createLocalMealPlan(newMealPlan: PHMealPlan) {
         "Cannot create meal plan. Plan for target date already exists."
       );
     } else {
-      makePlan();
+      const newLocalMeals = [...verifiedMealPlans, newMealPlan];
+      localStorage.setItem("localMeals", JSON.stringify(newLocalMeals));
     }
   }
 }
