@@ -27,7 +27,7 @@ function MealEntry({ recipe }: { recipe: PHRecipe }) {
   );
 }
 
-function AddMealButton({
+function AddRecipeSelect({
   ...props
 }: {
   recipes: PHRecipe[];
@@ -134,7 +134,7 @@ export default function DayInterface({
           ?.recipes.map((recipe, index) => (
             <MealEntry recipe={recipe} key={index} />
           ))}
-        <AddMealButton
+        <AddRecipeSelect
           recipes={recipes}
           date={selectedDate}
           isLoggedIn={isLoggedIn}
