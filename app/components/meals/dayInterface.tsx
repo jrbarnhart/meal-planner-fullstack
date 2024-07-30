@@ -1,6 +1,12 @@
 import { formatDateForTitle } from "~/lib/utils";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardDescription, CardHeader } from "../ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import { Separator } from "../ui/separator";
 import { PHMealPlan, PHRecipe } from "~/lib/phData";
 import { SetStateAction, useState } from "react";
@@ -117,9 +123,9 @@ export default function DayInterface({
   } = props;
 
   return (
-    <Card className="p-2 w-full overflow-hidden">
+    <Card className="p-2 w-full h-full overflow-hidden flex flex-col">
       <CardHeader className="p-1 text-lg font-semibold flex items-center">
-        <p>{formatDateForTitle(selectedDate)}</p>
+        <CardTitle>{formatDateForTitle(selectedDate)}</CardTitle>
         <CardDescription className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr] w-full">
           <span>Recipe Name</span>
           <span>Prep Time</span>
