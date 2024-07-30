@@ -3,7 +3,7 @@ import { recipeArraySchema } from "./recipeSchema";
 
 export const mealPlanSchema = z.object({
   id: z.number().int(),
-  date: z.date(),
+  date: z.date().or(z.string()),
   recipes: recipeArraySchema,
 });
 
