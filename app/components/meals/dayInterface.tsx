@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import { addLocaMealPlan, getLocalId } from "~/lib/localStorageUtils";
 
 function MealEntry({ recipe }: { recipe: PHRecipe }) {
   return (
@@ -24,8 +25,50 @@ function MealEntry({ recipe }: { recipe: PHRecipe }) {
   );
 }
 
-function AddMealButton({ recipes }: { recipes: PHRecipe[] }) {
+function AddMealButton({
+  ...props
+}: {
+  recipes: PHRecipe[];
+  date: Date;
+  isLoggedIn: boolean;
+  mealPlan?: PHMealPlan;
+}) {
+  const { recipes, date, isLoggedIn, mealPlan } = props;
   const [open, setOpen] = useState<boolean>(false);
+
+  const onLocalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    // If mealPlan then add recipe to it
+    if (mealPlan) {
+      const recipeToAdd = recipes.find(
+        (rec) => rec.id === parseInt(event.target.value)
+      );
+      if (!recipeToAdd) {
+        return console.error(
+          "Recipe was not found in your recipes data. Local storage data may have been manually edited."
+        );
+      }
+      const updatedMealPlan = {
+        ...mealPlan,
+        recipes: [...mealPlan.recipes, recipeToAdd],
+      };
+      addLocaMealPlan(updatedMealPlan);
+    } else {
+      const recipeToAdd = recipes.find(
+        (rec) => rec.id === parseInt(event.target.value)
+      );
+      if (!recipeToAdd) {
+        return console.error(
+          "Recipe was not found in your recipes data. Local storage data may have been manually edited."
+        );
+      }
+      const newMealPlan: PHMealPlan = {
+        id: getLocalId(),
+        date,
+        recipes: [recipeToAdd],
+      };
+      addLocaMealPlan(newMealPlan);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -39,7 +82,16 @@ function AddMealButton({ recipes }: { recipes: PHRecipe[] }) {
           <DialogTitle>Add Recipe</DialogTitle>
           <DialogDescription>Select from your recipes.</DialogDescription>
         </DialogHeader>
-        <select>
+        <select
+          onChange={(e) => {
+            if (isLoggedIn) {
+              // Handle DB Operation for editing/adding meal plan
+              console.log("DB Action not yet set implemented.");
+            } else {
+              onLocalChange(e);
+            }
+          }}
+        >
           <option value="">--Select a Recipe--</option>
           {recipes.map((recipe) => (
             <option key={recipe.id} value={recipe.id}>
@@ -58,8 +110,12 @@ export default function DayInterface({
   selectedDate: Date;
   currentMealPlans: PHMealPlan[];
   recipes: PHRecipe[];
+  isLoggedIn: boolean;
 }) {
-  const { selectedDate, currentMealPlans, recipes } = props;
+  const { selectedDate, currentMealPlans, recipes, isLoggedIn } = props;
+  const currentMealPlan = currentMealPlans.find(
+    (meal) => meal.date.getDate() === selectedDate.getDate()
+  );
 
   return (
     <Card className="p-2 w-full overflow-hidden">
@@ -74,12 +130,15 @@ export default function DayInterface({
       </CardHeader>
       <Separator />
       <CardContent className="p-2 pb-16 grid gap-y-2 overflow-y-scroll h-full">
-        {currentMealPlans
-          .find((meal) => meal.date.getDate() === selectedDate.getDate())
-          ?.recipes.map((recipe, index) => (
-            <MealEntry recipe={recipe} key={index} />
-          ))}
-        <AddMealButton recipes={recipes} />
+        {currentMealPlan?.recipes.map((recipe, index) => (
+          <MealEntry recipe={recipe} key={index} />
+        ))}
+        <AddMealButton
+          recipes={recipes}
+          date={selectedDate}
+          isLoggedIn={isLoggedIn}
+          mealPlan={currentMealPlan}
+        />
       </CardContent>
     </Card>
   );
