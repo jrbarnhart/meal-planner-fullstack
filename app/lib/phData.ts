@@ -293,3 +293,10 @@ export type PHMealPlan = {
   date: Date;
   recipes: PHRecipe[];
 };
+
+export type PHUser = {
+  name: string;
+  email: string;
+  mealPlans: PHMealPlan[];
+  recipes: PHRecipe[];
+};
