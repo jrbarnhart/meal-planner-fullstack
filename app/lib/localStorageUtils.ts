@@ -129,12 +129,13 @@ export function createLocalMealPlan(targetDate: Date) {
   }
 }
 
-export function addLocaMealPlan(mealPlan: PHMealPlan) {
+export function addRecipeToPlan(mealPlan: PHMealPlan, recipeToAdd: PHRecipe) {
   const localMealsString = localStorage.getItem("localMeals");
 
   if (!localMealsString) {
-    const localMeals = [mealPlan];
-    localStorage.setItem("localMeals", JSON.stringify(localMeals));
+    return console.error(
+      "Cannot add recipe to plan. Plan data does not exist in local storage."
+    );
   } else {
     const localMeals = JSON.parse(localMealsString);
     const zodResults = mealPlanArraySchema.safeParse(localMeals);
@@ -144,16 +145,21 @@ export function addLocaMealPlan(mealPlan: PHMealPlan) {
       );
     }
     const verifiedMealPlans = zodResults.data;
-    const existingMealIndex = verifiedMealPlans.findIndex(
-      (verMeal) => verMeal.id === mealPlan.id
+    const existingPlanIndex = verifiedMealPlans.findIndex(
+      (plan) => plan.id === mealPlan.id
     );
-    if (existingMealIndex !== -1) {
-      const newLocalMeals = [...verifiedMealPlans];
-      newLocalMeals[existingMealIndex] = mealPlan;
-      localStorage.setItem("localMeals", JSON.stringify(newLocalMeals));
+    if (existingPlanIndex) {
+      const newMealPlan = {
+        ...verifiedMealPlans[existingPlanIndex],
+        recipes: [...verifiedMealPlans[existingPlanIndex].recipes, recipeToAdd],
+      };
+      const newMealPlans = [...verifiedMealPlans];
+      newMealPlans[existingPlanIndex] = newMealPlan;
+      localStorage.setItem("localMeals", JSON.stringify(newMealPlans));
     } else {
-      const newLocalMeals = [...verifiedMealPlans, mealPlan];
-      localStorage.setItem("localMeals", JSON.stringify(newLocalMeals));
+      return console.error(
+        "Cannot add recipe to plan. Plan entry was not found in local storage data."
+      );
     }
   }
 }
