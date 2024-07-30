@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { Form, useLoaderData, useNavigate } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
@@ -92,9 +92,10 @@ export default function UserDetails() {
     }
   }, [isLoggedIn]);
 
-  const navigate = useNavigate();
-
   const confirmationRef = useRef<HTMLInputElement>(null);
+  const [confirmationError, setConfirmationError] = useState<
+    string | undefined
+  >();
 
   const handleLocalDelete = () => {
     if (
@@ -102,7 +103,11 @@ export default function UserDetails() {
       confirmationRef.current.value === "DELETE MY DATA"
     ) {
       localStorage.clear();
-      navigate("/user");
+      location.reload();
+    } else {
+      setConfirmationError(
+        "Error. Make sure confirmation is correct with spaces and capitalization."
+      );
     }
   };
 
@@ -138,9 +143,15 @@ export default function UserDetails() {
                   <Label htmlFor="confirmation">{`Type "DELETE MY DATA" if you are sure you want to delete all of your data.`}</Label>
                   <Input
                     ref={confirmationRef}
+                    autoComplete="off"
                     className="text-destructive"
                     id="confirmation"
                   ></Input>
+                  {confirmationError ? (
+                    <p className="text-destructive text-sm">
+                      {confirmationError}
+                    </p>
+                  ) : null}
                 </div>
                 {isLoggedIn ? (
                   <Button variant={"destructive"} className="w-full">
