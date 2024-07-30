@@ -11,14 +11,6 @@ import { Separator } from "../ui/separator";
 import { PHMealPlan, PHRecipe } from "~/lib/phData";
 import { SetStateAction, useState } from "react";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import {
   addRecipeToPlan,
   createLocalMealPlan,
   getLocalId,
@@ -45,7 +37,8 @@ function AddMealButton({
   mealPlan?: PHMealPlan;
 }) {
   const { recipes, date, isLoggedIn, setLocalStorageVersion, mealPlan } = props;
-  const [open, setOpen] = useState<boolean>(false);
+
+  const [selectedRecipe, setSelectedRecipe] = useState("");
 
   const onLocalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const recipeToAdd = recipes.find(
@@ -59,6 +52,7 @@ function AddMealButton({
 
     if (mealPlan) {
       addRecipeToPlan(mealPlan, recipeToAdd);
+      setSelectedRecipe("");
       setLocalStorageVersion((prev) => prev + 1);
     } else {
       const newMealPlan: PHMealPlan = {
@@ -67,41 +61,41 @@ function AddMealButton({
         recipes: [recipeToAdd],
       };
       createLocalMealPlan(newMealPlan);
+      setSelectedRecipe("");
       setLocalStorageVersion((prev) => prev + 1);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="w-36 h-12 my-4 justify-self-center">
-          Add Recipe
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Add Recipe</DialogTitle>
-          <DialogDescription>Select from your recipes.</DialogDescription>
-        </DialogHeader>
-        <select
-          onChange={(e) => {
-            if (isLoggedIn) {
-              // Handle DB Operation for editing/adding meal plan
-              console.log("DB Action not yet set implemented.");
-            } else {
-              onLocalChange(e);
-            }
-          }}
-        >
-          <option value="">--Select a Recipe--</option>
-          {recipes.map((recipe) => (
-            <option key={recipe.id} value={recipe.id}>
-              {recipe.name[0].toUpperCase() + recipe.name.slice(1)}
-            </option>
-          ))}
-        </select>
-      </DialogContent>
-    </Dialog>
+    <select
+      value={selectedRecipe}
+      className="h-10 rounded-md bg-primary text-primary-foreground"
+      onChange={(e) => {
+        if (isLoggedIn) {
+          // Handle DB Operation for editing/adding meal plan
+          console.log("DB Action not yet set implemented.");
+          setSelectedRecipe(e.target.value);
+        } else {
+          setSelectedRecipe(e.target.value);
+          onLocalChange(e);
+        }
+      }}
+    >
+      <option value="">--Select a Recipe--</option>
+      {recipes
+        .sort((a, b) => {
+          const nameA = a.name.toUpperCase();
+          const nameB = b.name.toUpperCase();
+          if (nameA < nameB) return -1;
+          if (nameA > nameB) return 1;
+          return 0;
+        })
+        .map((recipe) => (
+          <option key={recipe.id} value={recipe.id}>
+            {recipe.name[0].toUpperCase() + recipe.name.slice(1)}
+          </option>
+        ))}
+    </select>
   );
 }
 
