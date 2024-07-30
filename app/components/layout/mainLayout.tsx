@@ -10,8 +10,13 @@ function InfoHeader({ username }: { username?: string }) {
       <Link to={"/"}>
         <Icon height={48} width={48} />
       </Link>
-      <div className="flex flex-col items-end">
-        <p>Welcome, {username ?? "Guest"}</p>
+      <div className="flex flex-col items-end flex-grow">
+        <div className="grid grid-flow-col gap-x-1">
+          <p>Welcome, </p>
+          <Link className="text-green-600 underline" to={"/user"}>
+            {username || "Guest"}
+          </Link>
+        </div>
         {username ? (
           <p className="text-sm justify-end text-blue-600">Logout</p>
         ) : null}
