@@ -92,6 +92,43 @@ export function getLocalId() {
   return nextId;
 }
 
+export function createLocalMealPlan(targetDate: Date) {
+  const localMealsString = localStorage.getItem("localMeals");
+
+  const makePlan = () => {
+    const newMealPlan: PHMealPlan = {
+      id: getLocalId(),
+      date: targetDate,
+      recipes: [],
+    };
+    const localMeals = [newMealPlan];
+    localStorage.setItem("localMeals", JSON.stringify(localMeals));
+  };
+
+  if (!localMealsString) {
+    makePlan();
+  } else {
+    const localMeals = JSON.parse(localMealsString);
+    const zodResults = mealPlanArraySchema.safeParse(localMeals);
+    if (!zodResults.success) {
+      return console.error(
+        "Error parsing localMeals from local storage. Incorrect data format."
+      );
+    }
+    const verifiedMealPlans = zodResults.data;
+    const existingMealPlan = verifiedMealPlans.find(
+      (plan) => new Date(plan.date).getDate() === targetDate.getDate()
+    );
+    if (existingMealPlan) {
+      return console.error(
+        "Cannot create meal plan. Plan for target date already exists."
+      );
+    } else {
+      makePlan();
+    }
+  }
+}
+
 export function addLocaMealPlan(mealPlan: PHMealPlan) {
   const localMealsString = localStorage.getItem("localMeals");
 
@@ -106,16 +143,16 @@ export function addLocaMealPlan(mealPlan: PHMealPlan) {
         "Error parsing localMeals from local storage. Incorrect data format."
       );
     }
-    const verifiedMeals = zodResults.data;
-    const existingMealIndex = verifiedMeals.findIndex(
+    const verifiedMealPlans = zodResults.data;
+    const existingMealIndex = verifiedMealPlans.findIndex(
       (verMeal) => verMeal.id === mealPlan.id
     );
     if (existingMealIndex !== -1) {
-      const newLocalMeals = [...verifiedMeals];
+      const newLocalMeals = [...verifiedMealPlans];
       newLocalMeals[existingMealIndex] = mealPlan;
       localStorage.setItem("localMeals", JSON.stringify(newLocalMeals));
     } else {
-      const newLocalMeals = [...verifiedMeals, mealPlan];
+      const newLocalMeals = [...verifiedMealPlans, mealPlan];
       localStorage.setItem("localMeals", JSON.stringify(newLocalMeals));
     }
   }
