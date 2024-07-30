@@ -143,7 +143,7 @@ export function addRecipeToPlan(mealPlan: PHMealPlan, recipeToAdd: PHRecipe) {
     const existingPlanIndex = verifiedMealPlans.findIndex(
       (plan) => plan.id === mealPlan.id
     );
-    if (existingPlanIndex) {
+    if (existingPlanIndex !== -1) {
       const newMealPlan = {
         ...verifiedMealPlans[existingPlanIndex],
         recipes: [...verifiedMealPlans[existingPlanIndex].recipes, recipeToAdd],
@@ -152,6 +152,7 @@ export function addRecipeToPlan(mealPlan: PHMealPlan, recipeToAdd: PHRecipe) {
       newMealPlans[existingPlanIndex] = newMealPlan;
       localStorage.setItem("localMeals", JSON.stringify(newMealPlans));
     } else {
+      console.log(existingPlanIndex, mealPlan.id);
       return console.error(
         "Cannot add recipe to plan. Plan entry was not found in local storage data."
       );
