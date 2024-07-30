@@ -53,10 +53,16 @@ export default function Meals() {
       const zodResultsMeals = mealPlanArraySchema.safeParse(localMeals);
       if (!zodResultsMeals.success) {
         console.error(
-          "Error parsing data. Ensure data in local storage has not been modified manually."
+          "Error parsing data. Ensure data in local storage has not been modified manually.",
+          zodResultsMeals.error.flatten()
         );
       } else {
-        setCurrentMealPlans(zodResultsMeals.data);
+        const mealPlans = zodResultsMeals.data;
+        const datedMealPlans = mealPlans.map((mealPlan) => ({
+          ...mealPlan,
+          date: new Date(mealPlan.date),
+        }));
+        setCurrentMealPlans(datedMealPlans);
       }
     }
 
@@ -65,7 +71,8 @@ export default function Meals() {
       const zodResultsRecipes = recipeArraySchema.safeParse(localRecipes);
       if (!zodResultsRecipes.success) {
         console.error(
-          "Error parsing data. Ensure data in local storage has not been modified manually."
+          "Error parsing data. Ensure data in local storage has not been modified manually.",
+          zodResultsRecipes.error.flatten()
         );
       } else {
         setCurrentRecipes(zodResultsRecipes.data);
@@ -91,6 +98,7 @@ export default function Meals() {
         selectedDate={selectedDate || new Date()}
         currentMealPlans={currentMealPlans}
         recipes={currentRecipes}
+        isLoggedIn={isLoggedIn}
       />
     </RouteContent>
   );
