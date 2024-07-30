@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardDescription, CardHeader } from "../ui/card";
 import { Separator } from "../ui/separator";
 import { PHMealPlan, PHRecipe } from "~/lib/phData";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -116,16 +116,6 @@ export default function DayInterface({
     setLocalStorageVersion,
   } = props;
 
-  const [thisMealPlan, setThisMealPlan] = useState<PHMealPlan | undefined>();
-
-  useEffect(() => {
-    setThisMealPlan(
-      currentMealPlans.find(
-        (meal) => meal.date.getDate() === selectedDate.getDate()
-      )
-    );
-  }, [currentMealPlans, selectedDate]);
-
   return (
     <Card className="p-2 w-full overflow-hidden">
       <CardHeader className="p-1 text-lg font-semibold flex items-center">
@@ -139,9 +129,11 @@ export default function DayInterface({
       </CardHeader>
       <Separator />
       <CardContent className="p-2 pb-16 grid gap-y-2 overflow-y-scroll h-full">
-        {thisMealPlan?.recipes.map((recipe, index) => (
-          <MealEntry recipe={recipe} key={index} />
-        ))}
+        {currentMealPlans
+          .find((meal) => meal.date.getDate() === selectedDate.getDate())
+          ?.recipes.map((recipe, index) => (
+            <MealEntry recipe={recipe} key={index} />
+          ))}
         <AddMealButton
           recipes={recipes}
           date={selectedDate}
