@@ -83,10 +83,6 @@ export default function Meals() {
   }, [isLoggedIn, localStorageVersion]);
 
   return (
-    // Month Name Date Picker
-    // Fast Day Carousel
-    // Detail Day Carousel
-    // Meals Interface
     <RouteContent>
       <Calendar
         mode="single"
