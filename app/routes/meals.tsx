@@ -95,7 +95,6 @@ export default function Meals() {
         mode="single"
         selected={selectedDate}
         onSelect={setSelectedDate}
-        mealPlans={currentMealPlans}
       />
       <DayInterface
         selectedDate={selectedDate || new Date()}
