@@ -128,31 +128,70 @@ export function addRecipeToPlan(mealPlan: PHMealPlan, recipeToAdd: PHRecipe) {
     return console.error(
       "Cannot add recipe to plan. Plan data does not exist in local storage."
     );
-  } else {
-    const localMeals = JSON.parse(localMealsString);
-    const zodResults = mealPlanArraySchema.safeParse(localMeals);
-    if (!zodResults.success) {
-      return console.error(
-        "Error parsing localMeals from local storage. Incorrect data format."
-      );
-    }
-    const verifiedMealPlans = zodResults.data;
-    const existingPlanIndex = verifiedMealPlans.findIndex(
-      (plan) => plan.id === mealPlan.id
+  }
+  const localMeals = JSON.parse(localMealsString);
+  const zodResults = mealPlanArraySchema.safeParse(localMeals);
+  if (!zodResults.success) {
+    return console.error(
+      "Error parsing localMeals from local storage. Incorrect data format."
     );
-    if (existingPlanIndex !== -1) {
-      const newMealPlan = {
-        ...verifiedMealPlans[existingPlanIndex],
-        recipes: [...verifiedMealPlans[existingPlanIndex].recipes, recipeToAdd],
-      };
-      const newMealPlans = [...verifiedMealPlans];
-      newMealPlans[existingPlanIndex] = newMealPlan;
-      localStorage.setItem("localMeals", JSON.stringify(newMealPlans));
-    } else {
-      console.log(existingPlanIndex, mealPlan.id);
-      return console.error(
-        "Cannot add recipe to plan. Plan entry was not found in local storage data."
-      );
-    }
+  }
+  const verifiedMealPlans = zodResults.data;
+  const existingPlanIndex = verifiedMealPlans.findIndex(
+    (plan) => plan.id === mealPlan.id
+  );
+  if (existingPlanIndex !== -1) {
+    const newMealPlan = {
+      ...verifiedMealPlans[existingPlanIndex],
+      recipes: [...verifiedMealPlans[existingPlanIndex].recipes, recipeToAdd],
+    };
+    const newMealPlans = [...verifiedMealPlans];
+    newMealPlans[existingPlanIndex] = newMealPlan;
+    localStorage.setItem("localMeals", JSON.stringify(newMealPlans));
+  } else {
+    console.log(existingPlanIndex, mealPlan.id);
+    return console.error(
+      "Cannot add recipe to plan. Plan entry was not found in local storage data."
+    );
+  }
+}
+
+export function removeRecipeFromPlan(
+  mealPlan: PHMealPlan,
+  recipeIndex: number
+) {
+  const localMealsString = localStorage.getItem("localMeals");
+  if (!localMealsString) {
+    return console.error(
+      "Cannot add recipe to plan. Plan data does not exist in local storage."
+    );
+  }
+  const localMeals = JSON.parse(localMealsString);
+  const zodResults = mealPlanArraySchema.safeParse(localMeals);
+  if (!zodResults.success) {
+    return console.error(
+      "Error parsing localMeals from local storage. Incorrect data format."
+    );
+  }
+  const verifiedMealPlans = zodResults.data;
+  const existingPlanIndex = verifiedMealPlans.findIndex(
+    (plan) => plan.id === mealPlan.id
+  );
+  if (existingPlanIndex !== -1) {
+    const newMealPlan = {
+      ...verifiedMealPlans[existingPlanIndex],
+      recipes: verifiedMealPlans[existingPlanIndex].recipes.splice(
+        recipeIndex,
+        1
+      ),
+    };
+    const newMealPlans = [...verifiedMealPlans];
+    newMealPlans[existingPlanIndex] = newMealPlan;
+    localStorage.setItem("localMeals", JSON.stringify(newMealPlans));
+  } else {
+    console.log(existingPlanIndex, mealPlan.id);
+    return console.error(
+      "Cannot remove recipe from plan. Plan entry was not found in local storage data."
+    );
   }
 }
