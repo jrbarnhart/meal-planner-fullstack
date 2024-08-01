@@ -168,6 +168,7 @@ export default function DayInterface({
               isLoggedIn={isLoggedIn}
               handleDeleteClick={() => {
                 removeRecipeFromPlan(meal, index);
+                setLocalStorageVersion((prev) => prev + 1);
               }}
             />
           ));
