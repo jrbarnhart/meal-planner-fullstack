@@ -108,7 +108,10 @@ export function createLocalMealPlan(newMealPlan: PHMealPlan) {
     }
     const verifiedMealPlans = zodResults.data;
     const existingMealPlan = verifiedMealPlans.find(
-      (plan) => new Date(plan.date).getDate() === newMealPlan.date.getDate()
+      (plan) =>
+        new Date(plan.date).getFullYear() === newMealPlan.date.getFullYear() &&
+        new Date(plan.date).getMonth() === newMealPlan.date.getMonth() &&
+        new Date(plan.date).getDate() === newMealPlan.date.getDate()
     );
     if (existingMealPlan) {
       return console.error(

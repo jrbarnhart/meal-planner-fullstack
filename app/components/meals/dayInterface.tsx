@@ -183,7 +183,10 @@ export default function DayInterface({
           date={selectedDate}
           isLoggedIn={isLoggedIn}
           mealPlan={currentMealPlans.find(
-            (meal) => meal.date.getDate() === selectedDate.getDate()
+            (meal) =>
+              meal.date.getFullYear() === selectedDate.getFullYear() &&
+              meal.date.getMonth() === selectedDate.getMonth() &&
+              meal.date.getDate() === selectedDate.getDate()
           )}
           setLocalStorageVersion={setLocalStorageVersion}
         />
