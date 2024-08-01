@@ -1,6 +1,6 @@
 import DayInterface from "~/components/meals/dayInterface";
 import RouteContent from "~/components/layout/routeContent";
-import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
 import { PHMealPlan, PHRecipe } from "~/lib/phData";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
@@ -23,6 +23,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   return json({ mealPlans, recipes, isLoggedIn });
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  console.log(formData);
+  return null;
 }
 
 export default function Meals() {
