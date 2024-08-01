@@ -16,7 +16,7 @@ import {
   getLocalId,
   removeRecipeFromPlan,
 } from "~/lib/localStorageUtils";
-import { Form } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 
 function MealEntry({
   ...props
@@ -28,7 +28,9 @@ function MealEntry({
   const { recipe, isLoggedIn, handleDeleteClick } = props;
   return (
     <div className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr] items-center text-nowrap">
-      <p className="truncate">{recipe.name}</p>
+      <Link to={`/recipes/${recipe.id}`} className="truncate text-green-500">
+        {recipe.name}
+      </Link>
       <p>{`${recipe.time} min`}</p>
       <p>{recipe.feeds}</p>
       <Form method="post">
