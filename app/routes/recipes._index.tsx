@@ -20,18 +20,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const isLoggedIn = session.has("userId");
 
-  let recipes: PHRecipe[] = [];
-  if (isLoggedIn) {
-    // set recipes using db query for user's recipes
-    recipes = [];
-  }
+  const userRecipes: PHRecipe[] = []; // DB query if logged in
 
-  return json({ recipes, isLoggedIn });
+  return json({ userRecipes, isLoggedIn });
 }
 
 export default function Recipes() {
-  const { recipes, isLoggedIn } = useLoaderData<typeof loader>();
-  const [currentRecipes, setCurrentRecipes] = useState<PHRecipe[]>(recipes);
+  const { userRecipes, isLoggedIn } = useLoaderData<typeof loader>();
+  const [currentRecipes, setCurrentRecipes] = useState<PHRecipe[]>(userRecipes);
 
   useEffect(() => {
     const localRecipesString = localStorage.getItem("localRecipes");
@@ -58,7 +54,7 @@ export default function Recipes() {
   return (
     <RouteContent>
       <div className="flex items-center justify-between w-full">
-        <AddRecipeButton recipes={currentRecipes} />
+        <AddRecipeButton />
         <h1 className="text-xl">My Recipes</h1>
       </div>
       <Card className="w-full h-full overflow-hidden">
