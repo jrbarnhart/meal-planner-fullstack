@@ -4,6 +4,7 @@ import { DayPicker } from "react-day-picker";
 
 import { cn } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
+import { PHMealPlan } from "~/lib/phData";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
@@ -11,8 +12,18 @@ function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  mealPlans,
   ...props
-}: CalendarProps) {
+}: CalendarProps & { mealPlans: PHMealPlan[] }) {
+  const mealPlanDays = mealPlans.map(
+    (plan) =>
+      new Date(
+        plan.date.getFullYear(),
+        plan.date.getMonth(),
+        plan.date.getDate()
+      )
+  );
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -42,7 +53,7 @@ function Calendar({
         day_range_end: "day-range-end",
         day_selected:
           "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-        day_today: "bg-accent text-accent-foreground",
+        day_today: "bg-accent",
         day_outside:
           "day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30",
         day_disabled: "text-muted-foreground opacity-50",
@@ -51,6 +62,8 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
+      modifiers={{ hasMealPlan: mealPlanDays }}
+      modifiersClassNames={{ hasMealPlan: "!text-green-500" }}
       components={{
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
