@@ -178,12 +178,11 @@ export function removeRecipeFromPlan(
     (plan) => plan.id === mealPlan.id
   );
   if (existingPlanIndex !== -1) {
+    const newRecipes = [...verifiedMealPlans[existingPlanIndex].recipes];
+    newRecipes.splice(recipeIndex, 1);
     const newMealPlan = {
       ...verifiedMealPlans[existingPlanIndex],
-      recipes: verifiedMealPlans[existingPlanIndex].recipes.splice(
-        recipeIndex,
-        1
-      ),
+      recipes: newRecipes,
     };
     const newMealPlans = [...verifiedMealPlans];
     newMealPlans[existingPlanIndex] = newMealPlan;
