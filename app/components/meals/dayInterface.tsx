@@ -14,15 +14,42 @@ import {
   addRecipeToPlan,
   createLocalMealPlan,
   getLocalId,
+  removeRecipeFromPlan,
 } from "~/lib/localStorageUtils";
+import { Form } from "@remix-run/react";
 
-function MealEntry({ recipe }: { recipe: PHRecipe }) {
+function MealEntry({
+  ...props
+}: {
+  recipe: PHRecipe;
+  isLoggedIn: boolean;
+  handleDeleteClick: () => void;
+}) {
+  const { recipe, isLoggedIn, handleDeleteClick } = props;
   return (
     <div className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr] items-center text-nowrap">
       <p className="truncate">{recipe.name}</p>
       <p>{`${recipe.time} min`}</p>
-      <p>{`Feeds ${recipe.feeds}`}</p>
-      <Button variant={"secondary"}>...</Button>
+      <p>{recipe.feeds}</p>
+      <Form method="post">
+        <input type="hidden" name="deleteId" value={recipe.id} />
+        {isLoggedIn ? (
+          <Button type="submit" variant={"outline"} className="text-red-500">
+            X
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            variant={"outline"}
+            className="text-red-500 font-bold"
+            onClick={() => {
+              handleDeleteClick();
+            }}
+          >
+            X
+          </Button>
+        )}
+      </Form>
     </div>
   );
 }
@@ -124,16 +151,27 @@ export default function DayInterface({
           <span>Recipe Name</span>
           <span>Prep Time</span>
           <span>Feeds</span>
-          <span>Actions</span>
+          <span>Remove</span>
         </CardDescription>
       </CardHeader>
       <Separator />
       <CardContent className="p-2 pb-16 grid gap-y-2 overflow-y-scroll h-full">
-        {currentMealPlans
-          .find((meal) => meal.date.getDate() === selectedDate.getDate())
-          ?.recipes.map((recipe, index) => (
-            <MealEntry recipe={recipe} key={index} />
-          ))}
+        {(() => {
+          const meal = currentMealPlans.find(
+            (meal) => meal.date.getDate() === selectedDate.getDate()
+          );
+
+          return meal?.recipes.map((recipe, index) => (
+            <MealEntry
+              recipe={recipe}
+              key={index}
+              isLoggedIn={isLoggedIn}
+              handleDeleteClick={() => {
+                removeRecipeFromPlan(meal, index);
+              }}
+            />
+          ));
+        })()}
         <AddRecipeSelect
           recipes={recipes}
           date={selectedDate}
