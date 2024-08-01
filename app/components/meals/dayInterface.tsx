@@ -160,7 +160,10 @@ export default function DayInterface({
       <CardContent className="p-2 pb-16 grid gap-y-2 overflow-y-scroll h-full">
         {(() => {
           const meal = currentMealPlans.find(
-            (meal) => meal.date.getDate() === selectedDate.getDate()
+            (meal) =>
+              meal.date.getFullYear() === selectedDate.getFullYear() &&
+              meal.date.getMonth() === selectedDate.getMonth() &&
+              meal.date.getDate() === selectedDate.getDate()
           );
 
           return meal?.recipes.map((recipe, index) => (
