@@ -57,6 +57,6 @@ export function formatDateForTitle(date: Date): string {
   return `${month} ${day}${suffix(day)}`;
 }
 // .getDate gets day of the month, not an actual date. Use this instead.
-export function getActualDate(date: Date): string {
-  return date.toISOString().split("T")[0];
+export function getActualDate(date: Date): Date {
+  return new Date(date.toISOString().split("T")[0]);
 }
