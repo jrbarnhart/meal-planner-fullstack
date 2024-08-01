@@ -50,10 +50,12 @@ export default function Meals() {
   const [localStorageVersion, setLocalStorageVersion] = useState(0);
 
   useEffect(() => {
+    if (isLoggedIn) return;
+
     const localMealsString = localStorage.getItem("localMeals");
     const localRecipesString = localStorage.getItem("localRecipes");
 
-    if ((!localMealsString && !localRecipesString) || isLoggedIn) {
+    if (!localMealsString && !localRecipesString) {
       return;
     }
 

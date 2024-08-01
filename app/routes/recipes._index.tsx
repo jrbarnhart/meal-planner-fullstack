@@ -30,10 +30,12 @@ export default function Recipes() {
   const [currentRecipes, setCurrentRecipes] = useState<PHRecipe[]>(userRecipes);
 
   useEffect(() => {
+    if (isLoggedIn) return;
+
     const localRecipesString = localStorage.getItem("localRecipes");
 
     if (!localRecipesString) {
-      return console.log("No recipe data found in local storage.");
+      return;
     }
 
     const localRecipes = JSON.parse(localRecipesString);
@@ -46,9 +48,7 @@ export default function Recipes() {
       );
     }
 
-    if (!isLoggedIn) {
-      setCurrentRecipes(zodResults.data);
-    }
+    setCurrentRecipes(zodResults.data);
   }, [isLoggedIn]);
 
   return (

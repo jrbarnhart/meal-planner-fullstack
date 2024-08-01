@@ -47,27 +47,24 @@ export default function RecipeLibrary() {
     useState<PHRecipe[]>(userRecipes);
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      const localRecipesString = localStorage.getItem("localRecipes");
+    if (isLoggedIn) return;
 
-      if (!localRecipesString) {
-        return console.log("No recipe data found in local storage.");
-      }
+    const localRecipesString = localStorage.getItem("localRecipes");
 
-      const localRecipes = JSON.parse(localRecipesString);
-
-      const zodResults = recipeArraySchema.safeParse(localRecipes);
-
-      if (!zodResults.success) {
-        return console.error(
-          "Error parsing recipe data. Ensure data in local storage has not been modified manually."
-        );
-      }
-
-      if (!isLoggedIn) {
-        setCurrentUserRecipes(zodResults.data);
-      }
+    if (!localRecipesString) {
+      return;
     }
+
+    const localRecipes = JSON.parse(localRecipesString);
+
+    const zodResults = recipeArraySchema.safeParse(localRecipes);
+
+    if (!zodResults.success) {
+      return console.error(
+        "Error parsing recipe data. Ensure data in local storage has not been modified manually."
+      );
+    }
+    setCurrentUserRecipes(zodResults.data);
   }, [isLoggedIn]);
 
   const calculateComplexity = (recipe: PHRecipe) => {
