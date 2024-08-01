@@ -2,7 +2,7 @@ import { LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import RouteContent from "~/components/layout/routeContent";
-import NewRecipeButton from "~/components/recipes/newRecipeButton";
+import AddRecipeButton from "~/components/recipes/addRecipeButton";
 import RecipeEntry from "~/components/recipes/recipeEntry";
 import {
   Card,
@@ -58,7 +58,7 @@ export default function Recipes() {
   return (
     <RouteContent>
       <div className="flex items-center justify-between w-full">
-        <NewRecipeButton recipes={currentRecipes} />
+        <AddRecipeButton recipes={currentRecipes} />
         <h1 className="text-xl">My Recipes</h1>
       </div>
       <Card className="w-full h-full overflow-hidden">

@@ -13,7 +13,7 @@ import { Label } from "../ui/label";
 import { Link } from "@remix-run/react";
 import { PHRecipe } from "~/lib/phData";
 
-export default function NewRecipeButton({ recipes }: { recipes: PHRecipe[] }) {
+export default function AddRecipeButton({ recipes }: { recipes: PHRecipe[] }) {
   const [open, setOpen] = useState(false);
 
   return (
