@@ -1,4 +1,8 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  redirect,
+} from "@remix-run/node";
 import { Form, json, Link, useLoaderData, useSubmit } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import RouteContent from "~/components/layout/routeContent";
@@ -43,8 +47,27 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
-  console.log(formData);
-  return null;
+  const sort = formData.get("sort");
+  const feeds = formData.get("feeds");
+  const time = formData.get("time");
+
+  const types: string[] = [];
+  for (const [key, value] of formData.entries()) {
+    if (value === "on") {
+      types.push(key);
+    }
+  }
+
+  let urlWithParams = "/recipes/library/?";
+  if (sort) urlWithParams += `sort=${sort}&`;
+  if (feeds) urlWithParams += `feeds=${feeds}&`;
+  if (time) urlWithParams += `time=${time}&`;
+  if (types.length > 0) {
+    urlWithParams += `types=${types.join("+")}`;
+  }
+
+  console.log(urlWithParams, formData);
+  return redirect(urlWithParams);
 }
 
 export default function RecipeLibrary() {
