@@ -25,6 +25,7 @@ import {
 import { Slider } from "~/components/ui/slider";
 import { addLocalRecipe } from "~/lib/localStorageUtils";
 import { PHRecipe, phRecipes } from "~/lib/phData";
+import { calculateComplexity } from "~/lib/utils";
 import { recipeArraySchema } from "~/lib/zodSchemas/recipeSchema";
 import { getSession } from "~/sessions";
 
@@ -41,7 +42,58 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const defaultRecipes = phRecipes; // Replace with db query
 
-  return json({ isLoggedIn, defaultRecipes, userRecipes });
+  const url = new URL(request.url);
+  const sort = url.searchParams.get("sort");
+  const feeds = url.searchParams.get("feeds");
+  const time = url.searchParams.get("time");
+  const types = url.searchParams.get("types");
+
+  let filteredRecipes = defaultRecipes;
+  if (feeds) {
+    filteredRecipes = filteredRecipes.filter(
+      (recipe) => recipe.feeds >= parseInt(feeds)
+    );
+  }
+  if (time) {
+    filteredRecipes = filteredRecipes.filter(
+      (recipe) => recipe.time <= parseInt(time)
+    );
+  }
+  if (types) {
+    const typesArray = types.split("+");
+    console.log(typesArray);
+    filteredRecipes = filteredRecipes.filter((recipe) =>
+      recipe.types.some((type) => typesArray.includes(type.toLowerCase()))
+    );
+  }
+  if (sort) {
+    filteredRecipes = filteredRecipes.sort((a, b) => {
+      if (sort === "alpha") {
+        if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+        if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+        return 0;
+      }
+      if (sort === "time") {
+        if (a.time > b.time) return 1;
+        if (a.time < b.time) return -1;
+        return 0;
+      }
+      if (sort === "complexity") {
+        // This only works because calculateComplexity returns a string starting with a number
+        if (calculateComplexity(a) > calculateComplexity(b)) return 1;
+        if (calculateComplexity(a) < calculateComplexity(b)) return -1;
+        return 0;
+      }
+      if (sort === "feeds") {
+        if (a.feeds > b.feeds) return -1;
+        if (a.feeds < b.feeds) return 1;
+        return 0;
+      }
+      return 0;
+    });
+  }
+
+  return json({ isLoggedIn, filteredRecipes, userRecipes });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -71,7 +123,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function RecipeLibrary() {
-  const { isLoggedIn, defaultRecipes, userRecipes } =
+  const { isLoggedIn, filteredRecipes, userRecipes } =
     useLoaderData<typeof loader>();
   const [currentUserRecipes, setCurrentUserRecipes] =
     useState<PHRecipe[]>(userRecipes);
@@ -96,31 +148,6 @@ export default function RecipeLibrary() {
     }
     setCurrentUserRecipes(zodResults.data);
   }, [isLoggedIn]);
-
-  const calculateComplexity = (recipe: PHRecipe) => {
-    const { time } = recipe;
-    const totalRequirements = recipe.requirements.length;
-    const totalSteps = recipe.steps.length;
-    const totalIngredients = recipe.ingredients.length;
-    const timeCeiling = 180;
-    const requirementsCeiling = 8;
-    const stepsCeiling = 15;
-    const ingredientsCeiling = 10;
-    const complexity =
-      0.33 * (time / timeCeiling) +
-      0.2 * (totalRequirements / requirementsCeiling) +
-      0.15 * (totalIngredients / ingredientsCeiling) +
-      0.32 * (totalSteps / stepsCeiling);
-    if (complexity > 0.9) {
-      return "5 - Advanced";
-    } else if (complexity > 0.75) {
-      return "4 - Challenging";
-    } else if (complexity > 0.4) {
-      return "3 - Intermediate";
-    } else if (complexity > 0.3) {
-      return "2 - Basic";
-    } else return "1 - Easy";
-  };
 
   const submit = useSubmit();
 
@@ -210,7 +237,7 @@ export default function RecipeLibrary() {
         <h1 className="text-xl">Recipe Library</h1>
       </div>
       <div className="overflow-y-auto space-y-2">
-        {defaultRecipes.map((recipe) => (
+        {filteredRecipes.map((recipe) => (
           <Card key={recipe.id}>
             <CardHeader>
               <CardTitle>{recipe.name}</CardTitle>
