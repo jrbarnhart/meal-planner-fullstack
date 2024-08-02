@@ -302,6 +302,7 @@ export type PHUser = {
 
 export const defaultRecipes = [
   {
+    isDefault: true,
     name: "Pancakes",
     description: "Fluffy and delicious breakfast pancakes.",
     types: ["breakfast"],
@@ -331,6 +332,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Grilled Cheese Sandwich",
     description:
       "A classic grilled cheese sandwich with a crispy exterior and gooey interior.",
@@ -356,6 +358,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Chicken Caesar Salad",
     description:
       "A fresh and hearty salad with grilled chicken, romaine lettuce, and Caesar dressing.",
@@ -381,6 +384,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Spaghetti Bolognese",
     description: "A hearty Italian pasta dish with a rich meat sauce.",
     types: ["dinner"],
@@ -412,6 +416,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Chocolate Chip Cookies",
     description: "Classic chewy chocolate chip cookies.",
     types: ["dessert", "snack"],
@@ -443,6 +448,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Chicken Stir-Fry",
     description: "Quick and easy chicken stir-fry with vegetables.",
     types: ["lunch", "dinner"],
@@ -467,6 +473,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Blueberry Muffins",
     description: "Soft and moist blueberry muffins.",
     types: ["breakfast", "snack", "dessert"],
@@ -497,6 +504,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Beef Tacos",
     description: "Tasty beef tacos with all the fixings.",
     types: ["lunch", "dinner"],
@@ -521,6 +529,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Omelette",
     description: "A fluffy omelette filled with cheese and veggies.",
     types: ["breakfast"],
@@ -548,6 +557,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "BBQ Chicken Pizza",
     description:
       "A delicious pizza topped with BBQ chicken, red onions, and cilantro.",
@@ -575,6 +585,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Veggie Burger",
     description:
       "A healthy and satisfying veggie burger made with black beans.",
@@ -605,6 +616,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Greek Salad",
     description:
       "A fresh and tangy salad with cucumbers, tomatoes, olives, and feta cheese.",
@@ -634,6 +646,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Shrimp Tacos",
     description: "Flavorful shrimp tacos with a tangy slaw and creamy sauce.",
     types: ["lunch", "dinner"],
@@ -664,6 +677,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Mac and Cheese",
     description:
       "Creamy homemade mac and cheese with a crunchy breadcrumb topping.",
@@ -693,6 +707,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Fruit Smoothie",
     description: "A refreshing and healthy fruit smoothie.",
     types: ["breakfast", "snack"],
@@ -715,6 +730,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Chicken Quesadilla",
     description: "A cheesy chicken quesadilla with a crispy tortilla.",
     types: ["lunch", "dinner"],
@@ -739,6 +755,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Beef Stew",
     description: "A hearty and comforting beef stew with vegetables.",
     types: ["lunch", "dinner"],
@@ -770,6 +787,7 @@ export const defaultRecipes = [
     ],
   },
   {
+    isDefault: true,
     name: "Banana Bread",
     description: "Moist and delicious banana bread with a hint of cinnamon.",
     types: ["breakfast", "snack", "dessert"],
