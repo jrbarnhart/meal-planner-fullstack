@@ -1,3 +1,4 @@
+import { Recipe } from "@prisma/client";
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -12,6 +13,7 @@ import {
   useSubmit,
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { prisma } from "~/client";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
 import {
@@ -31,7 +33,6 @@ import {
 } from "~/components/ui/popover";
 import { Slider } from "~/components/ui/slider";
 import { addLocalRecipe } from "~/lib/localStorageUtils";
-import { PHRecipe, phRecipes } from "~/lib/phData";
 import { calculateComplexity } from "~/lib/utils";
 import { recipeArraySchema } from "~/lib/zodSchemas/recipeSchema";
 import { getSession } from "~/sessions";
@@ -52,13 +53,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const isLoggedIn = session.has("userId");
 
-  let userRecipes: PHRecipe[] = [];
+  let userRecipes: Recipe[] = [];
 
   if (isLoggedIn) {
-    userRecipes = []; // Replace with db query
+    userRecipes = []; // Replace with db query for logged in user's recipes
   }
 
-  const defaultRecipes = phRecipes; // Replace with db query
+  const defaultRecipes = await prisma.recipe.findMany();
 
   const url = new URL(request.url);
   const sort = url.searchParams.get("sort");
@@ -143,7 +144,7 @@ export default function RecipeLibrary() {
   const { isLoggedIn, filteredRecipes, userRecipes } =
     useLoaderData<typeof loader>();
   const [currentUserRecipes, setCurrentUserRecipes] =
-    useState<PHRecipe[]>(userRecipes);
+    useState<Recipe[]>(userRecipes);
 
   useEffect(() => {
     if (isLoggedIn) return;
