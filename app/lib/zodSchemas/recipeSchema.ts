@@ -13,6 +13,8 @@ export const localRecipeSchema = z.object({
   preNotes: z.string().trim(),
   steps: z.array(z.string().trim()),
   postNotes: z.string().trim(),
+  userId: z.literal(-1),
+  isDefault: z.literal(false),
 });
 
 export const addLocalRecipeSchema = z.object({
@@ -34,6 +36,8 @@ export const addLocalRecipeSchema = z.object({
   preNotes: z.string().trim(),
   steps: z.array(z.string().trim()),
   postNotes: z.string().trim(),
+  userId: z.literal(-1),
+  isDefault: z.literal(false),
 });
 
 export const recipeArraySchema = z.array(localRecipeSchema);
