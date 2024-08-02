@@ -23,9 +23,9 @@ model Recipe {
   types        String[]
   requirements String[]
   ingredients  String[]
-  preNotes     String[]
+  preNotes     String
   steps        String[]
-  postNotes    String[]
+  postNotes    String
   mealPlans    MealPlan[]
   userId       Int
   user         User       @relation(references: [id], fields: [userId])
