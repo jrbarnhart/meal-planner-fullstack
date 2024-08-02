@@ -1,4 +1,4 @@
-import { PHMealPlan, PHRecipe } from "./phData";
+import { MealPlan, Recipe } from "@prisma/client";
 import { mealPlanArraySchema } from "./zodSchemas/mealPlanSchema";
 import { recipeArraySchema } from "./zodSchemas/recipeSchema";
 
@@ -20,7 +20,7 @@ export function findLocalRecipeById(id: number) {
   return verifiedRecipes.find((verRec) => verRec.id === id);
 }
 
-export function addLocalRecipe(recipe: PHRecipe) {
+export function addLocalRecipe(recipe: Recipe) {
   const localRecipesString = localStorage.getItem("localRecipes");
 
   if (!localRecipesString) {
@@ -47,7 +47,7 @@ export function addLocalRecipe(recipe: PHRecipe) {
   }
 }
 
-export function deleteLocalRecipe(recipe: PHRecipe) {
+export function deleteLocalRecipe(recipe: Recipe) {
   const localRecipesString = localStorage.getItem("localRecipes");
 
   if (!localRecipesString) {
@@ -92,7 +92,7 @@ export function getLocalId() {
   return nextId;
 }
 
-export function createLocalMealPlan(newMealPlan: PHMealPlan) {
+export function createLocalMealPlan(newMealPlan: MealPlan) {
   const localMealsString = localStorage.getItem("localMeals");
 
   if (!localMealsString) {
@@ -124,7 +124,7 @@ export function createLocalMealPlan(newMealPlan: PHMealPlan) {
   }
 }
 
-export function addRecipeToPlan(mealPlan: PHMealPlan, recipeToAdd: PHRecipe) {
+export function addRecipeToPlan(mealPlan: MealPlan, recipeToAdd: Recipe) {
   const localMealsString = localStorage.getItem("localMeals");
 
   if (!localMealsString) {
@@ -159,10 +159,7 @@ export function addRecipeToPlan(mealPlan: PHMealPlan, recipeToAdd: PHRecipe) {
   }
 }
 
-export function removeRecipeFromPlan(
-  mealPlan: PHMealPlan,
-  recipeIndex: number
-) {
+export function removeRecipeFromPlan(mealPlan: MealPlan, recipeIndex: number) {
   const localMealsString = localStorage.getItem("localMeals");
   if (!localMealsString) {
     return console.error(
