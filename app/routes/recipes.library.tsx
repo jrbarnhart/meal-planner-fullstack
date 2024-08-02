@@ -45,6 +45,8 @@ const RECIPE_TYPES = [
   "snack",
 ];
 
+const MAX_TIME = 180;
+
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
 
@@ -169,8 +171,8 @@ export default function RecipeLibrary() {
   const [searchParams] = useSearchParams();
   const selectedTypes = searchParams.get("types")?.split(" ");
   const selectedSort = searchParams.get("sort");
-  const selectedFeeds = searchParams.get("feeds");
-  const selectedTime = searchParams.get("time");
+  const selectedFeeds = searchParams.get("feeds") ?? "1";
+  const selectedTime = searchParams.get("time") ?? MAX_TIME.toString();
 
   return (
     <RouteContent>
