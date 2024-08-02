@@ -3,7 +3,14 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import { Form, json, Link, useLoaderData, useSubmit } from "@remix-run/react";
+import {
+  Form,
+  json,
+  Link,
+  useLoaderData,
+  useSearchParams,
+  useSubmit,
+} from "@remix-run/react";
 import { useEffect, useState } from "react";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
@@ -28,6 +35,15 @@ import { PHRecipe, phRecipes } from "~/lib/phData";
 import { calculateComplexity } from "~/lib/utils";
 import { recipeArraySchema } from "~/lib/zodSchemas/recipeSchema";
 import { getSession } from "~/sessions";
+
+const RECIPE_TYPES = [
+  "breakfast",
+  "lunch",
+  "dinner",
+  "brunch",
+  "dessert",
+  "snack",
+];
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -61,7 +77,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
   if (types) {
     const typesArray = types.split("+");
-    console.log(typesArray);
     filteredRecipes = filteredRecipes.filter((recipe) =>
       recipe.types.some((type) => typesArray.includes(type.toLowerCase()))
     );
@@ -118,7 +133,6 @@ export async function action({ request }: ActionFunctionArgs) {
     urlWithParams += `types=${types.join("+")}`;
   }
 
-  console.log(urlWithParams, formData);
   return redirect(urlWithParams);
 }
 
@@ -151,6 +165,12 @@ export default function RecipeLibrary() {
 
   const submit = useSubmit();
 
+  const [searchParams] = useSearchParams();
+  const selectedTypes = searchParams.get("types")?.split(" ");
+  const selectedSort = searchParams.get("sort");
+  const selectedFeeds = searchParams.get("feeds");
+  const selectedTime = searchParams.get("time");
+
   return (
     <RouteContent>
       <div className="flex items-center justify-between gap-3 w-full">
@@ -171,7 +191,11 @@ export default function RecipeLibrary() {
             >
               <div className="flex gap-3 items-center">
                 <Label htmlFor="sort">Sort By:</Label>
-                <select id="sort" name="sort">
+                <select
+                  id="sort"
+                  name="sort"
+                  defaultValue={selectedSort || "alpha"}
+                >
                   <option value="alpha">A-Z</option>
                   <option value="time">Prep Time</option>
                   <option value="complexity">Complexity</option>
@@ -181,54 +205,44 @@ export default function RecipeLibrary() {
               <div className="flex gap-3 items-center">
                 <Label htmlFor="feeds">Feeds:</Label>
                 <p>1</p>
-                <Slider id="feeds" name="feeds" min={1} max={10} step={1} />
+                <Slider
+                  id="feeds"
+                  name="feeds"
+                  min={1}
+                  max={10}
+                  step={1}
+                  defaultValue={[parseInt(selectedFeeds || "")]}
+                />
                 <p>10+</p>
               </div>
               <div className="flex gap-3 items-center">
                 <Label htmlFor="time">Prep Time:</Label>
                 <p>5m</p>
-                <Slider id="time" name="time" min={10} max={180} step={10} />
+                <Slider
+                  id="time"
+                  name="time"
+                  min={10}
+                  max={180}
+                  step={10}
+                  defaultValue={[parseInt(selectedTime || "")]}
+                />
                 <p>3hr</p>
               </div>
               <div className="flex gap-3 items-center">
-                <Label htmlFor="type">Type:</Label>
                 <fieldset id="type" className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-2">
-                    <Checkbox id="t1" name="breakfast" />
-                    <Label htmlFor="t1" className="text-lg">
-                      Breakfast
-                    </Label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Checkbox id="t2" name="lunch" />
-                    <Label htmlFor="t2" className="text-lg">
-                      Lunch
-                    </Label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Checkbox id="t3" name="dinner" />
-                    <Label htmlFor="t3" className="text-lg">
-                      Dinner
-                    </Label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Checkbox id="t4" name="dessert" />
-                    <Label htmlFor="t4" className="text-lg">
-                      Dessert
-                    </Label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Checkbox id="t5" name="brunch" />
-                    <Label htmlFor="t5" className="text-lg">
-                      Brunch
-                    </Label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Checkbox id="t6" name="snacks" />
-                    <Label htmlFor="t6" className="text-lg">
-                      Snacks
-                    </Label>
-                  </div>
+                  <legend>Recipe Type</legend>
+                  {RECIPE_TYPES.map((type, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Checkbox
+                        id={type}
+                        name={type}
+                        defaultChecked={selectedTypes?.includes(type)}
+                      />
+                      <Label htmlFor={type} className="text-lg">
+                        {type[0].toUpperCase() + type.slice(1)}
+                      </Label>
+                    </div>
+                  ))}
                 </fieldset>
               </div>
             </Form>
