@@ -205,31 +205,34 @@ export default function RecipeLibrary() {
                   <option value="feeds">Feeds</option>
                 </select>
               </div>
-              <div className="flex gap-3 items-center">
-                <Label htmlFor="feeds">Feeds:</Label>
-                <p>1</p>
+              <div className="grid gap-3 grid-cols-[1fr_4fr] items-center">
+                <p className="text-sm">Feeds:</p>
+                <p>{selectedFeeds}+</p>
                 <Slider
                   id="feeds"
                   name="feeds"
+                  className="col-span-full"
                   min={1}
                   max={10}
                   step={1}
                   defaultValue={[parseInt(selectedFeeds || "")]}
                 />
-                <p>10+</p>
               </div>
-              <div className="flex gap-3 items-center">
-                <Label htmlFor="time">Prep Time:</Label>
-                <p>5m</p>
+              <div className="grid gap-3 grid-cols-[1fr_4fr] items-center">
+                <p className="text-sm">Prep Time:</p>
+                <p>
+                  {selectedTime +
+                    (parseInt(selectedTime) >= MAX_TIME ? " min+" : " min")}
+                </p>
                 <Slider
                   id="time"
                   name="time"
+                  className="col-span-full"
                   min={10}
                   max={180}
                   step={10}
                   defaultValue={[parseInt(selectedTime || "")]}
                 />
-                <p>3hr</p>
               </div>
               <div className="flex gap-3 items-center">
                 <fieldset id="type" className="grid grid-cols-2 gap-4">
