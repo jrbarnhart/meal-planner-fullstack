@@ -76,7 +76,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
   if (types) {
-    const typesArray = types.split("+");
+    const typesArray = types.split(" ");
+
     filteredRecipes = filteredRecipes.filter((recipe) =>
       recipe.types.some((type) => typesArray.includes(type.toLowerCase()))
     );
