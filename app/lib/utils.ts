@@ -1,6 +1,6 @@
+import { Recipe } from "@prisma/client";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { PHRecipe } from "./phData";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -58,7 +58,7 @@ export function formatDateForTitle(date: Date): string {
   return `${month} ${day}${suffix(day)}`;
 }
 
-export function calculateComplexity(recipe: PHRecipe) {
+export function calculateComplexity(recipe: Recipe) {
   const { time } = recipe;
   const totalRequirements = recipe.requirements.length;
   const totalSteps = recipe.steps.length;
