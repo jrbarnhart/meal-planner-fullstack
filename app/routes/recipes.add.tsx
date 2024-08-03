@@ -79,7 +79,7 @@ export default function AddRecipe() {
     const zodResult = addLocalRecipeSchema.safeParse(dataWithId);
 
     if (!zodResult.success) {
-      // Handle form errors locally?
+      // Map zod errors to state for local errors
       return;
     }
 
