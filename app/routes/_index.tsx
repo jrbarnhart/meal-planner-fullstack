@@ -11,6 +11,7 @@ import { ActionError } from "~/lib/types";
 import { loginFormSchema } from "~/lib/zodSchemas/authFormSchemas";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import RouteContent from "~/components/layout/routeContent";
 
 export const meta: MetaFunction = () => {
   return [
@@ -58,8 +59,8 @@ export default function Index() {
   const errors = useActionData<typeof action>();
 
   return (
-    <div className="font-sans p-4">
+    <RouteContent>
       <LoginForm errors={errors} />
-    </div>
+    </RouteContent>
   );
 }

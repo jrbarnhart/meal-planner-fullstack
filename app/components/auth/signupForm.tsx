@@ -14,7 +14,7 @@ import { ActionError } from "~/lib/types";
 export default function SignupForm({ ...props }: { errors: ActionError }) {
   const { errors } = props;
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Create Account</CardTitle>
         <CardDescription>Feel free to try the app out first.</CardDescription>

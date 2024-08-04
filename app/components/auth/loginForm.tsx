@@ -17,7 +17,7 @@ export default function LoginForm({
 }) {
   const { errors } = props;
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Welcome to Munchlify!</CardTitle>
         <CardDescription>Existing users can log in below.</CardDescription>
