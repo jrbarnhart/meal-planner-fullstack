@@ -29,7 +29,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (isNaN(userId)) {
     return json({ isLoggedIn: false, foundUser: null });
   }
-  // Replace these with DB queries
+
   const foundUser = await prisma.user.findUnique({
     where: { id: userId },
     select: {
