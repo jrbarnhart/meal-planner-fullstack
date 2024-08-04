@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Separator } from "../ui/separator";
-import { PHMealPlan, PHRecipe } from "~/lib/phData";
 import { SetStateAction, useState } from "react";
 import {
   addRecipeToPlan,
@@ -17,11 +16,13 @@ import {
   removeRecipeFromPlan,
 } from "~/lib/localStorageUtils";
 import { Form, Link } from "@remix-run/react";
+import { MealPlan, Recipe } from "@prisma/client";
+import { MealPlanFull } from "~/lib/prisma/mealPlanTypes";
 
 function MealEntry({
   ...props
 }: {
-  recipe: PHRecipe;
+  recipe: Recipe;
   isLoggedIn: boolean;
   handleDeleteClick: () => void;
 }) {
@@ -59,18 +60,18 @@ function MealEntry({
 function AddRecipeSelect({
   ...props
 }: {
-  recipes: PHRecipe[];
+  recipes: Recipe[] | null;
   date: Date;
   isLoggedIn: boolean;
   setLocalStorageVersion: React.Dispatch<SetStateAction<number>>;
-  mealPlan?: PHMealPlan;
+  mealPlan?: MealPlan;
 }) {
   const { recipes, date, isLoggedIn, setLocalStorageVersion, mealPlan } = props;
 
   const [selectedRecipe, setSelectedRecipe] = useState("");
 
   const onLocalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const recipeToAdd = recipes.find(
+    const recipeToAdd = recipes?.find(
       (rec) => rec.id === parseInt(event.target.value)
     );
     if (!recipeToAdd) {
@@ -84,10 +85,11 @@ function AddRecipeSelect({
       setSelectedRecipe("");
       setLocalStorageVersion((prev) => prev + 1);
     } else {
-      const newMealPlan: PHMealPlan = {
+      const newMealPlan = {
         id: getLocalId(),
         date,
         recipes: [recipeToAdd],
+        userId: -1, // Local user doesn't have an id
       };
       createLocalMealPlan(newMealPlan);
       setSelectedRecipe("");
@@ -112,7 +114,7 @@ function AddRecipeSelect({
     >
       <option value="">--Select a Recipe--</option>
       {recipes
-        .sort((a, b) => {
+        ?.sort((a, b) => {
           const nameA = a.name.toUpperCase();
           const nameB = b.name.toUpperCase();
           if (nameA < nameB) return -1;
@@ -132,8 +134,8 @@ export default function DayInterface({
   ...props
 }: {
   selectedDate: Date;
-  currentMealPlans: PHMealPlan[];
-  recipes: PHRecipe[];
+  currentMealPlans: MealPlanFull[] | null;
+  recipes: Recipe[] | null;
   isLoggedIn: boolean;
   setLocalStorageVersion: React.Dispatch<SetStateAction<number>>;
 }) {
@@ -159,14 +161,14 @@ export default function DayInterface({
       <Separator />
       <CardContent className="p-2 pb-16 grid gap-y-2 overflow-y-scroll h-full">
         {(() => {
-          const meal = currentMealPlans.find(
+          const meal = currentMealPlans?.find(
             (meal) =>
               meal.date.getFullYear() === selectedDate.getFullYear() &&
               meal.date.getMonth() === selectedDate.getMonth() &&
               meal.date.getDate() === selectedDate.getDate()
           );
 
-          return meal?.recipes.map((recipe, index) => (
+          return meal?.recipes?.map((recipe, index) => (
             <MealEntry
               recipe={recipe}
               key={index}
@@ -182,7 +184,7 @@ export default function DayInterface({
           recipes={recipes}
           date={selectedDate}
           isLoggedIn={isLoggedIn}
-          mealPlan={currentMealPlans.find(
+          mealPlan={currentMealPlans?.find(
             (meal) =>
               meal.date.getFullYear() === selectedDate.getFullYear() &&
               meal.date.getMonth() === selectedDate.getMonth() &&
