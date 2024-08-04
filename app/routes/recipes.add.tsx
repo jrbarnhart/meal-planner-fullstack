@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { useState, useRef } from "react";
 import RouteContent from "~/components/layout/routeContent";
@@ -46,7 +46,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const isLoggedIn = session.has("userId");
 
-  return { isLoggedIn };
+  return json({ isLoggedIn });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
