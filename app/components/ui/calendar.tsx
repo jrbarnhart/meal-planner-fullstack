@@ -5,7 +5,7 @@ import { DayPicker } from "react-day-picker";
 
 import { cn } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
-import { PHMealPlan } from "~/lib/phData";
+import { MealPlan } from "@prisma/client";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
@@ -15,15 +15,16 @@ function Calendar({
   showOutsideDays = true,
   mealPlans,
   ...props
-}: CalendarProps & { mealPlans: PHMealPlan[] }) {
-  const mealPlanDays = mealPlans.map(
-    (plan) =>
-      new Date(
-        plan.date.getFullYear(),
-        plan.date.getMonth(),
-        plan.date.getDate()
-      )
-  );
+}: CalendarProps & { mealPlans: MealPlan[] | null }) {
+  const mealPlanDays =
+    mealPlans?.map(
+      (plan) =>
+        new Date(
+          plan.date.getFullYear(),
+          plan.date.getMonth(),
+          plan.date.getDate()
+        )
+    ) ?? [];
 
   return (
     <DayPicker
