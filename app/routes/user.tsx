@@ -1,5 +1,5 @@
 import { MealPlan, Recipe } from "@prisma/client";
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import { prisma } from "~/client";
@@ -17,21 +17,17 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
-import { UserFullNoPass } from "~/lib/prisma/userTypes";
 
 import { mealPlanArraySchema } from "~/lib/zodSchemas/mealPlanSchema";
 import { recipeArraySchema } from "~/lib/zodSchemas/recipeSchema";
 import { getSession } from "~/sessions";
 
-export async function loader({ request }: LoaderFunctionArgs): Promise<{
-  isLoggedIn: boolean;
-  foundUser: UserFullNoPass | null;
-}> {
+export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const isLoggedIn = session.has("userId");
   const userId = parseInt(session.id);
   if (isNaN(userId)) {
-    return { isLoggedIn: false, foundUser: null };
+    return json({ isLoggedIn: false, foundUser: null });
   }
   // Replace these with DB queries
   const foundUser = await prisma.user.findUnique({
@@ -44,7 +40,7 @@ export async function loader({ request }: LoaderFunctionArgs): Promise<{
       recipes: true,
     },
   });
-  return { isLoggedIn, foundUser };
+  return json({ isLoggedIn, foundUser });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
