@@ -12,11 +12,11 @@ import InputMany from "~/components/ui/inputMany";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { addLocalRecipe, getLocalId } from "~/lib/localStorageUtils";
-import { addLocalRecipeSchema } from "~/lib/zodSchemas/recipeSchema";
+import { localRecipeSchema } from "~/lib/zodSchemas/recipeSchema";
 import { getSession } from "~/sessions";
 
-type AddLocalRecipeInput = z.input<typeof addLocalRecipeSchema>;
-type FlattenedErrors = z.inferFlattenedErrors<typeof addLocalRecipeSchema>;
+type AddLocalRecipeInput = z.input<typeof localRecipeSchema>;
+type FlattenedErrors = z.inferFlattenedErrors<typeof localRecipeSchema>;
 
 function formatFormData(formData: FormData): AddLocalRecipeInput {
   const values: Record<string, unknown> = {};
@@ -79,7 +79,7 @@ export default function AddRecipe() {
       userId: -1,
     };
 
-    const zodResult = addLocalRecipeSchema.safeParse(completeData);
+    const zodResult = localRecipeSchema.safeParse(completeData);
 
     if (!zodResult.success) {
       setLocalErrors(zodResult.error.flatten());
