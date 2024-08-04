@@ -1,6 +1,7 @@
 import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { useState, useRef } from "react";
+import { z } from "zod";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
@@ -13,32 +14,30 @@ import { addLocalRecipe, getLocalId } from "~/lib/localStorageUtils";
 import { addLocalRecipeSchema } from "~/lib/zodSchemas/recipeSchema";
 import { getSession } from "~/sessions";
 
-function formatFormData(formData: FormData) {
-  const values: Record<string, FormDataEntryValue | FormDataEntryValue[]> = {};
+type AddLocalRecipeInput = z.input<typeof addLocalRecipeSchema>;
+type FlattenedErrors = z.inferFlattenedErrors<typeof addLocalRecipeSchema>;
+
+function formatFormData(formData: FormData): AddLocalRecipeInput {
+  const values: Record<string, unknown> = {};
 
   for (const [key, value] of formData.entries()) {
-    if (key === "types[]") {
-      if (!values.types) {
-        values["types"] = formData.getAll("types[]");
+    if (
+      key === "types[]" ||
+      key === "requirements[]" ||
+      key === "steps[]" ||
+      key === "ingredients[]"
+    ) {
+      if (!values[key.replace("[]", "")]) {
+        values[key.replace("[]", "")] = formData.getAll(key);
       }
-    } else if (key === "requirements[]") {
-      if (!values.requirements) {
-        values["requirements"] = formData.getAll("requirements[]");
-      }
-    } else if (key === "steps[]") {
-      if (!values.steps) {
-        values["steps"] = formData.getAll("steps[]");
-      }
-    } else if (key === "ingredients[]") {
-      if (!values.ingredients) {
-        values["ingredients"] = formData.getAll("ingredients[]");
-      }
+    } else if (key === "time" || key === "feeds") {
+      values[key] = parseInt(value as string, 10);
     } else {
       values[key] = value;
     }
   }
 
-  return values;
+  return values as AddLocalRecipeInput;
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -71,15 +70,14 @@ export default function AddRecipe() {
     }
 
     const formData = new FormData(ref.current);
-
     const formattedData = formatFormData(formData);
-
     const dataWithId = { ...formattedData, id: getLocalId() };
 
     const zodResult = addLocalRecipeSchema.safeParse(dataWithId);
 
     if (!zodResult.success) {
-      // Map zod errors to state for local errors
+      setLocalErrors(zodResult.error.flatten());
+      console.log(zodResult.error.flatten());
       return;
     }
 
@@ -90,6 +88,8 @@ export default function AddRecipe() {
   const { isLoggedIn } = useLoaderData<typeof loader>();
 
   const formRef = useRef<HTMLFormElement>(null);
+
+  const [localErrors, setLocalErrors] = useState<FlattenedErrors | undefined>();
 
   const [requirements, setRequirements] = useState<string[]>([]);
   const requirementsInputRef = useRef<HTMLInputElement>(null);
@@ -114,6 +114,11 @@ export default function AddRecipe() {
             <div>
               <Label htmlFor="name">Name</Label>
               <Input id="name" name="name" placeholder="Recipe Name"></Input>
+              {localErrors?.fieldErrors.name && (
+                <p className="text-destructive">
+                  {localErrors.fieldErrors.name}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="description">Description</Label>
@@ -122,14 +127,29 @@ export default function AddRecipe() {
                 name="description"
                 placeholder="A short description of your recipe."
               ></Textarea>
+              {localErrors?.fieldErrors.description && (
+                <p className="text-destructive">
+                  3{localErrors.fieldErrors.description}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="time">Prep Time - Minutes</Label>
               <Input id="time" name="time" type="number" min={1}></Input>
+              {localErrors?.fieldErrors.time && (
+                <p className="text-destructive">
+                  {localErrors.fieldErrors.time}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="feeds">Feeds</Label>
               <Input id="feeds" name="feeds" type="number" min={1}></Input>
+              {localErrors?.fieldErrors.feeds && (
+                <p className="text-destructive">
+                  {localErrors.fieldErrors.feeds}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="types">Type(s):</Label>
@@ -173,6 +193,11 @@ export default function AddRecipe() {
                   </div>
                 </fieldset>
               </Card>
+              {localErrors?.fieldErrors.types && (
+                <p className="text-destructive">
+                  {localErrors.fieldErrors.types}
+                </p>
+              )}
             </div>
             <InputMany
               inputRef={requirementsInputRef}
@@ -197,6 +222,11 @@ export default function AddRecipe() {
                 name="preNotes"
                 placeholder="Before you begin..."
               ></Textarea>
+              {localErrors?.fieldErrors.preNotes && (
+                <p className="text-destructive">
+                  {localErrors.fieldErrors.preNotes}
+                </p>
+              )}
             </div>
             <InputMany
               inputRef={stepsInputRef}
@@ -213,6 +243,11 @@ export default function AddRecipe() {
                 name="postNotes"
                 placeholder="Now that you are done..."
               ></Textarea>
+              {localErrors?.fieldErrors.postNotes && (
+                <p className="text-destructive">
+                  {localErrors.fieldErrors.postNotes}
+                </p>
+              )}
             </div>
             {isLoggedIn ? (
               <Button type="submit" className="w-full">
