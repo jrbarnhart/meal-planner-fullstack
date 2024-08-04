@@ -199,22 +199,36 @@ export default function AddRecipe() {
                 </p>
               )}
             </div>
-            <InputMany
-              inputRef={requirementsInputRef}
-              name="requirements"
-              label="Requirements"
-              placeholder="Mixing bowl"
-              values={requirements}
-              setValues={setRequirements}
-            />
-            <InputMany
-              inputRef={ingredientsInputRef}
-              name="ingredients"
-              label="Ingredients"
-              placeholder="1 cup water"
-              values={ingredients}
-              setValues={setIngredients}
-            />
+            <div>
+              <InputMany
+                inputRef={requirementsInputRef}
+                name="requirements"
+                label="Requirements"
+                placeholder="Mixing bowl"
+                values={requirements}
+                setValues={setRequirements}
+              />
+              {localErrors?.fieldErrors.requirements && (
+                <p className="text-destructive">
+                  {localErrors.fieldErrors.requirements}
+                </p>
+              )}
+            </div>
+            <div>
+              <InputMany
+                inputRef={ingredientsInputRef}
+                name="ingredients"
+                label="Ingredients"
+                placeholder="1 cup water"
+                values={ingredients}
+                setValues={setIngredients}
+              />
+              {localErrors?.fieldErrors.ingredients && (
+                <p className="text-destructive">
+                  {localErrors.fieldErrors.ingredients}
+                </p>
+              )}
+            </div>
             <div>
               <Label htmlFor="preNotes">Notes before starting</Label>
               <Textarea
@@ -228,14 +242,21 @@ export default function AddRecipe() {
                 </p>
               )}
             </div>
-            <InputMany
-              inputRef={stepsInputRef}
-              name="steps"
-              label="Steps"
-              values={steps}
-              setValues={setSteps}
-              placeholder="First..."
-            />
+            <div>
+              <InputMany
+                inputRef={stepsInputRef}
+                name="steps"
+                label="Steps"
+                values={steps}
+                setValues={setSteps}
+                placeholder="First..."
+              />
+              {localErrors?.fieldErrors.steps && (
+                <p className="text-destructive">
+                  {localErrors.fieldErrors.steps}
+                </p>
+              )}
+            </div>
             <div>
               <Label htmlFor="postNotes">Notes when finishing up</Label>
               <Textarea
