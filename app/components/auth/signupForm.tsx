@@ -1,7 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { signupFormSchema } from "~/lib/zodSchemas/authFormSchemas";
 import {
   Card,
   CardHeader,
@@ -9,87 +5,57 @@ import {
   CardContent,
   CardDescription,
 } from "../ui/card";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Link } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
+import { Label } from "../ui/label";
+import { ActionError } from "~/lib/types";
 
-export default function SignupForm() {
-  const signupForm = useForm<z.infer<typeof signupFormSchema>>({
-    resolver: zodResolver(signupFormSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  const onSubmit = (values: z.infer<typeof signupFormSchema>) => {
-    console.log(values);
-  };
-
+export default function SignupForm({ ...props }: { errors: ActionError }) {
+  const { errors } = props;
   return (
     <Card>
       <CardHeader>
         <CardTitle>Create Account</CardTitle>
-        <CardDescription>
-          Also, feel free to try the app out first.
-        </CardDescription>
+        <CardDescription>Feel free to try the app out first.</CardDescription>
       </CardHeader>
       <CardContent>
-        <Form {...signupForm}>
-          <form
-            onSubmit={signupForm.handleSubmit(onSubmit)}
-            className="space-y-4"
-          >
-            <FormField
-              control={signupForm.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="email@host.com"
-                      autoComplete="username"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={signupForm.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="********"
-                      autoComplete="current-password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="space-x-2">
-              <Button type="submit">Create Account</Button>
-              <Link to={"/meals"}>
-                <Button type="button">Try Out</Button>
-              </Link>
-            </div>
-          </form>
+        <Form method="post" className="space-y-4">
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input type="email" name="email" />
+            {errors?.email?.map((error, index) => (
+              <p className="text-destructive" key={index}>
+                {error}
+              </p>
+            ))}
+          </div>
+          <div>
+            <Label htmlFor="name">Name</Label>
+            <Input type="name" name="name" />
+            {errors?.name?.map((error, index) => (
+              <p className="text-destructive" key={index}>
+                {error}
+              </p>
+            ))}
+          </div>
+          <div>
+            <Label htmlFor="password">Password</Label>
+            <Input type="password" name="password" />
+            {errors?.password?.map((error, index) => (
+              <p className="text-destructive" key={index}>
+                {error}
+              </p>
+            ))}
+          </div>
+          <div className="grid gap-2">
+            <Button type="submit">Create Account</Button>
+            <Link to={"/meals"}>
+              <Button type="button" className="w-full">
+                Try Out
+              </Button>
+            </Link>
+          </div>
         </Form>
       </CardContent>
     </Card>
