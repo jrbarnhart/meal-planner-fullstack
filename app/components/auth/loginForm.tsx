@@ -44,13 +44,17 @@ export default function LoginForm({
             ))}
           </div>
 
-          <div className="space-x-2">
+          <div className="grid gap-2">
             <Button type="submit">Log In</Button>
             <Link to={"/signup"}>
-              <Button type="button">Sign Up</Button>
+              <Button type="button" variant={"secondary"} className="w-full">
+                Sign Up
+              </Button>
             </Link>
             <Link to={"/meals"}>
-              <Button type="button">Try Out</Button>
+              <Button type="button" variant={"secondary"} className="w-full">
+                Try Out
+              </Button>
             </Link>
           </div>
         </Form>
