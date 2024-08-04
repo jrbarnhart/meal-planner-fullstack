@@ -3,8 +3,8 @@
 
 import { Prisma } from "@prisma/client";
 
-const fullUserNoPass = Prisma.validator<Prisma.UserDefaultArgs>()({
+const userFullNoPass = Prisma.validator<Prisma.UserDefaultArgs>()({
   select: { id: true, name: true, email: true, recipes: true, mealPlans: true },
 });
 
-export type FullUserNoPass = Prisma.UserGetPayload<typeof fullUserNoPass>;
+export type UserFullNoPass = Prisma.UserGetPayload<typeof userFullNoPass>;
