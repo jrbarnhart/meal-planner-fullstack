@@ -1,6 +1,8 @@
+import { User } from "@prisma/client";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
+import { prisma } from "~/client";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
@@ -15,22 +17,26 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
-import { PHMealPlan, PHRecipe, PHUser } from "~/lib/phData";
+
 import { mealPlanArraySchema } from "~/lib/zodSchemas/mealPlanSchema";
 import { recipeArraySchema } from "~/lib/zodSchemas/recipeSchema";
 import { getSession } from "~/sessions";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({
+  request,
+}: LoaderFunctionArgs): Promise<{
+  isLoggedIn: boolean;
+  foundUser: User | null;
+}> {
   const session = await getSession(request.headers.get("Cookie"));
   const isLoggedIn = session.has("userId");
+  const userId = parseInt(session.id);
+  if (isNaN(userId)) {
+    return { isLoggedIn: false, foundUser: null };
+  }
   // Replace these with DB queries
-  const user: PHUser = {
-    name: "placeholder",
-    email: "place@holder.com",
-    mealPlans: [],
-    recipes: [],
-  };
-  return { isLoggedIn, user };
+  const foundUser = await prisma.user.findUnique({ where: { id: userId } });
+  return { isLoggedIn, foundUser };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -41,8 +47,8 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function UserDetails() {
-  const { isLoggedIn, user } = useLoaderData<typeof loader>();
-  const { mealPlans, recipes } = user;
+  const { isLoggedIn, foundUser } = useLoaderData<typeof loader>();
+  const { mealPlans, recipes } = foundUser;
   const mealPlansWithDates = mealPlans.map((plan) => ({
     ...plan,
     date: new Date(plan.date),
@@ -121,10 +127,10 @@ export default function UserDetails() {
       </div>
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>{isLoggedIn ? user.name : "Guest"}</CardTitle>
+          <CardTitle>{isLoggedIn ? foundUser.name : "Guest"}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <p>{`Email: ${isLoggedIn ? user.email : "N/A"}`}</p>
+          <p>{`Email: ${isLoggedIn ? foundUser.email : "N/A"}`}</p>
           <p>{`Total Recipes: ${currentRecipes.length}`}</p>
           <p>{`Total Meal Plans: ${currentMealPlans.length}`}</p>
           <Separator />
