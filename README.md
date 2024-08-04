@@ -19,3 +19,4 @@ This is a front-end application for a meal planner, built with Remix, TypeScript
 - **Tailwind CSS**
 - **Shadcn UI Components**
 - **Zod**
+- **Bcryptjs**
