@@ -50,13 +50,12 @@ const MAX_TIME = 180;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-
   const isLoggedIn = session.has("userId");
+  const userId = parseInt(session.id);
 
   let userRecipes: Recipe[] = [];
-
-  if (isLoggedIn) {
-    userRecipes = []; // Replace with db query for logged in user's recipes
+  if (isLoggedIn && !isNaN(userId)) {
+    userRecipes = await prisma.recipe.findMany({ where: { userId } });
   }
 
   const defaultRecipes = await prisma.recipe.findMany();
