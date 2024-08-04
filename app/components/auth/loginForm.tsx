@@ -1,4 +1,4 @@
-import { Form } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import {
   Card,
   CardContent,
@@ -18,7 +18,7 @@ export default function LoginForm() {
         <CardDescription>Existing users can log in below.</CardDescription>
       </CardHeader>
       <CardContent>
-        <Form method="post" className="space-y-3">
+        <Form method="post" className="space-y-4">
           <div>
             <Label htmlFor="email">Email</Label>
             <Input type="email" name="email" />
@@ -28,7 +28,15 @@ export default function LoginForm() {
             <Input type="password" name="password" />
           </div>
 
-          <Button type="submit">Sign Up</Button>
+          <div className="space-x-2">
+            <Button type="submit">Log In</Button>
+            <Link to={"/signup"}>
+              <Button type="button">Sign Up</Button>
+            </Link>
+            <Link to={"/meals"}>
+              <Button type="button">Try Out</Button>
+            </Link>
+          </div>
         </Form>
       </CardContent>
     </Card>
