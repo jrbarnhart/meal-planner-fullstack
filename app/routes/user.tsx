@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { MealPlan, Recipe } from "@prisma/client";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
@@ -17,16 +17,15 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
+import { UserFullNoPass } from "~/lib/prisma/userTypes";
 
 import { mealPlanArraySchema } from "~/lib/zodSchemas/mealPlanSchema";
 import { recipeArraySchema } from "~/lib/zodSchemas/recipeSchema";
 import { getSession } from "~/sessions";
 
-export async function loader({
-  request,
-}: LoaderFunctionArgs): Promise<{
+export async function loader({ request }: LoaderFunctionArgs): Promise<{
   isLoggedIn: boolean;
-  foundUser: User | null;
+  foundUser: UserFullNoPass | null;
 }> {
   const session = await getSession(request.headers.get("Cookie"));
   const isLoggedIn = session.has("userId");
@@ -35,7 +34,16 @@ export async function loader({
     return { isLoggedIn: false, foundUser: null };
   }
   // Replace these with DB queries
-  const foundUser = await prisma.user.findUnique({ where: { id: userId } });
+  const foundUser = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      mealPlans: true,
+      recipes: true,
+    },
+  });
   return { isLoggedIn, foundUser };
 }
 
@@ -48,15 +56,22 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function UserDetails() {
   const { isLoggedIn, foundUser } = useLoaderData<typeof loader>();
-  const { mealPlans, recipes } = foundUser;
-  const mealPlansWithDates = mealPlans.map((plan) => ({
-    ...plan,
-    date: new Date(plan.date),
-  }));
+  const { mealPlans, recipes } = foundUser ?? {
+    mealPlans: null,
+    recipes: null,
+  };
+  const mealPlansWithDates =
+    mealPlans?.map((plan) => ({
+      ...plan,
+      date: new Date(plan.date),
+    })) ?? null;
 
-  const [currentMealPlans, setCurrentMealPlans] =
-    useState<PHMealPlan[]>(mealPlansWithDates);
-  const [currentRecipes, setCurrentRecipes] = useState<PHRecipe[]>(recipes);
+  const [currentMealPlans, setCurrentMealPlans] = useState<MealPlan[] | null>(
+    mealPlansWithDates
+  );
+  const [currentRecipes, setCurrentRecipes] = useState<Recipe[] | null>(
+    recipes
+  );
 
   useEffect(() => {
     if (isLoggedIn) return;
@@ -127,12 +142,18 @@ export default function UserDetails() {
       </div>
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>{isLoggedIn ? foundUser.name : "Guest"}</CardTitle>
+          <CardTitle>
+            {isLoggedIn ? foundUser?.name ?? "User" : "Guest"}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <p>{`Email: ${isLoggedIn ? foundUser.email : "N/A"}`}</p>
-          <p>{`Total Recipes: ${currentRecipes.length}`}</p>
-          <p>{`Total Meal Plans: ${currentMealPlans.length}`}</p>
+          <p>{`Email: ${
+            isLoggedIn ? foundUser?.email ?? "Not Found" : "N/A"
+          }`}</p>
+          <p>{`Total Recipes: ${currentRecipes?.length ?? "Not Found"}`}</p>
+          <p>{`Total Meal Plans: ${
+            currentMealPlans?.length ?? "Not Found"
+          }`}</p>
           <Separator />
           <Dialog>
             <DialogTrigger asChild>
