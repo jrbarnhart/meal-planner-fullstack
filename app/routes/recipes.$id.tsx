@@ -1,6 +1,8 @@
+import { Recipe } from "@prisma/client";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { json, Link, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { prisma } from "~/client";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
 import {
@@ -11,26 +13,22 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { findLocalRecipeById } from "~/lib/localStorageUtils";
-import { PHRecipe, phRecipes } from "~/lib/phData";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const id = params.id;
   const idNum = parseInt(id || "");
-  let serverRecipe;
   if (isNaN(idNum)) {
-    return serverRecipe;
+    return { serverRecipe: null, idNum };
   }
 
-  // If the id is > 0 use db (ph data for now)
-  if (idNum > 0) {
-    serverRecipe = phRecipes.find((phRec) => phRec.id === idNum);
-  }
+  const serverRecipe = await prisma.recipe.findUnique({ where: { id: idNum } });
+
   return json({ serverRecipe, idNum });
 }
 
 export default function RecipeDetails() {
   const { serverRecipe, idNum } = useLoaderData<typeof loader>();
-  const [recipe, setRecipe] = useState<PHRecipe | undefined>(serverRecipe);
+  const [recipe, setRecipe] = useState<Recipe | null | undefined>(serverRecipe);
 
   useEffect(() => {
     if (!serverRecipe) {
