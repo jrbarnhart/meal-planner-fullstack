@@ -10,6 +10,7 @@ import LoginForm from "~/components/auth/loginForm";
 import { ActionError } from "~/lib/types";
 import { loginFormSchema } from "~/lib/zodSchemas/authFormSchemas";
 import bcrypt from "bcryptjs";
+import { z } from "zod";
 
 export const meta: MetaFunction = () => {
   return [
@@ -23,7 +24,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
 
-  const loginData = { email, password };
+  const loginData: z.infer<typeof loginFormSchema> = { email, password };
   const zodResults = loginFormSchema.safeParse(loginData);
   if (!zodResults.success) {
     const errors: ActionError = zodResults.error.flatten().fieldErrors;
