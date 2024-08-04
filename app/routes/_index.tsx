@@ -5,8 +5,11 @@ import {
   type MetaFunction,
 } from "@remix-run/node";
 import { useActionData } from "@remix-run/react";
+import { prisma } from "~/client";
 import LoginForm from "~/components/auth/loginForm";
+import { ActionError } from "~/lib/types";
 import { loginFormSchema } from "~/lib/zodSchemas/authFormSchemas";
+import bcrypt from "bcryptjs";
 
 export const meta: MetaFunction = () => {
   return [
@@ -22,23 +25,40 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const loginData = { email, password };
   const zodResults = loginFormSchema.safeParse(loginData);
-
   if (!zodResults.success) {
-    return json(zodResults.error.flatten());
+    const errors: ActionError = zodResults.error.flatten().fieldErrors;
+    return json(errors);
   }
 
-  // For now just redirect on successful data parse
-  return redirect("/meals");
+  const { email: parsedEmail } = zodResults.data;
+  const userToLog = await prisma.user.findUnique({
+    where: { email: parsedEmail },
+  });
+  if (!userToLog) {
+    const errors: ActionError = {
+      email: ["No account with that email exists."],
+    };
+    return json(errors);
+  }
 
-  // Check data against db
+  const { password: parsedPassword } = zodResults.data;
+
+  const match = await bcrypt.compare(parsedPassword, userToLog.passHash);
+
+  if (!match) {
+    const errors: ActionError = { password: ["Invalid password"] };
+    return json(errors);
+  }
+
+  return redirect("/meals"); // Change to login logic
 }
 
 export default function Index() {
-  const actionData = useActionData<typeof action>();
+  const errors = useActionData<typeof action>();
 
   return (
     <div className="font-sans p-4">
-      <LoginForm actionData={actionData} />
+      <LoginForm errors={errors} />
     </div>
   );
 }
