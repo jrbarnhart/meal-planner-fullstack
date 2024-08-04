@@ -18,7 +18,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   const id = params.id;
   const idNum = parseInt(id || "");
   if (isNaN(idNum)) {
-    return { serverRecipe: null, idNum };
+    return json({ serverRecipe: null, idNum });
   }
 
   const serverRecipe = await prisma.recipe.findUnique({ where: { id: idNum } });
