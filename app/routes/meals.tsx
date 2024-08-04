@@ -22,7 +22,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   let mealPlans: MealPlanFull[] = [];
   let recipes: Recipe[] = [];
   if (isLoggedIn) {
-    // Replace with db query
     mealPlans = await prisma.mealPlan.findMany({
       where: { userId },
       select: { id: true, date: true, recipes: true, userId: true },
