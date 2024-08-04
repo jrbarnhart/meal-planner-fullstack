@@ -9,8 +9,14 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
+import { FlattenedLoginFormSchemaErrors } from "~/lib/zodSchemas/authFormSchemas";
 
-export default function LoginForm() {
+export default function LoginForm({
+  ...props
+}: {
+  actionData: FlattenedLoginFormSchemaErrors | undefined;
+}) {
+  const { actionData } = props;
   return (
     <Card>
       <CardHeader>
@@ -22,10 +28,20 @@ export default function LoginForm() {
           <div>
             <Label htmlFor="email">Email</Label>
             <Input type="email" name="email" />
+            {actionData?.fieldErrors.email?.map((error, index) => (
+              <p className="text-destructive" key={index}>
+                {error}
+              </p>
+            ))}
           </div>
           <div>
             <Label htmlFor="password">Password</Label>
             <Input type="password" name="password" />
+            {actionData?.fieldErrors.password?.map((error, index) => (
+              <p className="text-destructive" key={index}>
+                {error}
+              </p>
+            ))}
           </div>
 
           <div className="space-x-2">

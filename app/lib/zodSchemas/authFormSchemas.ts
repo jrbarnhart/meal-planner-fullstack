@@ -11,7 +11,7 @@ const emailSchema = z
 
 export const loginFormSchema = z.object({
   email: emailSchema,
-  password: z.string().trim(),
+  password: z.string().trim().min(1, { message: "Password required" }),
 });
 
 export const signupFormSchema = z.object({
@@ -29,3 +29,7 @@ export const signupFormSchema = z.object({
     .regex(/[0-9]/, { message: "Password must contain at least one number" })
     .regex(/^\S*$/, { message: "Password must not contain spaces" }),
 });
+
+export type LoginFormSchema = z.infer<typeof loginFormSchema>;
+export type FlattenedLoginFormSchemaErrors =
+  z.typeToFlattenedError<LoginFormSchema>;
