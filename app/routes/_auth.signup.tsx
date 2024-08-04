@@ -1,10 +1,12 @@
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { useActionData } from "@remix-run/react";
 import { z } from "zod";
+import { prisma } from "~/client";
 import SignupForm from "~/components/auth/signupForm";
 import RouteContent from "~/components/layout/routeContent";
 import { ActionError } from "~/lib/types";
 import { signupFormSchema } from "~/lib/zodSchemas/authFormSchemas";
+import bcrypt from "bcryptjs";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -22,7 +24,43 @@ export async function action({ request }: ActionFunctionArgs) {
     const errors: ActionError = zodResults.error.flatten().fieldErrors;
     return json(errors);
   }
-  return;
+
+  // Check if the user exists already
+  const parsedEmail = zodResults.data.email;
+  const userExists = await prisma.user.findUnique({
+    where: { email: parsedEmail },
+  });
+  if (userExists) {
+    const errors: ActionError = {
+      email: [
+        "This email is already registered to an account. Try loggin in instead.",
+      ],
+    };
+    return json(errors);
+  }
+
+  const parsedPassword = zodResults.data.password;
+  const parsedName = zodResults.data.name;
+  try {
+    const hashedPassword = await bcrypt.hash(parsedPassword, 10);
+
+    const newUser = await prisma.user.create({
+      data: { email: parsedEmail, name: parsedName, passHash: hashedPassword },
+    });
+
+    // Log in the new user here
+    console.log(newUser);
+
+    return redirect("/meals");
+  } catch (error) {
+    console.log(error);
+    const errors: ActionError = {
+      misc: [
+        "An error occurred while creating your account. Please try again.",
+      ],
+    };
+    return json(errors);
+  }
 }
 
 export default function CreateAccount() {
