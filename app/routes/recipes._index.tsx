@@ -1,6 +1,8 @@
+import { Recipe } from "@prisma/client";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { prisma } from "~/client";
 import RouteContent from "~/components/layout/routeContent";
 import AddRecipeButton from "~/components/recipes/addRecipeButton";
 import RecipeEntry from "~/components/recipes/recipeEntry";
@@ -11,23 +13,32 @@ import {
   CardHeader,
 } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
-import { PHRecipe } from "~/lib/phData";
 import { recipeArraySchema } from "~/lib/zodSchemas/recipeSchema";
 import { getSession } from "~/sessions";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-
   const isLoggedIn = session.has("userId");
 
-  const userRecipes: PHRecipe[] = []; // DB query if logged in
+  if (!isLoggedIn) {
+    return json({ userRecipes: null, isLoggedIn });
+  }
+
+  const userId = parseInt(session.id);
+  if (isNaN(userId)) {
+    return json({ isLoggedIn: false, userRecipes: null });
+  }
+
+  const userRecipes = await prisma.recipe.findMany({ where: { userId } });
 
   return json({ userRecipes, isLoggedIn });
 }
 
 export default function Recipes() {
   const { userRecipes, isLoggedIn } = useLoaderData<typeof loader>();
-  const [currentRecipes, setCurrentRecipes] = useState<PHRecipe[]>(userRecipes);
+  const [currentRecipes, setCurrentRecipes] = useState<Recipe[] | null>(
+    userRecipes
+  );
 
   useEffect(() => {
     if (isLoggedIn) return;
@@ -68,14 +79,14 @@ export default function Recipes() {
         </CardHeader>
         <Separator />
         <CardContent className="overflow-y-scroll h-full space-y-2 pb-20 pt-2">
-          {currentRecipes.map((recipe) => (
+          {currentRecipes?.map((recipe) => (
             <RecipeEntry
               key={recipe.id}
               recipe={recipe}
               isLoggedIn={isLoggedIn}
               setCurrentRecipes={setCurrentRecipes}
             />
-          ))}
+          )) ?? <p>No user recipes found.</p>}
         </CardContent>
       </Card>
     </RouteContent>

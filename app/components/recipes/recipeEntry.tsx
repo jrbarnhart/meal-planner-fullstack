@@ -2,16 +2,16 @@ import { Link } from "@remix-run/react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { PHRecipe } from "~/lib/phData";
 import { deleteLocalRecipe } from "~/lib/localStorageUtils";
 import { SetStateAction } from "react";
+import { Recipe } from "@prisma/client";
 
 export default function RecipeEntry({
   ...props
 }: {
-  recipe: PHRecipe;
+  recipe: Recipe;
   isLoggedIn: boolean;
-  setCurrentRecipes: React.Dispatch<SetStateAction<PHRecipe[]>>;
+  setCurrentRecipes: React.Dispatch<SetStateAction<Recipe[] | null>>;
 }) {
   const { recipe, isLoggedIn, setCurrentRecipes } = props;
   const { id, name, time, feeds } = recipe;
@@ -37,7 +37,7 @@ export default function RecipeEntry({
                 : () => {
                     deleteLocalRecipe(recipe);
                     setCurrentRecipes((prev) =>
-                      prev.filter((rec) => rec.id !== recipe.id)
+                      (prev ?? []).filter((rec) => rec.id !== recipe.id)
                     );
                   }
             }
