@@ -1,3 +1,4 @@
+import { Recipe } from "@prisma/client";
 import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { useState, useRef } from "react";
@@ -71,9 +72,14 @@ export default function AddRecipe() {
 
     const formData = new FormData(ref.current);
     const formattedData = formatFormData(formData);
-    const dataWithId = { ...formattedData, id: getLocalId() };
+    const completeData: Recipe = {
+      ...formattedData,
+      id: getLocalId(),
+      isDefault: false,
+      userId: -1,
+    };
 
-    const zodResult = addLocalRecipeSchema.safeParse(dataWithId);
+    const zodResult = addLocalRecipeSchema.safeParse(completeData);
 
     if (!zodResult.success) {
       setLocalErrors(zodResult.error.flatten());
