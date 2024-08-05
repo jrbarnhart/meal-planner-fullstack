@@ -25,7 +25,7 @@ import { getSession } from "~/sessions";
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const isLoggedIn = session.has("userId");
-  const userId = parseInt(session.id);
+  const userId = parseInt(session.get("userId") ?? "");
   if (isNaN(userId)) {
     return json({ isLoggedIn: false, foundUser: null });
   }
