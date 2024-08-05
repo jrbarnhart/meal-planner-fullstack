@@ -1,16 +1,24 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
-import { Link, useLocation } from "@remix-run/react";
+import { Form, Link, useLocation } from "@remix-run/react";
 import Icon from "~/svg/icon";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 
 function InfoHeader({ username }: { username?: string }) {
+  const [open, setOpen] = useState(false);
   return (
     <div className="px-4 py-2 shadow-md flex justify-between items-center">
       <Link to={"/"}>
         <Icon height={48} width={48} />
       </Link>
-      <div className="flex flex-col items-end flex-grow">
+      <div className="grid grid-flow-col gap-3 items-center">
         <div className="grid grid-flow-col gap-x-1">
           <p>Welcome, </p>
           <Link className="text-green-600 underline" to={"/user"}>
@@ -18,7 +26,23 @@ function InfoHeader({ username }: { username?: string }) {
           </Link>
         </div>
         {username ? (
-          <p className="text-sm justify-end text-blue-600">Logout</p>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button className="p-2 aspect-square rounded-full">X</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogTitle>Log out?</DialogTitle>
+              <DialogDescription>
+                Your recipe list and meal plans will be there when you come
+                back.
+              </DialogDescription>
+              <Form method="post">
+                <Button className="w-full" onClick={() => setOpen(false)}>
+                  Logout
+                </Button>
+              </Form>
+            </DialogContent>
+          </Dialog>
         ) : null}
       </div>
     </div>
