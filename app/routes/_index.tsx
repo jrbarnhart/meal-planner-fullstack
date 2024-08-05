@@ -1,5 +1,6 @@
 import {
   json,
+  LoaderFunctionArgs,
   redirect,
   type ActionFunctionArgs,
   type MetaFunction,
@@ -12,6 +13,7 @@ import { loginFormSchema } from "~/lib/zodSchemas/authFormSchemas";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import RouteContent from "~/components/layout/routeContent";
+import { commitSession, getSession } from "~/sessions";
 
 export const meta: MetaFunction = () => {
   return [
@@ -19,6 +21,22 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  if (session.has("userId")) {
+    return redirect("/meals");
+  }
+
+  const data = { error: session.get("error") };
+
+  return json(data, {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
+}
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
