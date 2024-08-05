@@ -8,6 +8,7 @@ import {
   Form,
   json,
   Link,
+  useFetcher,
   useLoaderData,
   useSearchParams,
   useSubmit,
@@ -48,6 +49,11 @@ const RECIPE_TYPES = [
 
 const MAX_TIME = 180;
 
+type ActionResponse = {
+  addedRecipe?: Recipe;
+  error?: string;
+};
+
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const isLoggedIn = session.has("userId");
@@ -58,7 +64,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     userRecipes = await prisma.recipe.findMany({ where: { userId } });
   }
 
-  const defaultRecipes = await prisma.recipe.findMany();
+  const defaultRecipes = await prisma.recipe.findMany({
+    where: { isDefault: true },
+    orderBy: { name: "asc" },
+  });
 
   const url = new URL(request.url);
   const sort = url.searchParams.get("sort");
@@ -116,6 +125,27 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
+  const session = await getSession(request.headers.get("Cookie"));
+  const userId = parseInt(session.get("userId") ?? "");
+
+  if (formData.get("_action") === "addRecipe") {
+    const recipeId = parseInt(formData.get("recipeId")?.toString() ?? "");
+    try {
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: { recipes: { connect: { id: recipeId } } },
+        include: { recipes: true },
+      });
+      return json({
+        addedRecipe: updatedUser.recipes.find((r) => r.id === recipeId),
+      } as ActionResponse);
+    } catch (error) {
+      console.error(error);
+      return json({ error: "Failed to add recipe" } as ActionResponse, {
+        status: 500,
+      });
+    }
+  }
 
   const sort = formData.get("sort");
   const feeds = formData.get("feeds");
@@ -165,6 +195,17 @@ export default function RecipeLibrary() {
     }
     setCurrentUserRecipes(zodResults.data);
   }, [isLoggedIn]);
+
+  const fetcher = useFetcher<typeof action>();
+
+  useEffect(() => {
+    if (fetcher.data?.addedRecipe) {
+      const { addedRecipe } = fetcher.data as { addedRecipe: Recipe };
+      if (addedRecipe) {
+        setCurrentUserRecipes((prev) => [...prev, addedRecipe]);
+      }
+    }
+  }, [fetcher.data]);
 
   const submit = useSubmit();
 
@@ -280,6 +321,13 @@ export default function RecipeLibrary() {
             <CardFooter className="flex gap-4 justify-end">
               {currentUserRecipes.some((curRec) => curRec.id === recipe.id) ? (
                 <Button variant={"outline"}>In Library</Button>
+              ) : isLoggedIn ? (
+                <Form method="post">
+                  <Button type="submit" name="_action" value="addRecipe">
+                    Add
+                  </Button>
+                  <input type="hidden" name="recipeId" value={recipe.id} />
+                </Form>
               ) : (
                 <Button
                   onClick={
@@ -298,7 +346,7 @@ export default function RecipeLibrary() {
                   }
                   asChild
                 >
-                  <Link to={"/recipes/library"}>Add</Link>
+                  <Link to={"/recipes/library"}>Add L</Link>
                 </Button>
               )}
 
