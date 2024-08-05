@@ -4,10 +4,13 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 import "./tailwind.css";
 import MainLayout from "./components/layout/mainLayout";
-import { LinksFunction } from "@remix-run/node";
+import { json, LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { commitSession, getSession } from "./sessions";
+import { prisma } from "./client";
 
 export const links: LinksFunction = () => {
   return [
@@ -18,6 +21,25 @@ export const links: LinksFunction = () => {
     },
   ];
 };
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const userIdString = session.get("userId");
+  const userId = parseInt(userIdString ?? "");
+  let foundUser = null;
+  if (!isNaN(userId)) {
+    foundUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { name: true, id: true },
+    });
+  }
+  return json(
+    { foundUser },
+    {
+      headers: { "Set-Cookie": await commitSession(session) },
+    }
+  );
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -38,8 +60,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const loaderData = useLoaderData<typeof loader>();
+  const foundUser = loaderData.foundUser;
+
   return (
-    <MainLayout>
+    <MainLayout username={foundUser?.name}>
       <Outlet />
     </MainLayout>
   );
