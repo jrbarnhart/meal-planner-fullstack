@@ -10,12 +10,8 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 
-export default function LoginForm({
-  ...props
-}: {
-  errors: { [key: string]: string[] } | undefined;
-}) {
-  const { errors } = props;
+export default function LoginForm({ ...props }: { error: string | undefined }) {
+  const { error } = props;
   return (
     <Card className="w-full">
       <CardHeader>
@@ -27,20 +23,11 @@ export default function LoginForm({
           <div>
             <Label htmlFor="email">Email</Label>
             <Input type="email" name="email" />
-            {errors?.email?.map((error, index) => (
-              <p className="text-destructive" key={index}>
-                {error}
-              </p>
-            ))}
           </div>
           <div>
             <Label htmlFor="password">Password</Label>
             <Input type="password" name="password" />
-            {errors?.password?.map((error, index) => (
-              <p className="text-destructive" key={index}>
-                {error}
-              </p>
-            ))}
+            {error && <p className="text-destructive">{error}</p>}
           </div>
 
           <div className="grid gap-2">
