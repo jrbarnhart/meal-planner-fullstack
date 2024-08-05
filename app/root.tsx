@@ -8,8 +8,14 @@ import {
 } from "@remix-run/react";
 import "./tailwind.css";
 import MainLayout from "./components/layout/mainLayout";
-import { json, LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { commitSession, getSession } from "./sessions";
+import {
+  ActionFunctionArgs,
+  json,
+  LinksFunction,
+  LoaderFunctionArgs,
+  redirect,
+} from "@remix-run/node";
+import { commitSession, destroySession, getSession } from "./sessions";
 import { prisma } from "./client";
 
 export const links: LinksFunction = () => {
@@ -39,6 +45,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
       headers: { "Set-Cookie": await commitSession(session) },
     }
   );
+}
+
+// Logout is handled here b/c the button is in MainLayout
+export async function action({ request }: ActionFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  return redirect("/", {
+    headers: { "Set-Cookie": await destroySession(session) },
+  });
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
