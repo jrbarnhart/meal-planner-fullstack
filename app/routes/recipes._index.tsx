@@ -1,5 +1,5 @@
 import { Recipe } from "@prisma/client";
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { prisma } from "~/client";
@@ -32,6 +32,25 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userRecipes = await prisma.recipe.findMany({ where: { userId } });
 
   return json({ userRecipes, isLoggedIn });
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const userId = parseInt(session.get("userId") ?? "");
+  const formData = await request.formData();
+  const recipeId = parseInt(formData.get("recipeId")?.toString() ?? "");
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: { recipes: { disconnect: { id: recipeId } } },
+      include: { recipes: true },
+    });
+    return json({ updatedRecipes: updatedUser.recipes });
+  } catch (error) {
+    console.error(error);
+    return json({ error: "Failed to remove recipe." });
+  }
 }
 
 export default function Recipes() {
