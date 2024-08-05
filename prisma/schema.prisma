@@ -29,6 +29,7 @@ model Recipe {
   mealPlans    MealPlan[]
   userId       Int
   user         User       @relation(references: [id], fields: [userId])
+  userLists    User[]     @relation("UserRecipeList")
 }
 
 model MealPlan {
@@ -40,10 +41,11 @@ model MealPlan {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  name      String
-  email     String     @unique
-  passHash  String
-  mealPlans MealPlan[]
-  recipes   Recipe[]
+  id         Int        @id @default(autoincrement())
+  name       String
+  email      String     @unique
+  passHash   String
+  mealPlans  MealPlan[]
+  recipes    Recipe[]
+  recipeList Recipe[]   @relation("UserRecipeList")
 }
