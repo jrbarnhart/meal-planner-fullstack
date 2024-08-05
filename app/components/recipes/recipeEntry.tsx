@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -27,24 +27,26 @@ export default function RecipeEntry({
           <Button asChild>
             <Link to={`/recipes/${id}`}>Details</Link>
           </Button>
-          <Button
-            onClick={
-              isLoggedIn
-                ? () => {
-                    // Replace with db query
-                    return;
-                  }
-                : () => {
-                    deleteLocalRecipe(recipe);
-                    setCurrentRecipes((prev) =>
-                      (prev ?? []).filter((rec) => rec.id !== recipe.id)
-                    );
-                  }
-            }
-            variant={"destructive"}
-          >
-            Remove
-          </Button>
+          {isLoggedIn ? (
+            <Form method="post">
+              <Button type="submit" variant={"destructive"} className="w-full">
+                Remove
+              </Button>
+              <input type="hidden" name="recipeId" value={recipe.id} />
+            </Form>
+          ) : (
+            <Button
+              onClick={() => {
+                deleteLocalRecipe(recipe);
+                setCurrentRecipes((prev) =>
+                  (prev ?? []).filter((rec) => rec.id !== recipe.id)
+                );
+              }}
+              variant={"destructive"}
+            >
+              Remove
+            </Button>
+          )}
         </PopoverContent>
       </Popover>
     </Card>
