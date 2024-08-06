@@ -35,6 +35,7 @@ export const addLocalRecipeSchema = z.object({
 });
 
 export const addRecipeSchema = z.object({
+  userId: z.number().int(),
   name: z.string().trim().min(1).max(256),
   description: z.string().trim(),
   types: z.array(z.string().trim()),
