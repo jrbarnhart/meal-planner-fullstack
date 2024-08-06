@@ -8,14 +8,14 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Separator } from "../ui/separator";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useRef, useState } from "react";
 import {
   addRecipeToPlan,
   createLocalMealPlan,
   getLocalId,
   removeRecipeFromPlan,
 } from "~/lib/localStorageUtils";
-import { Form, Link } from "@remix-run/react";
+import { Form, Link, useSubmit } from "@remix-run/react";
 import { MealPlan, Recipe } from "@prisma/client";
 import { MealPlanFull } from "~/lib/prisma/mealPlanTypes";
 
@@ -97,36 +97,41 @@ function AddRecipeSelect({
     }
   };
 
+  const submit = useSubmit();
+  const formRef = useRef(null);
+
   return (
-    <select
-      value={selectedRecipe}
-      className="h-10 rounded-md bg-primary text-primary-foreground"
-      onChange={(e) => {
-        if (isLoggedIn) {
-          // Handle DB Operation for editing/adding meal plan
-          console.log("DB Action not yet set implemented.");
-          setSelectedRecipe(e.target.value);
-        } else {
-          setSelectedRecipe(e.target.value);
-          onLocalChange(e);
-        }
-      }}
-    >
-      <option value="">--Select a Recipe--</option>
-      {recipes
-        ?.sort((a, b) => {
-          const nameA = a.name.toUpperCase();
-          const nameB = b.name.toUpperCase();
-          if (nameA < nameB) return -1;
-          if (nameA > nameB) return 1;
-          return 0;
-        })
-        .map((recipe) => (
-          <option key={recipe.id} value={recipe.id}>
-            {recipe.name[0].toUpperCase() + recipe.name.slice(1)}
-          </option>
-        ))}
-    </select>
+    <Form method="post" ref={formRef}>
+      <select
+        name="addRecipe"
+        value={selectedRecipe}
+        className="h-10 w-full rounded-md bg-primary text-primary-foreground"
+        onChange={(e) => {
+          if (isLoggedIn) {
+            submit(formRef.current);
+            setSelectedRecipe(e.target.value);
+          } else {
+            setSelectedRecipe(e.target.value);
+            onLocalChange(e);
+          }
+        }}
+      >
+        <option value="">--Select a Recipe--</option>
+        {recipes
+          ?.sort((a, b) => {
+            const nameA = a.name.toUpperCase();
+            const nameB = b.name.toUpperCase();
+            if (nameA < nameB) return -1;
+            if (nameA > nameB) return 1;
+            return 0;
+          })
+          .map((recipe) => (
+            <option key={recipe.id} value={recipe.id}>
+              {recipe.name[0].toUpperCase() + recipe.name.slice(1)}
+            </option>
+          ))}
+      </select>
+    </Form>
   );
 }
 
