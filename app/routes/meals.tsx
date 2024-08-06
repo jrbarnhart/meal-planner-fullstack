@@ -26,7 +26,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
       where: { userId },
       select: { id: true, date: true, recipes: true, userId: true },
     });
-    recipes = await prisma.recipe.findMany({ where: { userId } });
+    const foundUser = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { recipeList: true },
+    });
+    recipes = foundUser?.recipeList ?? [];
   }
 
   return json({ mealPlans, recipes, isLoggedIn });
