@@ -6,7 +6,10 @@ import { useEffect, useState } from "react";
 import { getSession } from "~/sessions";
 import { mealPlanArraySchema } from "~/lib/zodSchemas/mealPlanSchema";
 import { Calendar } from "~/components/ui/calendar";
-import { recipeArraySchema } from "~/lib/zodSchemas/recipeSchema";
+import {
+  addRecipeToMealSchema,
+  recipeArraySchema,
+} from "~/lib/zodSchemas/recipeSchema";
 import { Recipe } from "@prisma/client";
 import { prisma } from "~/client";
 import { MealPlanFull } from "~/lib/prisma/mealPlanTypes";
@@ -37,10 +40,52 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
+  const session = await getSession(request.headers.get("Cookie"));
+  const userId = parseInt(session.get("userId") ?? "");
 
-  console.log(formData);
-  return null;
+  const formData = await request.formData();
+  const data = {
+    recipeId: parseInt(formData.get("recipeId")?.toString() ?? ""),
+    date: new Date(formData.get("date")?.toString() ?? ""),
+  };
+
+  const zodResults = await addRecipeToMealSchema.safeParse(data);
+
+  if (!zodResults.success) {
+    return json({ error: "Form data is not using correct format." });
+  }
+
+  const { date, recipeId } = zodResults.data;
+
+  const normalizedDate = new Date(date);
+  normalizedDate.setHours(0, 0, 0, 0);
+
+  // Is there a meal plan for this day?
+  const existingMealPlan = await prisma.mealPlan.findUnique({
+    where: { userId_date: { userId, date: normalizedDate } },
+  });
+  try {
+    // If no then create the meal plan with the recipe added with nesting
+    if (!existingMealPlan) {
+      await prisma.mealPlan.create({
+        data: {
+          userId,
+          date: normalizedDate,
+          recipes: { connect: { id: recipeId } },
+        },
+      });
+      return json({ success: true });
+    } else {
+      // If yes then add the recipe to the plan
+      await prisma.mealPlan.update({
+        where: { userId_date: { userId, date: normalizedDate } },
+        data: { recipes: { connect: { id: recipeId } } },
+      });
+      return json({ success: true });
+    }
+  } catch {
+    return json({ error: "There was an error while adding meal plan." });
+  }
 }
 
 export default function Meals() {
