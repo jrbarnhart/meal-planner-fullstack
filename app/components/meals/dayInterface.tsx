@@ -103,7 +103,7 @@ function AddRecipeSelect({
   return (
     <Form method="post" ref={formRef}>
       <select
-        name="addRecipe"
+        name="recipeId"
         value={selectedRecipe}
         className="h-10 w-full rounded-md bg-primary text-primary-foreground"
         onChange={(e) => {
