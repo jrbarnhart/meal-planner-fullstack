@@ -1,5 +1,10 @@
 import { MealPlan, Recipe } from "@prisma/client";
-import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  json,
+  LoaderFunctionArgs,
+  redirect,
+} from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import { prisma } from "~/client";
@@ -39,9 +44,26 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
+  const session = await getSession(request.headers.get("Cookie"));
+  const userId = parseInt(session.get("userId") ?? "");
 
-  console.log(formData);
-  return null;
+  const confirmation = formData.get("confirmation");
+  try {
+    if (confirmation === "DELETE MY DATA") {
+      await prisma.$transaction([
+        prisma.user.update({
+          where: { id: userId },
+          data: { recipeList: { set: [] } },
+        }),
+        prisma.recipe.deleteMany({ where: { userId } }),
+        prisma.mealPlan.deleteMany({ where: { userId } }),
+      ]);
+      return redirect("/meals");
+    }
+  } catch (error) {
+    console.error(error);
+    return json({ error: "Error while deleting user information." });
+  }
 }
 
 export default function UserDetails() {
@@ -163,6 +185,7 @@ export default function UserDetails() {
                     ref={confirmationRef}
                     autoComplete="off"
                     className="text-destructive"
+                    name="confirmation"
                     id="confirmation"
                   ></Input>
                   {confirmationError ? (
