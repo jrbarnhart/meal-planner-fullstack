@@ -1,8 +1,20 @@
 import { Recipe } from "@prisma/client";
-import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
-import { Form, Link, useLoaderData, useNavigate } from "@remix-run/react";
+import {
+  ActionFunctionArgs,
+  json,
+  LoaderFunctionArgs,
+  redirect,
+} from "@remix-run/node";
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+} from "@remix-run/react";
 import { useState, useRef } from "react";
 import { z } from "zod";
+import { prisma } from "~/client";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
@@ -12,7 +24,10 @@ import InputMany from "~/components/ui/inputMany";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { addLocalRecipe, getLocalId } from "~/lib/localStorageUtils";
-import { localRecipeSchema } from "~/lib/zodSchemas/recipeSchema";
+import {
+  addRecipeSchema,
+  localRecipeSchema,
+} from "~/lib/zodSchemas/recipeSchema";
 import { getSession } from "~/sessions";
 
 type AddLocalRecipeInput = z.input<typeof localRecipeSchema>;
@@ -49,13 +64,34 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ isLoggedIn });
 }
 
+type ActionResponse = {
+  error?: string;
+  zodErrors?: z.inferFlattenedErrors<typeof addRecipeSchema>;
+};
+
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
-  const values = formatFormData(formData);
+  const formattedData = formatFormData(formData);
 
-  console.log(values);
-  return null;
+  const zodResult = await addRecipeSchema.safeParse(formattedData);
+
+  if (!zodResult.success) {
+    const zodErrors = zodResult.error.flatten();
+    return json({ zodErrors } as ActionResponse);
+  }
+
+  const validatedData = zodResult.data;
+
+  try {
+    await prisma.recipe.create({ data: validatedData });
+    return redirect("/recipes");
+  } catch (error) {
+    console.error(error);
+    return json({
+      error: "Error while adding recipe. Please try again.",
+    } as ActionResponse);
+  }
 }
 
 export default function AddRecipe() {
@@ -92,6 +128,7 @@ export default function AddRecipe() {
   }
 
   const { isLoggedIn } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -125,6 +162,11 @@ export default function AddRecipe() {
                   {localErrors.fieldErrors.name}
                 </p>
               )}
+              {actionData?.zodErrors?.fieldErrors.name && (
+                <p className="text-destructive">
+                  {actionData.zodErrors.fieldErrors.name}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="description">Description</Label>
@@ -138,6 +180,11 @@ export default function AddRecipe() {
                   3{localErrors.fieldErrors.description}
                 </p>
               )}
+              {actionData?.zodErrors?.fieldErrors.description && (
+                <p className="text-destructive">
+                  {actionData.zodErrors.fieldErrors.description}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="time">Prep Time - Minutes</Label>
@@ -147,6 +194,11 @@ export default function AddRecipe() {
                   {localErrors.fieldErrors.time}
                 </p>
               )}
+              {actionData?.zodErrors?.fieldErrors.time && (
+                <p className="text-destructive">
+                  {actionData.zodErrors.fieldErrors.time}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="feeds">Feeds</Label>
@@ -154,6 +206,11 @@ export default function AddRecipe() {
               {localErrors?.fieldErrors.feeds && (
                 <p className="text-destructive">
                   {localErrors.fieldErrors.feeds}
+                </p>
+              )}
+              {actionData?.zodErrors?.fieldErrors.feeds && (
+                <p className="text-destructive">
+                  {actionData.zodErrors.fieldErrors.feeds}
                 </p>
               )}
             </div>
@@ -204,6 +261,11 @@ export default function AddRecipe() {
                   {localErrors.fieldErrors.types}
                 </p>
               )}
+              {actionData?.zodErrors?.fieldErrors.types && (
+                <p className="text-destructive">
+                  {actionData.zodErrors.fieldErrors.types}
+                </p>
+              )}
             </div>
             <div>
               <InputMany
@@ -217,6 +279,11 @@ export default function AddRecipe() {
               {localErrors?.fieldErrors.requirements && (
                 <p className="text-destructive">
                   {localErrors.fieldErrors.requirements}
+                </p>
+              )}
+              {actionData?.zodErrors?.fieldErrors.requirements && (
+                <p className="text-destructive">
+                  {actionData.zodErrors.fieldErrors.requirements}
                 </p>
               )}
             </div>
@@ -234,6 +301,11 @@ export default function AddRecipe() {
                   {localErrors.fieldErrors.ingredients}
                 </p>
               )}
+              {actionData?.zodErrors?.fieldErrors.ingredients && (
+                <p className="text-destructive">
+                  {actionData.zodErrors.fieldErrors.ingredients}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="preNotes">Notes before starting</Label>
@@ -245,6 +317,11 @@ export default function AddRecipe() {
               {localErrors?.fieldErrors.preNotes && (
                 <p className="text-destructive">
                   {localErrors.fieldErrors.preNotes}
+                </p>
+              )}
+              {actionData?.zodErrors?.fieldErrors.preNotes && (
+                <p className="text-destructive">
+                  {actionData.zodErrors.fieldErrors.preNotes}
                 </p>
               )}
             </div>
@@ -262,6 +339,11 @@ export default function AddRecipe() {
                   {localErrors.fieldErrors.steps}
                 </p>
               )}
+              {actionData?.zodErrors?.fieldErrors.steps && (
+                <p className="text-destructive">
+                  {actionData.zodErrors.fieldErrors.steps}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="postNotes">Notes when finishing up</Label>
@@ -275,11 +357,21 @@ export default function AddRecipe() {
                   {localErrors.fieldErrors.postNotes}
                 </p>
               )}
+              {actionData?.zodErrors?.fieldErrors.postNotes && (
+                <p className="text-destructive">
+                  {actionData.zodErrors.fieldErrors.postNotes}
+                </p>
+              )}
             </div>
             {isLoggedIn ? (
-              <Button type="submit" className="w-full">
-                Add Recipe
-              </Button>
+              <>
+                <Button type="submit" className="w-full">
+                  Add Recipe
+                </Button>
+                {actionData?.error && (
+                  <p className="text-destructive">{actionData.error}</p>
+                )}
+              </>
             ) : (
               <Button
                 onClick={(e) => handleLocalSubmit(e, formRef)}
