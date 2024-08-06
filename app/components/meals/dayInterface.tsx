@@ -102,7 +102,7 @@ function AddRecipeSelect({
 
   return (
     <Form method="post" ref={formRef}>
-      <input type="hidden" name="date" value={date.toDateString()} />
+      <input type="hidden" name="date" value={date.toISOString()} />
       <select
         name="recipeId"
         value={selectedRecipe}
