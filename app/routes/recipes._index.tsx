@@ -53,11 +53,24 @@ export async function action({ request }: ActionFunctionArgs) {
   const recipeId = parseInt(formData.get("recipeId")?.toString() ?? "");
 
   try {
+    const recipeToRemove = await prisma.recipe.findUnique({
+      where: { id: recipeId },
+    });
+
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: { recipeList: { disconnect: { id: recipeId } } },
       include: { recipeList: true },
     });
+
+    if (
+      recipeToRemove?.userId === userId &&
+      recipeToRemove.isDefault === false
+    ) {
+      // This is a user's recipe that they are removing from their recipes list, so delete it
+      await prisma.recipe.delete({ where: { id: recipeToRemove.id } });
+    }
+
     return json({ updatedRecipes: updatedUser.recipeList } as ActionResponse);
   } catch (error) {
     console.error(error);
