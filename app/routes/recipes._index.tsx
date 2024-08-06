@@ -29,7 +29,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return json({ isLoggedIn: false, userRecipes: null });
   }
 
-  const userRecipes = await prisma.recipe.findMany({ where: { userId } });
+  const userWithRecipeList = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      recipeList: true,
+    },
+  });
+
+  const userRecipes = userWithRecipeList?.recipeList || [];
 
   return json({ userRecipes, isLoggedIn });
 }
