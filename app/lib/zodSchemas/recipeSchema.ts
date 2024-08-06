@@ -48,4 +48,9 @@ export const addRecipeSchema = z.object({
   postNotes: z.string().trim(),
 });
 
+export const addRecipeToMealSchema = z.object({
+  recipeId: z.number().int(),
+  date: z.string().date(),
+});
+
 export const recipeArraySchema = z.array(localRecipeSchema);
