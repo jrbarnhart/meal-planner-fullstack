@@ -50,10 +50,10 @@ export async function action({ request }: ActionFunctionArgs) {
   try {
     const updatedUser = await prisma.user.update({
       where: { id: userId },
-      data: { recipes: { disconnect: { id: recipeId } } },
-      include: { recipes: true },
+      data: { recipeList: { disconnect: { id: recipeId } } },
+      include: { recipeList: true },
     });
-    return json({ updatedRecipes: updatedUser.recipes });
+    return json({ updatedRecipes: updatedUser.recipeList });
   } catch (error) {
     console.error(error);
     return json({ error: "Failed to remove recipe." });
