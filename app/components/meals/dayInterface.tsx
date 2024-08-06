@@ -113,7 +113,7 @@ function AddRecipeSelect({
         onChange={(e) => {
           if (isLoggedIn) {
             submit(formRef.current);
-            setSelectedRecipe(e.target.value);
+            setSelectedRecipe("");
           } else {
             setSelectedRecipe(e.target.value);
             onLocalChange(e);
