@@ -61,7 +61,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   let userRecipes: Recipe[] = [];
   if (isLoggedIn && !isNaN(userId)) {
-    userRecipes = await prisma.recipe.findMany({ where: { userId } });
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { recipeList: true },
+    });
+    userRecipes = user?.recipeList ?? [];
   }
 
   const defaultRecipes = await prisma.recipe.findMany({
@@ -133,11 +137,11 @@ export async function action({ request }: ActionFunctionArgs) {
     try {
       const updatedUser = await prisma.user.update({
         where: { id: userId },
-        data: { recipes: { connect: { id: recipeId } } },
-        include: { recipes: true },
+        data: { recipeList: { connect: { id: recipeId } } },
+        include: { recipeList: true },
       });
       return json({
-        addedRecipe: updatedUser.recipes.find((r) => r.id === recipeId),
+        addedRecipe: updatedUser.recipeList.find((r) => r.id === recipeId),
       } as ActionResponse);
     } catch (error) {
       console.error(error);
