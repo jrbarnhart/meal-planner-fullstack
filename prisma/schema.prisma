@@ -38,6 +38,8 @@ model MealPlan {
   recipes Recipe[]
   userId  Int
   user    User     @relation(references: [id], fields: [userId])
+
+  @@unique([userId, date])
 }
 
 model User {
