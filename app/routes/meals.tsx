@@ -49,6 +49,27 @@ export async function action({ request }: ActionFunctionArgs) {
   const userId = parseInt(session.get("userId") ?? "");
 
   const formData = await request.formData();
+
+  const deleteId = parseInt(formData.get("deleteId")?.toString() ?? "");
+  const mealPlanId = parseInt(formData.get("mealPlanId")?.toString() ?? "");
+  if (!isNaN(deleteId) && !isNaN(mealPlanId)) {
+    try {
+      const updatedMealPlan = await prisma.mealPlan.update({
+        where: { id: mealPlanId },
+        data: { recipes: { disconnect: { id: deleteId } } },
+        include: { recipes: true },
+      });
+      if (updatedMealPlan.recipes.length === 0) {
+        await prisma.mealPlan.delete({ where: { id: mealPlanId } });
+      }
+      return json({ updatedMealPlan } as ActionResponse);
+    } catch {
+      return json({
+        error: "Error while removing recipe from meal plan.",
+      } as ActionResponse);
+    }
+  }
+
   const data = {
     recipeId: parseInt(formData.get("recipeId")?.toString() ?? ""),
     date: new Date(formData.get("date")?.toString() ?? ""),
@@ -177,15 +198,20 @@ export default function Meals() {
           return [updatedPlanWithDate];
         }
 
+        if (updatedMealPlan.recipes.length === 0) {
+          const updatedMealPlans = prev.filter(
+            (prevPlan) => prevPlan.id !== updatedMealPlan.id
+          );
+          return updatedMealPlans;
+        }
+
         const prevIndex = prev.findIndex(
           (currentPlan) => currentPlan.id === updatedMealPlan.id
         );
 
         if (prevIndex !== -1) {
-          const updatedMealPlans = prev.map((currentPlan) =>
-            currentPlan.id === updatedMealPlan.id
-              ? updatedPlanWithDate
-              : currentPlan
+          const updatedMealPlans = prev.map((prevPlan) =>
+            prevPlan.id === updatedMealPlan.id ? updatedPlanWithDate : prevPlan
           );
           return updatedMealPlans;
         } else {
