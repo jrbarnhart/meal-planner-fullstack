@@ -32,13 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const foundUser = await prisma.user.findUnique({
     where: { id: userId },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      mealPlans: true,
-      recipes: true,
-    },
+    include: { mealPlans: true, recipeList: true },
   });
   return json({ isLoggedIn, foundUser });
 }
@@ -52,9 +46,9 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function UserDetails() {
   const { isLoggedIn, foundUser } = useLoaderData<typeof loader>();
-  const { mealPlans, recipes } = foundUser ?? {
+  const { mealPlans, recipeList } = foundUser ?? {
     mealPlans: null,
-    recipes: null,
+    recipeList: null,
   };
   const mealPlansWithDates =
     mealPlans?.map((plan) => ({
@@ -66,7 +60,7 @@ export default function UserDetails() {
     mealPlansWithDates
   );
   const [currentRecipes, setCurrentRecipes] = useState<Recipe[] | null>(
-    recipes
+    recipeList
   );
 
   useEffect(() => {
@@ -133,7 +127,6 @@ export default function UserDetails() {
   return (
     <RouteContent>
       <div className="w-full flex justify-between items-center">
-        {isLoggedIn ? <Button variant={"secondary"}>Log Out</Button> : null}
         <h1 className="text-xl ml-auto">User Details</h1>
       </div>
       <Card className="w-full">
