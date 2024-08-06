@@ -36,7 +36,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     },
   });
 
-  const userRecipes = userWithRecipeList?.recipeList || [];
+  const userRecipes = userWithRecipeList?.recipeList ?? [];
 
   return json({ userRecipes, isLoggedIn });
 }
