@@ -102,6 +102,7 @@ function AddRecipeSelect({
 
   return (
     <Form method="post" ref={formRef}>
+      <input type="hidden" name="date" value={date.toDateString()} />
       <select
         name="recipeId"
         value={selectedRecipe}
