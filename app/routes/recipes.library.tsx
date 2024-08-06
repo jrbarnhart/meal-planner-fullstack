@@ -347,7 +347,7 @@ export default function RecipeLibrary() {
                   }
                   asChild
                 >
-                  <Link to={"/recipes/library"}>Add L</Link>
+                  <Link to={"/recipes/library"}>Add</Link>
                 </Button>
               )}
 
