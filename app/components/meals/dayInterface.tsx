@@ -24,9 +24,10 @@ function MealEntry({
 }: {
   recipe: Recipe;
   isLoggedIn: boolean;
-  handleDeleteClick: () => void;
+  mealPlan: MealPlan;
+  handleDeleteClickLocal: () => void;
 }) {
-  const { recipe, isLoggedIn, handleDeleteClick } = props;
+  const { recipe, isLoggedIn, mealPlan, handleDeleteClickLocal } = props;
   return (
     <div className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr] items-center text-nowrap">
       <Link to={`/recipes/${recipe.id}`} className="truncate text-green-500">
@@ -36,6 +37,7 @@ function MealEntry({
       <p>{recipe.feeds}</p>
       <Form method="post">
         <input type="hidden" name="deleteId" value={recipe.id} />
+        <input type="hidden" name="mealPlanId" value={mealPlan.id} />
         {isLoggedIn ? (
           <Button type="submit" variant={"outline"} className="text-red-500">
             X
@@ -46,7 +48,7 @@ function MealEntry({
             variant={"outline"}
             className="text-red-500 font-bold"
             onClick={() => {
-              handleDeleteClick();
+              handleDeleteClickLocal();
             }}
           >
             X
@@ -179,7 +181,8 @@ export default function DayInterface({
               recipe={recipe}
               key={index}
               isLoggedIn={isLoggedIn}
-              handleDeleteClick={() => {
+              mealPlan={meal}
+              handleDeleteClickLocal={() => {
                 removeRecipeFromPlan(meal, index);
                 setLocalStorageVersion((prev) => prev + 1);
               }}
