@@ -18,6 +18,7 @@ import {
 import { Form, Link, useSubmit } from "@remix-run/react";
 import { MealPlan, Recipe } from "@prisma/client";
 import { MealPlanFull } from "~/lib/prisma/mealPlanTypes";
+import AddRecipeButton from "../recipes/addRecipeButton";
 
 function MealEntry({
   ...props
@@ -189,18 +190,27 @@ export default function DayInterface({
             />
           ));
         })()}
-        <AddRecipeSelect
-          recipes={recipes}
-          date={selectedDate}
-          isLoggedIn={isLoggedIn}
-          mealPlan={currentMealPlans?.find(
-            (meal) =>
-              meal.date.getFullYear() === selectedDate.getFullYear() &&
-              meal.date.getMonth() === selectedDate.getMonth() &&
-              meal.date.getDate() === selectedDate.getDate()
-          )}
-          setLocalStorageVersion={setLocalStorageVersion}
-        />
+        {recipes && recipes.length > 0 ? (
+          <AddRecipeSelect
+            recipes={recipes}
+            date={selectedDate}
+            isLoggedIn={isLoggedIn}
+            mealPlan={currentMealPlans?.find(
+              (meal) =>
+                meal.date.getFullYear() === selectedDate.getFullYear() &&
+                meal.date.getMonth() === selectedDate.getMonth() &&
+                meal.date.getDate() === selectedDate.getDate()
+            )}
+            setLocalStorageVersion={setLocalStorageVersion}
+          />
+        ) : (
+          <div className="grid space-y-0 items-center">
+            <p className="text-center p-0">
+              {"You don't have any recipes yet."}
+            </p>
+            <AddRecipeButton />
+          </div>
+        )}
       </CardContent>
     </Card>
   );
