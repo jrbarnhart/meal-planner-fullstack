@@ -8,7 +8,7 @@ import {
   Form,
   json,
   Link,
-  useFetcher,
+  useActionData,
   useLoaderData,
   useSearchParams,
   useSubmit,
@@ -48,11 +48,6 @@ const RECIPE_TYPES = [
 ];
 
 const MAX_TIME = 180;
-
-type ActionResponse = {
-  addedRecipe?: Recipe;
-  error?: string;
-};
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -127,6 +122,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ isLoggedIn, filteredRecipes, userRecipes });
 }
 
+type ActionResponse = {
+  updatedRecipes?: Recipe[];
+  error?: string;
+};
+
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const session = await getSession(request.headers.get("Cookie"));
@@ -141,7 +141,7 @@ export async function action({ request }: ActionFunctionArgs) {
         include: { recipeList: true },
       });
       return json({
-        addedRecipe: updatedUser.recipeList.find((r) => r.id === recipeId),
+        updatedRecipes: updatedUser.recipeList,
       } as ActionResponse);
     } catch (error) {
       console.error(error);
@@ -200,16 +200,13 @@ export default function RecipeLibrary() {
     setCurrentUserRecipes(zodResults.data);
   }, [isLoggedIn]);
 
-  const fetcher = useFetcher<typeof action>();
+  const actionData = useActionData<typeof action>();
 
   useEffect(() => {
-    if (fetcher.data?.addedRecipe) {
-      const { addedRecipe } = fetcher.data as { addedRecipe: Recipe };
-      if (addedRecipe) {
-        setCurrentUserRecipes((prev) => [...prev, addedRecipe]);
-      }
+    if (actionData?.updatedRecipes) {
+      setCurrentUserRecipes(actionData.updatedRecipes);
     }
-  }, [fetcher.data]);
+  }, [actionData]);
 
   const submit = useSubmit();
 
