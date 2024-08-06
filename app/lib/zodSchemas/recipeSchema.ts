@@ -50,7 +50,7 @@ export const addRecipeSchema = z.object({
 
 export const addRecipeToMealSchema = z.object({
   recipeId: z.number().int(),
-  date: z.string().date(),
+  date: z.date(),
 });
 
 export const recipeArraySchema = z.array(localRecipeSchema);
