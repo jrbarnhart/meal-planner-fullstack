@@ -4,7 +4,7 @@
 import { Prisma } from "@prisma/client";
 
 const mealPlanFull = Prisma.validator<Prisma.MealPlanDefaultArgs>()({
-  select: { id: true, recipes: true, date: true, userId: true },
+  include: { recipes: true },
 });
 
 export type MealPlanFull = Prisma.MealPlanGetPayload<typeof mealPlanFull>;
