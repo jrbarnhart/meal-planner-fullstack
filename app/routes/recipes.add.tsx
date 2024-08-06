@@ -70,11 +70,21 @@ type ActionResponse = {
 };
 
 export async function action({ request }: ActionFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const userId = parseInt(session.get("userId") ?? "");
+  if (isNaN(userId)) {
+    return json({
+      error: "Invalid user id. Cannot create recipe.",
+    } as ActionResponse);
+  }
+
   const formData = await request.formData();
 
   const formattedData = formatFormData(formData);
 
-  const zodResult = await addRecipeSchema.safeParse(formattedData);
+  const dataWithUserId = { ...formattedData, userId };
+
+  const zodResult = await addRecipeSchema.safeParse(dataWithUserId);
 
   if (!zodResult.success) {
     const zodErrors = zodResult.error.flatten();
@@ -84,7 +94,11 @@ export async function action({ request }: ActionFunctionArgs) {
   const validatedData = zodResult.data;
 
   try {
-    await prisma.recipe.create({ data: validatedData });
+    const newRecipe = await prisma.recipe.create({ data: validatedData });
+    await prisma.user.update({
+      where: { id: userId },
+      data: { recipeList: { connect: { id: newRecipe.id } } },
+    });
     return redirect("/recipes");
   } catch (error) {
     console.error(error);
