@@ -1,7 +1,7 @@
 import DayInterface from "~/components/meals/dayInterface";
 import RouteContent from "~/components/layout/routeContent";
 import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { getSession } from "~/sessions";
 import { mealPlanArraySchema } from "~/lib/zodSchemas/mealPlanSchema";
@@ -39,6 +39,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ mealPlans, recipes, isLoggedIn });
 }
 
+type ActionResponse = {
+  updatedMealPlan?: MealPlanFull;
+  error?: string;
+};
+
 export async function action({ request }: ActionFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const userId = parseInt(session.get("userId") ?? "");
@@ -52,7 +57,9 @@ export async function action({ request }: ActionFunctionArgs) {
   const zodResults = await addRecipeToMealSchema.safeParse(data);
 
   if (!zodResults.success) {
-    return json({ error: "Form data is not using correct format." });
+    return json({
+      error: "Form data is not using correct format.",
+    } as ActionResponse);
   }
 
   const { date, recipeId } = zodResults.data;
@@ -67,24 +74,28 @@ export async function action({ request }: ActionFunctionArgs) {
   try {
     // If no then create the meal plan with the recipe added with nesting
     if (!existingMealPlan) {
-      await prisma.mealPlan.create({
+      const updatedMealPlan = await prisma.mealPlan.create({
         data: {
           userId,
           date: normalizedDate,
           recipes: { connect: { id: recipeId } },
         },
+        include: { recipes: true },
       });
-      return json({ success: true });
+      return json({ updatedMealPlan } as ActionResponse);
     } else {
       // If yes then add the recipe to the plan
-      await prisma.mealPlan.update({
+      const updatedMealPlan = await prisma.mealPlan.update({
         where: { userId_date: { userId, date: normalizedDate } },
         data: { recipes: { connect: { id: recipeId } } },
+        include: { recipes: true },
       });
-      return json({ success: true });
+      return json({ updatedMealPlan } as ActionResponse);
     }
   } catch {
-    return json({ error: "There was an error while adding meal plan." });
+    return json({
+      error: "There was an error while adding meal plan.",
+    } as ActionResponse);
   }
 }
 
@@ -150,6 +161,39 @@ export default function Meals() {
       }
     }
   }, [isLoggedIn, localStorageVersion]);
+
+  const actionData = useActionData<typeof action>();
+
+  useEffect(() => {
+    if (actionData?.updatedMealPlan) {
+      const updatedMealPlan = actionData.updatedMealPlan;
+      const updatedPlanWithDate = {
+        ...updatedMealPlan,
+        date: new Date(updatedMealPlan.date),
+      };
+
+      setCurrentMealPlans((prev) => {
+        if (!prev) {
+          return [updatedPlanWithDate];
+        }
+
+        const prevIndex = prev.findIndex(
+          (currentPlan) => currentPlan.id === updatedMealPlan.id
+        );
+
+        if (prevIndex !== -1) {
+          const updatedMealPlans = prev.map((currentPlan) =>
+            currentPlan.id === updatedMealPlan.id
+              ? updatedPlanWithDate
+              : currentPlan
+          );
+          return updatedMealPlans;
+        } else {
+          return [...prev, updatedPlanWithDate];
+        }
+      });
+    }
+  }, [actionData]);
 
   return (
     <RouteContent>
