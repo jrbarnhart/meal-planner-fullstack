@@ -1,6 +1,6 @@
 import { Recipe } from "@prisma/client";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, useLoaderData } from "@remix-run/react";
+import { json, useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { prisma } from "~/client";
 import RouteContent from "~/components/layout/routeContent";
@@ -40,6 +40,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return json({ userRecipes, isLoggedIn });
 }
+// TypeScript is losing the inferred types unless I do this. No idea why.
+type ActionResponse = {
+  updatedRecipes?: Recipe[];
+  error?: string;
+};
 
 export async function action({ request }: ActionFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -53,10 +58,10 @@ export async function action({ request }: ActionFunctionArgs) {
       data: { recipeList: { disconnect: { id: recipeId } } },
       include: { recipeList: true },
     });
-    return json({ updatedRecipes: updatedUser.recipeList });
+    return json({ updatedRecipes: updatedUser.recipeList } as ActionResponse);
   } catch (error) {
     console.error(error);
-    return json({ error: "Failed to remove recipe." });
+    return json({ error: "Failed to remove recipe." } as ActionResponse);
   }
 }
 
@@ -65,6 +70,8 @@ export default function Recipes() {
   const [currentRecipes, setCurrentRecipes] = useState<Recipe[] | null>(
     userRecipes
   );
+
+  const actionData = useActionData<typeof action>();
 
   useEffect(() => {
     if (isLoggedIn) return;
@@ -87,6 +94,12 @@ export default function Recipes() {
 
     setCurrentRecipes(zodResults.data);
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (actionData?.updatedRecipes) {
+      setCurrentRecipes([...actionData.updatedRecipes]);
+    }
+  }, [actionData]);
 
   return (
     <RouteContent>
