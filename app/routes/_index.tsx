@@ -47,10 +47,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const loginData: z.infer<typeof loginFormSchema> = { email, password };
   const zodResults = loginFormSchema.safeParse(loginData);
   if (!zodResults.success) {
-    session.flash(
-      "error",
-      "Email must be correct format: examplename@examplemail.com"
-    );
+    session.flash("error", "Invalid email or password.");
     return redirect("/", {
       headers: { "Set-Cookie": await commitSession(session) },
     });
@@ -62,7 +59,7 @@ export async function action({ request }: ActionFunctionArgs) {
     where: { email: parsedEmail },
   });
   if (!userToLog) {
-    session.flash("error", "Invalid username/password");
+    session.flash("error", "Invalid email or password.");
     return redirect("/", {
       headers: { "Set-Cookie": await commitSession(session) },
     });
@@ -70,7 +67,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const match = await bcrypt.compare(parsedPassword, userToLog.passHash);
   if (!match) {
-    session.flash("error", "Invalid username/password");
+    session.flash("error", "Invalid email or password.");
     return redirect("/", {
       headers: { "Set-Cookie": await commitSession(session) },
     });
