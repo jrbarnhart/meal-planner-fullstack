@@ -25,9 +25,9 @@ export default function PreviewButton() {
             "Preview mode saves data locally to your device. You'll need to recreate it if you sign up for an account, and it won't sync across different devices."
           }
         </p>
-        <Link to={"/meals"}>
-          <Button className="w-full">Continue</Button>
-        </Link>
+        <Button className="w-full" asChild>
+          <Link to={"/meals"}>Continue</Link>
+        </Button>
       </DialogContent>
     </Dialog>
   );

@@ -36,11 +36,14 @@ export default function LoginForm({ ...props }: { error: string | undefined }) {
             <Button type="submit">Log In</Button>
             <Separator />
             <p className="text-sm">New user? Signup or Preview the site:</p>
-            <Link to={"/signup"}>
-              <Button type="button" variant={"secondary"} className="w-full">
-                Sign Up
-              </Button>
-            </Link>
+            <Button
+              type="button"
+              variant={"secondary"}
+              className="w-full"
+              asChild
+            >
+              <Link to={"/signup"}>Sign Up</Link>
+            </Button>
             <PreviewButton />
           </div>
         </Form>
