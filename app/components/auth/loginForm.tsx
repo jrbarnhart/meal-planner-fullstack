@@ -9,6 +9,7 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
+import PreviewButton from "./previewButton";
 
 export default function LoginForm({ ...props }: { error: string | undefined }) {
   const { error } = props;
@@ -37,11 +38,7 @@ export default function LoginForm({ ...props }: { error: string | undefined }) {
                 Sign Up
               </Button>
             </Link>
-            <Link to={"/meals"}>
-              <Button type="button" variant={"secondary"} className="w-full">
-                Try Out
-              </Button>
-            </Link>
+            <PreviewButton />
           </div>
         </Form>
       </CardContent>
