@@ -23,7 +23,12 @@ export default function SignupForm({ ...props }: { errors: ActionError }) {
         <Form method="post" className="space-y-4">
           <div>
             <Label htmlFor="email">Email</Label>
-            <Input type="email" name="email" />
+            <Input
+              type="email"
+              name="email"
+              id="email"
+              autoComplete="username"
+            />
             {errors?.email?.map((error, index) => (
               <p className="text-destructive" key={index}>
                 {error}
@@ -32,7 +37,7 @@ export default function SignupForm({ ...props }: { errors: ActionError }) {
           </div>
           <div>
             <Label htmlFor="name">Name</Label>
-            <Input type="name" name="name" />
+            <Input type="name" name="name" id="name" autoComplete="name" />
             {errors?.name?.map((error, index) => (
               <p className="text-destructive" key={index}>
                 {error}
@@ -41,7 +46,7 @@ export default function SignupForm({ ...props }: { errors: ActionError }) {
           </div>
           <div>
             <Label htmlFor="password">Password</Label>
-            <Input type="password" name="password" />
+            <Input type="password" name="password" id="password" />
             {errors?.password?.map((error, index) => (
               <p className="text-destructive" key={index}>
                 {error}
