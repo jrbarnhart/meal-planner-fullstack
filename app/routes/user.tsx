@@ -46,6 +46,12 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const session = await getSession(request.headers.get("Cookie"));
   const userId = parseInt(session.get("userId") ?? "");
+  // This must be done in case guest user submits form with enter on input
+  if (isNaN(userId)) {
+    return json({
+      error: "Invalid user id. Cannot delete data.",
+    });
+  }
 
   const confirmation = formData.get("confirmation");
   try {
