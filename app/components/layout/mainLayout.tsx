@@ -52,8 +52,6 @@ function InfoHeader({ username }: { username?: string }) {
 function Nav() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const { pathname } = useLocation();
-
   return (
     <Card
       className={`absolute bottom-1/4 left-0 p-2 bg-card transition-all duration-300 ease-in-out rounded-l-none ${
@@ -67,13 +65,15 @@ function Nav() {
           className={`h-28 flex-shrink-0 w-14 ${isOpen ? "" : "opacity-35"}`}
           onClick={() => setIsOpen((prev) => !prev)}
         >
-          <p
-            className={`${
-              isOpen ? "rotate-180" : ""
-            } transition-all duration-300 ease-in-out`}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#e8eaed"
           >
-            &gt;
-          </p>
+            <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
+          </svg>
         </Button>
         <div
           className={`flex flex-col space-y-2 overflow-hidden transition-all duration-300 ${
@@ -81,22 +81,13 @@ function Nav() {
           }`}
         >
           <Button className="w-full" onClick={() => setIsOpen(false)} asChild>
-            <Link to={pathname.endsWith("/recipes") ? "/meals" : "/recipes"}>
-              {pathname.endsWith("/recipes") ? "Meals" : "My Recipes"}
-            </Link>
+            <Link to={"/meals"}>Meals</Link>
           </Button>
           <Button className="w-full" onClick={() => setIsOpen(false)} asChild>
-            <Link
-              to={
-                pathname.startsWith("/recipes/library")
-                  ? "/meals"
-                  : "/recipes/library"
-              }
-            >
-              {pathname.startsWith("/recipes/library")
-                ? "Meals"
-                : "Recipe Library"}
-            </Link>
+            <Link to={"/recipes"}>Recipes</Link>
+          </Button>
+          <Button className="w-full" onClick={() => setIsOpen(false)} asChild>
+            <Link to={"/recipes/library"}>Recipe Library</Link>
           </Button>
         </div>
       </nav>
@@ -111,11 +102,12 @@ export default function MainLayout({
   children: React.ReactNode;
   username?: string;
 }) {
+  const { pathname } = useLocation();
   return (
     <div className="relative h-full grid grid-rows-[min-content_1fr] grid-cols-1 overflow-hidden">
       <InfoHeader username={username} />
       {children}
-      <Nav />
+      {pathname !== "/" && pathname !== "/signup" ? <Nav /> : null}
     </div>
   );
 }
