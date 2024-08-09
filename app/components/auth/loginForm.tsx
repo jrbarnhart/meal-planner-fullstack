@@ -10,6 +10,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import PreviewButton from "./previewButton";
+import { Separator } from "../ui/separator";
 
 export default function LoginForm({ ...props }: { error: string | undefined }) {
   const { error } = props;
@@ -33,6 +34,8 @@ export default function LoginForm({ ...props }: { error: string | undefined }) {
 
           <div className="grid gap-2">
             <Button type="submit">Log In</Button>
+            <Separator />
+            <p className="text-sm">New user? Signup or Preview the site:</p>
             <Link to={"/signup"}>
               <Button type="button" variant={"secondary"} className="w-full">
                 Sign Up
