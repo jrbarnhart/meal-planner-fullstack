@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -11,13 +12,22 @@ export default function PreviewButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Preview</Button>
+        <Button variant={"secondary"}>Preview</Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogTitle>Try Munchify Out</DialogTitle>
+        <DialogTitle>Have a look around!</DialogTitle>
         <DialogDescription>
           Explore the site before creating an account.
         </DialogDescription>
+        <p className="text-sm">
+          <span className="text-destructive font-bold">Please note:</span>{" "}
+          {
+            "Preview mode saves data locally to your device. You'll need to recreate it if you sign up for an account, and it won't sync across different devices."
+          }
+        </p>
+        <Link to={"/meals"}>
+          <Button className="w-full">Continue</Button>
+        </Link>
       </DialogContent>
     </Dialog>
   );
