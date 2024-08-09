@@ -7,7 +7,7 @@ import {
 } from "../ui/card";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Form, Link } from "@remix-run/react";
+import { Form } from "@remix-run/react";
 import { Label } from "../ui/label";
 import { ActionError } from "~/lib/types";
 
@@ -50,11 +50,6 @@ export default function SignupForm({ ...props }: { errors: ActionError }) {
           </div>
           <div className="grid gap-2">
             <Button type="submit">Create Account</Button>
-            <Link to={"/meals"}>
-              <Button type="button" className="w-full">
-                Try Out
-              </Button>
-            </Link>
           </div>
         </Form>
       </CardContent>
