@@ -52,6 +52,8 @@ function InfoHeader({ username }: { username?: string }) {
 function Nav() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const { pathname } = useLocation();
+
   return (
     <Card
       className={`absolute bottom-1/4 left-0 p-2 bg-card transition-all duration-300 ease-in-out rounded-l-none ${
@@ -80,13 +82,28 @@ function Nav() {
             isOpen ? "w-44 opacity-100" : "w-0 opacity-0"
           }`}
         >
-          <Button className="w-full" onClick={() => setIsOpen(false)} asChild>
+          <Button
+            variant={pathname === "/meals" ? "secondary" : "default"}
+            className="w-full"
+            onClick={() => setIsOpen(false)}
+            asChild
+          >
             <Link to={"/meals"}>Meals</Link>
           </Button>
-          <Button className="w-full" onClick={() => setIsOpen(false)} asChild>
+          <Button
+            variant={pathname === "/recipes" ? "secondary" : "default"}
+            className="w-full"
+            onClick={() => setIsOpen(false)}
+            asChild
+          >
             <Link to={"/recipes"}>Recipes</Link>
           </Button>
-          <Button className="w-full" onClick={() => setIsOpen(false)} asChild>
+          <Button
+            variant={pathname === "/recipes/library" ? "secondary" : "default"}
+            className="w-full"
+            onClick={() => setIsOpen(false)}
+            asChild
+          >
             <Link to={"/recipes/library"}>Recipe Library</Link>
           </Button>
         </div>
