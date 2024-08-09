@@ -163,7 +163,7 @@ export function removeRecipeFromPlan(mealPlan: MealPlan, recipeIndex: number) {
   const localMealsString = localStorage.getItem("localMeals");
   if (!localMealsString) {
     return console.error(
-      "Cannot add recipe to plan. Plan data does not exist in local storage."
+      "Cannot remove recipe from. Plan data does not exist in local storage."
     );
   }
   const localMeals = JSON.parse(localMealsString);
@@ -184,9 +184,16 @@ export function removeRecipeFromPlan(mealPlan: MealPlan, recipeIndex: number) {
       ...verifiedMealPlans[existingPlanIndex],
       recipes: newRecipes,
     };
-    const newMealPlans = [...verifiedMealPlans];
-    newMealPlans[existingPlanIndex] = newMealPlan;
-    localStorage.setItem("localMeals", JSON.stringify(newMealPlans));
+    if (newMealPlan.recipes.length > 0) {
+      const newMealPlans = [...verifiedMealPlans];
+      newMealPlans[existingPlanIndex] = newMealPlan;
+      localStorage.setItem("localMeals", JSON.stringify(newMealPlans));
+    } else {
+      const newMealPlans = verifiedMealPlans.filter(
+        (plan) => plan.id !== newMealPlan.id
+      );
+      localStorage.setItem("localMeals", JSON.stringify(newMealPlans));
+    }
   } else {
     console.log(existingPlanIndex, mealPlan.id);
     return console.error(
