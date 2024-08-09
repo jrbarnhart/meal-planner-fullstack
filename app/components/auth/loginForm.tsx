@@ -24,11 +24,16 @@ export default function LoginForm({ ...props }: { error: string | undefined }) {
         <Form method="post" className="space-y-4">
           <div>
             <Label htmlFor="email">Email</Label>
-            <Input type="email" name="email" />
+            <Input
+              type="email"
+              name="email"
+              id="email"
+              autoComplete="username"
+            />
           </div>
           <div>
             <Label htmlFor="password">Password</Label>
-            <Input type="password" name="password" />
+            <Input type="password" name="password" id="password" />
             {error && <p className="text-destructive">{error}</p>}
           </div>
 
