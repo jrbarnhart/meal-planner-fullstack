@@ -13,6 +13,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import RouteContent from "~/components/layout/routeContent";
 import { commitSession, getSession } from "~/sessions";
+import splash from "../../public/splash.jpeg";
 
 export const meta: MetaFunction = () => {
   return [
@@ -86,6 +87,10 @@ export default function Index() {
 
   return (
     <RouteContent>
+      <img
+        src={splash}
+        alt="cartoon kitchen table with various foods laid out"
+      />
       <LoginForm error={error} />
     </RouteContent>
   );
