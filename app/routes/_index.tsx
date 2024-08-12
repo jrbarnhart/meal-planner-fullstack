@@ -11,9 +11,7 @@ import LoginForm from "~/components/auth/loginForm";
 import { loginFormSchema } from "~/lib/zodSchemas/authFormSchemas";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import RouteContent from "~/components/layout/routeContent";
 import { commitSession, getSession } from "~/sessions";
-import splash from "../../public/splash.jpeg";
 
 export const meta: MetaFunction = () => {
   return [
@@ -86,12 +84,25 @@ export default function Index() {
   const error = data.error;
 
   return (
-    <RouteContent>
-      <img
-        src={splash}
-        alt="cartoon kitchen table with various foods laid out"
-      />
-      <LoginForm error={error} />
-    </RouteContent>
+    <div className="relative h-full grid grid-rows-[min-content_1fr] grid-cols-1 overflow-hidden">
+      <div className="row-span-2 col-span-1 overflow-y-auto">
+        <div className="grid w-full p-3 relative z-10">
+          <img
+            src="/titleOpt.svg"
+            alt="Munchlify title"
+            className="justify-self-center"
+          />
+          <p className="grid justify-center text-center font-bold mb-10 bg-white rounded-md bg-opacity-75 w-min justify-self-center text-nowrap p-2">
+            <span className="text-xl">Welcome to Muchlify!</span>
+            <span className="text-lg">{'"Meal Planning Made Easy"'}</span>
+          </p>
+          <LoginForm error={error} />
+        </div>
+      </div>
+      <div
+        className="row-span-2 col-span-1 absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat -z-10"
+        style={{ backgroundImage: "url('/splash.jpeg')" }}
+      ></div>
+    </div>
   );
 }

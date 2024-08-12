@@ -17,7 +17,7 @@ export default function LoginForm({ ...props }: { error: string | undefined }) {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Welcome to Munchlify!</CardTitle>
+        <CardTitle>Login</CardTitle>
         <CardDescription>Existing users can log in below.</CardDescription>
       </CardHeader>
       <CardContent>
@@ -40,7 +40,9 @@ export default function LoginForm({ ...props }: { error: string | undefined }) {
           <div className="grid gap-2">
             <Button type="submit">Log In</Button>
             <Separator />
-            <p className="text-sm">New user? Signup or Preview the site:</p>
+            <p className="text-sm text-center">
+              New user? Signup or Preview the site:
+            </p>
             <Button
               type="button"
               variant={"secondary"}
