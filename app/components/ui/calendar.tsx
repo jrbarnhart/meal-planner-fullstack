@@ -65,7 +65,7 @@ function Calendar({
         ...classNames,
       }}
       modifiers={{ hasMealPlan: mealPlanDays }}
-      modifiersClassNames={{ hasMealPlan: "!text-green-500" }}
+      modifiersClassNames={{ hasMealPlan: "!text-accent" }}
       components={{
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,

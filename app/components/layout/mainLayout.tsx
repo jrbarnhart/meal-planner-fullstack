@@ -22,7 +22,7 @@ function InfoHeader({ username }: { username?: string }) {
       <div className="grid grid-flow-col gap-3 items-center">
         <div className="grid grid-flow-col gap-x-1">
           <p>Welcome, </p>
-          <Link className="text-green-600 underline" to={"/user"}>
+          <Link className="text-accent underline" to={"/user"}>
             {username || "Guest"}
           </Link>
         </div>

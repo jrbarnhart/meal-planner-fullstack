@@ -31,7 +31,7 @@ function MealEntry({
   const { recipe, isLoggedIn, mealPlan, handleDeleteClickLocal } = props;
   return (
     <div className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr] items-center text-nowrap">
-      <Link to={`/recipes/${recipe.id}`} className="truncate text-green-500">
+      <Link to={`/recipes/${recipe.id}`} className="truncate text-accent">
         {recipe.name}
       </Link>
       <p>{`${recipe.time} min`}</p>
