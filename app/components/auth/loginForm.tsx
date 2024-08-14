@@ -15,7 +15,7 @@ import { Separator } from "../ui/separator";
 export default function LoginForm({ ...props }: { error: string | undefined }) {
   const { error } = props;
   return (
-    <Card className="w-full">
+    <Card className="w-full bg-card/85 backdrop-blur-sm">
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription>Existing users can log in below.</CardDescription>

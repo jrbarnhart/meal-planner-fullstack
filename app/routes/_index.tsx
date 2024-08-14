@@ -12,6 +12,7 @@ import { loginFormSchema } from "~/lib/zodSchemas/authFormSchemas";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { commitSession, getSession } from "~/sessions";
+import { Card } from "~/components/ui/card";
 
 export const meta: MetaFunction = () => {
   return [
@@ -92,10 +93,16 @@ export default function Index() {
             alt="Munchlify title"
             className="w-auto h-auto"
           />
-          <p className="text-center font-bold bg-white rounded-md bg-opacity-75 p-2">
-            <span className="text-xl block">Welcome to Muchlify!</span>
-            <span className="text-lg block">{'"Meal Planning Made Easy"'}</span>
-          </p>
+          <Card className="bg-card/85 backdrop-blur-sm w-full">
+            <p className="text-center font-bold p-2 ">
+              <span className="text-xl block">Welcome to Muchlify!</span>
+              <span className="text-md block">
+                {
+                  "Plan your meals effortlessly and discover new recipes—all in one place. Let's make meal planning a breeze!"
+                }
+              </span>
+            </p>
+          </Card>
           <LoginForm error={error} />
           <div className="h-[10vh]" aria-hidden />
         </div>
