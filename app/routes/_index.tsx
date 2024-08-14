@@ -94,8 +94,10 @@ export default function Index() {
             className="w-auto h-auto"
           />
           <Card className="bg-card/85 backdrop-blur-sm w-full">
-            <p className="text-center font-bold p-2 ">
-              <span className="text-xl block">Welcome to Muchlify!</span>
+            <p className="text-center  p-2 ">
+              <span className="text-xl block font-bold">
+                Welcome to Muchlify!
+              </span>
               <span className="text-md block">
                 {
                   "Plan your meals effortlessly and discover new recipes—all in one place. Let's make meal planning a breeze!"

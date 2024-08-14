@@ -7,14 +7,15 @@ import {
 } from "../ui/card";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Form } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import { Label } from "../ui/label";
 import { ActionError } from "~/lib/types";
+import { Separator } from "../ui/separator";
 
 export default function SignupForm({ ...props }: { errors: ActionError }) {
   const { errors } = props;
   return (
-    <Card className="w-full overflow-y-auto">
+    <Card className="w-full overflow-y-auto bg-card/85 backdrop-blur-sm">
       <CardHeader>
         <CardTitle>Create Account</CardTitle>
         <CardDescription>Feel free to try the app out first.</CardDescription>
@@ -55,6 +56,10 @@ export default function SignupForm({ ...props }: { errors: ActionError }) {
           </div>
           <div className="grid gap-2">
             <Button type="submit">Create Account</Button>
+            <Separator className="my-3" />
+            <Button type="button" variant={"secondary"} asChild>
+              <Link to="/">Back</Link>
+            </Button>
           </div>
         </Form>
       </CardContent>

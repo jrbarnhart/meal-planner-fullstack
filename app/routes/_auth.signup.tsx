@@ -3,10 +3,11 @@ import { useActionData } from "@remix-run/react";
 import { z } from "zod";
 import { prisma } from "~/client";
 import SignupForm from "~/components/auth/signupForm";
-import RouteContent from "~/components/layout/routeContent";
 import { ActionError } from "~/lib/types";
 import { signupFormSchema } from "~/lib/zodSchemas/authFormSchemas";
 import bcrypt from "bcryptjs";
+import { Card } from "~/components/ui/card";
+import FavIcon from "~/components/icons/favIcon";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -66,8 +67,27 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function CreateAccount() {
   const errors = useActionData<typeof action>();
   return (
-    <RouteContent>
-      <SignupForm errors={errors} />
-    </RouteContent>
+    <div className="relative h-screen flex flex-col overflow-hidden">
+      <div className="flex-grow overflow-y-auto p-3 z-10">
+        <div className="flex flex-col items-center space-y-4">
+          <FavIcon />
+          <Card className="bg-card/85 backdrop-blur-sm w-full">
+            <p className="text-center p-2 ">
+              <span className="text-md block">
+                {
+                  "Fill out the form below to create a new account! Your email is just used for identification and you will not receive messages from us."
+                }
+              </span>
+            </p>
+          </Card>
+          <SignupForm errors={errors} />
+          <div className="h-[10vh]" aria-hidden />
+        </div>
+      </div>
+      <div
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat -z-10"
+        style={{ backgroundImage: "url('/splash.jpeg')" }}
+      ></div>
+    </div>
   );
 }
