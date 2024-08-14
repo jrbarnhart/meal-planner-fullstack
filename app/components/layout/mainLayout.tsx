@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Form, Link, useLocation } from "@remix-run/react";
-import Icon from "~/svg/icon";
+
 import {
   Dialog,
   DialogContent,
@@ -10,13 +10,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import FavIcon from "../icons/favIcon";
 
 function InfoHeader({ username }: { username?: string }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="px-4 py-2 shadow-md flex justify-between items-center">
       <Link to={"/"}>
-        <Icon height={48} width={48} />
+        <FavIcon className="size-10" />
       </Link>
       <div className="grid grid-flow-col gap-3 items-center">
         <div className="grid grid-flow-col gap-x-1">
@@ -66,6 +67,7 @@ function Nav() {
         <Button
           className={`h-28 flex-shrink-0 w-14 ${isOpen ? "" : "opacity-35"}`}
           onClick={() => setIsOpen((prev) => !prev)}
+          asChild
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -1,10 +1,13 @@
-export default function FavIcon() {
+import { SVGAttributes } from "react";
+
+export default function FavIcon(props: SVGAttributes<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="64"
       height="64"
       viewBox="0 0 16.933 16.933"
+      {...props}
     >
       <g transform="translate(-28.492 -43.537) scale(1.50898)">
         <path
