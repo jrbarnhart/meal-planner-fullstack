@@ -124,7 +124,7 @@ export default function MainLayout({
   const { pathname } = useLocation();
   return (
     <div className="relative h-full grid grid-rows-[min-content_1fr] grid-cols-1 overflow-hidden">
-      <InfoHeader username={username} />
+      {pathname !== "/" ? <InfoHeader username={username} /> : null}
       {children}
       {pathname !== "/" && pathname !== "/signup" ? <Nav /> : null}
     </div>

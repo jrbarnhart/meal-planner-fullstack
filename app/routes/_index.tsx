@@ -84,23 +84,24 @@ export default function Index() {
   const error = data.error;
 
   return (
-    <div className="relative h-full grid grid-rows-[min-content_1fr] grid-cols-1 overflow-hidden">
-      <div className="row-span-2 col-span-1 overflow-y-auto">
-        <div className="grid w-full p-3 relative z-10">
+    <div className="relative h-screen flex flex-col overflow-hidden">
+      <div className="flex-grow overflow-y-auto p-3 z-10">
+        <div className="flex flex-col items-center space-y-4">
           <img
             src="/titleOpt.svg"
             alt="Munchlify title"
-            className="justify-self-center"
+            className="w-auto h-auto"
           />
-          <p className="grid justify-center text-center font-bold mb-10 bg-white rounded-md bg-opacity-75 w-min justify-self-center text-nowrap p-2">
-            <span className="text-xl">Welcome to Muchlify!</span>
-            <span className="text-lg">{'"Meal Planning Made Easy"'}</span>
+          <p className="text-center font-bold bg-white rounded-md bg-opacity-75 p-2">
+            <span className="text-xl block">Welcome to Muchlify!</span>
+            <span className="text-lg block">{'"Meal Planning Made Easy"'}</span>
           </p>
           <LoginForm error={error} />
+          <div className="h-[10vh]" aria-hidden />
         </div>
       </div>
       <div
-        className="row-span-2 col-span-1 absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat -z-10"
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat -z-10"
         style={{ backgroundImage: "url('/splash.jpeg')" }}
       ></div>
     </div>
