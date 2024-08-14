@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a front-end application for a meal planner, built with Remix, TypeScript, and Tailwind.
+This is a full-stack meal planner application built with Remix.
 
 ## Features
 
@@ -10,7 +10,7 @@ This is a front-end application for a meal planner, built with Remix, TypeScript
 - **Custom Recipes:** Add your own recipes with custom ingredients and instructions.
 - **Meal Planning:** Assign recipes to days on the calendar to create meal plans.
 - **User Accounts:** Create an account to back up data on the server for access across different devices.
-- **Try Out Option:** Use local storage to test out the application without creating an account (with reduced performance and data reliability).
+- **Preview Option:** Use local storage to test out the application without creating an account (with reduced performance and data reliability).
 
 ## Technologies Used
 
@@ -20,3 +20,5 @@ This is a front-end application for a meal planner, built with Remix, TypeScript
 - **Shadcn UI Components**
 - **Zod**
 - **Bcryptjs**
+- **Prisma ORM**
+- **Postgres**
