@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a full-stack meal planner application built with Remix.
+This is a full-stack meal planning application built with Remix.
 
 ## Features
 
