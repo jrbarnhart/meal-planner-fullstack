@@ -11,9 +11,11 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import FavIcon from "../icons/favIcon";
+import useScreenSize from "~/lib/hooks/useScreenSize";
 
 function InfoHeader({ username }: { username?: string }) {
   const [open, setOpen] = useState(false);
+  const screenSize = useScreenSize();
   return (
     <div className="px-4 py-2 shadow-md md:shadow-none flex justify-between items-center">
       <Link to={"/"}>
@@ -21,15 +23,17 @@ function InfoHeader({ username }: { username?: string }) {
       </Link>
       <div className="grid grid-flow-col gap-3 items-center">
         <div className="grid grid-flow-col gap-x-1">
-          <p>Welcome, </p>
-          <Link className="text-accent underline" to={"/user"}>
+          <p className="md:text-lg">Welcome, </p>
+          <Link className="text-accent underline md:text-lg" to={"/user"}>
             {username || "Guest"}
           </Link>
         </div>
         {username ? (
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button className="p-2 aspect-square rounded-full">X</Button>
+              <Button className="p-2 aspect-square rounded-full md:rounded-md md:min-w-20">{`${
+                screenSize.width >= 768 ? "Logout" : "X"
+              }`}</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogTitle>Log out?</DialogTitle>
