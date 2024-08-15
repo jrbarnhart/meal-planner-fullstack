@@ -41,8 +41,11 @@ function InfoHeader({ username }: { username?: string }) {
                 Your recipe list and meal plans will be there when you come
                 back.
               </DialogDescription>
-              <Form method="post">
-                <Button className="w-full" onClick={() => setOpen(false)}>
+              <Form method="post" className="flex justify-center">
+                <Button
+                  className="w-full md: max-w-72"
+                  onClick={() => setOpen(false)}
+                >
                   Logout
                 </Button>
               </Form>
