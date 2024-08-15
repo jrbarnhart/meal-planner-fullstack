@@ -6,7 +6,7 @@ import SignupForm from "~/components/auth/signupForm";
 import { ActionError } from "~/lib/types";
 import { signupFormSchema } from "~/lib/zodSchemas/authFormSchemas";
 import bcrypt from "bcryptjs";
-import { Card } from "~/components/ui/card";
+import { Card, CardHeader, CardTitle } from "~/components/ui/card";
 import FavIcon from "~/components/icons/favIcon";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -70,8 +70,11 @@ export default function CreateAccount() {
     <div className="relative h-screen flex flex-col overflow-hidden items-center">
       <div className="flex-grow flex flex-col items-center overflow-y-auto p-3 z-10 w-full">
         <div className="flex flex-col items-center space-y-4 max-w-[456px]">
-          <FavIcon />
           <Card className="bg-card/85 backdrop-blur-sm w-full">
+            <CardHeader className="flex items-center">
+              <CardTitle>Welcome new users!</CardTitle>
+              <FavIcon />
+            </CardHeader>
             <p className="text-center md:text-lg p-2 ">
               <span className="text-md block">
                 {
