@@ -94,7 +94,7 @@ export default function Index() {
             alt="Munchlify title"
             className="w-auto h-auto xl:w-[320px]"
           />
-          <div className="space-y-4 lg:space-y-0 lg:space-x-4 lg:grid lg:grid-flow-col lg:grid-cols-2 w-full">
+          <div className="space-y-4 lg:space-y-0 lg:gap-x-4 lg:grid lg:grid-cols-2 w-full">
             <Card className="bg-card/85 backdrop-blur-sm w-full">
               <CardHeader className="flex items-center">
                 <CardTitle className="text-center">
