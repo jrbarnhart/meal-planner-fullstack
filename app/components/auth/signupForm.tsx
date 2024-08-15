@@ -55,12 +55,12 @@ export default function SignupForm({ ...props }: { errors: ActionError }) {
             ))}
           </div>
           <div className="grid gap-2">
-            <Button type="submit" className="md:h-16 md:text-base">
+            <Button type="submit" className="md:h-12 md:text-base">
               Create Account
             </Button>
             <Separator className="my-3" />
             <Button type="button" variant={"secondary"} asChild>
-              <Link to="/" className="md:h-16 md:text-base">
+              <Link to="/" className="md:h-12 md:text-base">
                 Back
               </Link>
             </Button>
