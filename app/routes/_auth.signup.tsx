@@ -68,7 +68,7 @@ export default function CreateAccount() {
   const errors = useActionData<typeof action>();
   return (
     <div className="relative h-screen flex flex-col overflow-hidden items-center">
-      <div className="flex-grow overflow-y-auto p-3 z-10">
+      <div className="flex-grow flex flex-col items-center overflow-y-auto p-3 z-10 w-full">
         <div className="flex flex-col items-center space-y-4 max-w-[456px]">
           <FavIcon />
           <Card className="bg-card/85 backdrop-blur-sm w-full">
