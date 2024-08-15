@@ -12,7 +12,8 @@ import { loginFormSchema } from "~/lib/zodSchemas/authFormSchemas";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { commitSession, getSession } from "~/sessions";
-import { Card } from "~/components/ui/card";
+import { Card, CardHeader, CardTitle } from "~/components/ui/card";
+import FavIcon from "~/components/icons/favIcon";
 
 export const meta: MetaFunction = () => {
   return [
@@ -87,25 +88,30 @@ export default function Index() {
   return (
     <div className="relative h-screen flex flex-col overflow-hidden items-center">
       <div className="flex-grow flex flex-col items-center overflow-y-auto p-3 z-10 w-full">
-        <div className="flex flex-col items-center space-y-4 max-w-[456px]">
+        <div className="flex flex-col items-center space-y-4 max-w-[456px] lg:max-w-[768px]">
           <img
             src="/titleOpt.svg"
             alt="Munchlify title"
             className="w-auto h-auto"
           />
-          <Card className="bg-card/85 backdrop-blur-sm w-full">
-            <p className="text-center p-2 ">
-              <span className="text-xl md:text-2xl block font-bold">
-                Welcome to Muchlify!
-              </span>
-              <span className="text-md md:text-lg block">
-                {
-                  "Plan your meals effortlessly and discover new recipes—all in one place. Let's make meal planning a breeze!"
-                }
-              </span>
-            </p>
-          </Card>
-          <LoginForm error={error} />
+          <div className="space-y-4 lg:space-y-0 lg:space-x-4 lg:grid lg:grid-flow-col lg:grid-cols-2 w-full">
+            <Card className="bg-card/85 backdrop-blur-sm w-full">
+              <CardHeader className="flex items-center">
+                <CardTitle className="text-center">
+                  Welcome to Munchlify!
+                </CardTitle>
+                <FavIcon className="hidden lg:block" />
+              </CardHeader>
+              <p className="text-center p-2 ">
+                <span className="text-md md:text-lg block">
+                  {
+                    "Plan your meals effortlessly and discover new recipes—all in one place. Let's make meal planning a breeze!"
+                  }
+                </span>
+              </p>
+            </Card>
+            <LoginForm error={error} />
+          </div>
           <div className="h-[10vh]" aria-hidden />
         </div>
       </div>

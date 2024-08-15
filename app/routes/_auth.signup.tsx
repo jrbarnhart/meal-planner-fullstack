@@ -69,22 +69,29 @@ export default function CreateAccount() {
   return (
     <div className="relative h-screen flex flex-col overflow-hidden items-center">
       <div className="flex-grow flex flex-col items-center overflow-y-auto p-3 z-10 w-full">
-        <div className="flex flex-col items-center space-y-4 max-w-[456px]">
-          <Card className="bg-card/85 backdrop-blur-sm w-full">
-            <CardHeader className="flex items-center">
-              <CardTitle>Welcome new users!</CardTitle>
-              <FavIcon />
-            </CardHeader>
-            <p className="text-center md:text-lg p-2 ">
-              <span className="text-md block">
-                {
-                  "Fill out the form below to create a new account! Your email is just used for identification and you will not receive messages from us."
-                }
-              </span>
-            </p>
-          </Card>
-          <SignupForm errors={errors} />
-          <div className="h-[10vh]" aria-hidden />
+        <div className="flex flex-col items-center space-y-4 max-w-[456px] lg:min-w-[768px]">
+          <img
+            src="/titleOpt.svg"
+            alt="Munchlify title"
+            className="w-auto h-auto hidden lg:block"
+          />
+          <div className="space-y-4 lg:space-y-0 lg:space-x-4 lg:grid lg:grid-flow-col lg:grid-cols-2 w-full">
+            <Card className="bg-card/85 backdrop-blur-sm w-full">
+              <CardHeader className="flex items-center">
+                <CardTitle>Welcome new users!</CardTitle>
+                <FavIcon />
+              </CardHeader>
+              <p className="text-center md:text-lg p-2 ">
+                <span className="text-md block">
+                  {
+                    "Fill out the form below to create a new account! Your email is just used for identification and you will not receive messages from us."
+                  }
+                </span>
+              </p>
+            </Card>
+            <SignupForm errors={errors} />
+            <div className="h-[10vh]" aria-hidden />
+          </div>
         </div>
       </div>
       <div

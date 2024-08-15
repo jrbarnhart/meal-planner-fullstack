@@ -18,7 +18,7 @@ export default function SignupForm({ ...props }: { errors: ActionError }) {
     <Card className="w-full overflow-y-auto bg-card/85 backdrop-blur-sm">
       <CardHeader>
         <CardTitle>Create Account</CardTitle>
-        <CardDescription>Feel free to try the app out first.</CardDescription>
+        <CardDescription>Enter your details below.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form method="post" className="space-y-4">
