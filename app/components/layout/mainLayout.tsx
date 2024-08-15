@@ -17,9 +17,17 @@ function InfoHeader({ username }: { username?: string }) {
   const [open, setOpen] = useState(false);
   const screenSize = useScreenSize();
   return (
-    <div className="px-4 py-2 shadow-md md:shadow-none flex justify-between items-center">
+    <div className="px-4 py-2 shadow-md md:shadow-none flex justify-between items-center 2xl:max-w-[1920px] 2xl:w-full 2xl:justify-self-center 2xl:py-0">
       <Link to={"/"}>
-        <FavIcon className="size-10" />
+        {screenSize.width >= 1536 ? (
+          <img
+            src="/titleOpt.svg"
+            alt="Munchlify title"
+            className="w-24 h-auto"
+          />
+        ) : (
+          <FavIcon className="size-10" />
+        )}
       </Link>
       <div className="grid grid-flow-col gap-3 items-center">
         <div className="grid grid-flow-col gap-x-1">
