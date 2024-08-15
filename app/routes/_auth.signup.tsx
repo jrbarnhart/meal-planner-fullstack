@@ -67,12 +67,12 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function CreateAccount() {
   const errors = useActionData<typeof action>();
   return (
-    <div className="relative h-screen flex flex-col overflow-hidden">
+    <div className="relative h-screen flex flex-col overflow-hidden items-center">
       <div className="flex-grow overflow-y-auto p-3 z-10">
-        <div className="flex flex-col items-center space-y-4">
+        <div className="flex flex-col items-center space-y-4 max-w-[456px]">
           <FavIcon />
           <Card className="bg-card/85 backdrop-blur-sm w-full">
-            <p className="text-center p-2 ">
+            <p className="text-center md:text-lg p-2 ">
               <span className="text-md block">
                 {
                   "Fill out the form below to create a new account! Your email is just used for identification and you will not receive messages from us."

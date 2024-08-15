@@ -12,7 +12,9 @@ export default function PreviewButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"secondary"}>Preview</Button>
+        <Button variant={"secondary"} className="md:h-16 md:text-base">
+          Preview
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogTitle>Have a look around!</DialogTitle>

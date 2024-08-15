@@ -38,7 +38,9 @@ export default function LoginForm({ ...props }: { error: string | undefined }) {
           </div>
 
           <div className="grid gap-2">
-            <Button type="submit">Log In</Button>
+            <Button type="submit" className="md:h-16 md:text-base">
+              Log In
+            </Button>
             <Separator />
             <p className="text-sm text-center">
               New user? Signup or Preview the site:
@@ -49,7 +51,9 @@ export default function LoginForm({ ...props }: { error: string | undefined }) {
               className="w-full"
               asChild
             >
-              <Link to={"/signup"}>Sign Up</Link>
+              <Link to={"/signup"} className="md:h-16 md:text-base">
+                Sign Up
+              </Link>
             </Button>
             <PreviewButton />
           </div>

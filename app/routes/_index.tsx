@@ -85,20 +85,20 @@ export default function Index() {
   const error = data.error;
 
   return (
-    <div className="relative h-screen flex flex-col overflow-hidden">
-      <div className="flex-grow overflow-y-auto p-3 z-10">
-        <div className="flex flex-col items-center space-y-4">
+    <div className="relative h-screen flex flex-col overflow-hidden items-center">
+      <div className="flex-grow overflow-y-auto p-3 z-10 ">
+        <div className="flex flex-col items-center space-y-4 max-w-[456px]">
           <img
             src="/titleOpt.svg"
             alt="Munchlify title"
             className="w-auto h-auto"
           />
           <Card className="bg-card/85 backdrop-blur-sm w-full">
-            <p className="text-center  p-2 ">
-              <span className="text-xl block font-bold">
+            <p className="text-center p-2 ">
+              <span className="text-xl md:text-2xl block font-bold">
                 Welcome to Muchlify!
               </span>
-              <span className="text-md block">
+              <span className="text-md md:text-lg block">
                 {
                   "Plan your meals effortlessly and discover new recipes—all in one place. Let's make meal planning a breeze!"
                 }
