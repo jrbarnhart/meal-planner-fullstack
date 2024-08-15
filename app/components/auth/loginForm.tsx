@@ -43,7 +43,7 @@ export default function LoginForm({ ...props }: { error: string | undefined }) {
             </Button>
             <Separator />
             <p className="text-sm text-center">
-              New user? Signup or Preview the site:
+              New user? Sign Up or Preview the site:
             </p>
             <Button
               type="button"

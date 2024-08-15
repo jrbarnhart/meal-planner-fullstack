@@ -6,7 +6,7 @@ import SignupForm from "~/components/auth/signupForm";
 import { ActionError } from "~/lib/types";
 import { signupFormSchema } from "~/lib/zodSchemas/authFormSchemas";
 import bcrypt from "bcryptjs";
-import { Card, CardHeader, CardTitle } from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import FavIcon from "~/components/icons/favIcon";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -73,21 +73,28 @@ export default function CreateAccount() {
           <img
             src="/titleOpt.svg"
             alt="Munchlify title"
-            className="w-auto h-auto hidden lg:block"
+            className="w-auto h-auto hidden lg:block xl:w-[320px]"
           />
           <div className="space-y-4 lg:space-y-0 lg:space-x-4 lg:grid lg:grid-flow-col lg:grid-cols-2 w-full">
             <Card className="bg-card/85 backdrop-blur-sm w-full">
               <CardHeader className="flex items-center">
-                <CardTitle>Welcome new users!</CardTitle>
+                <CardTitle>{"Let's create an account!"}</CardTitle>
                 <FavIcon />
               </CardHeader>
-              <p className="text-center md:text-lg p-2 ">
-                <span className="text-md block">
-                  {
-                    "Fill out the form below to create a new account! Your email is just used for identification and you will not receive messages from us."
-                  }
-                </span>
-              </p>
+              <CardContent>
+                <p className="md:text-lg space-y-4">
+                  <span className="text-md block">
+                    {
+                      "Fill out the form to create a new account. Your email is just used for identification and you will not receive messages from us."
+                    }
+                  </span>
+                  <span className="text-sm block text-destructive">
+                    {
+                      "* Password resets are not yet implemented. Consider creating a secure record of it for now."
+                    }
+                  </span>
+                </p>
+              </CardContent>
             </Card>
             <SignupForm errors={errors} />
             <div className="h-[10vh]" aria-hidden />

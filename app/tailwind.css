@@ -12,10 +12,10 @@
     --popover-foreground: 120 30% 10%;
     --primary: 120 40% 20%;
     --primary-foreground: 120 10% 98%;
-    --secondary: 120 20% 90%;
-    --secondary-foreground: 120 30% 10%;
+    --secondary: 120 20% 70%;
+    --secondary-foreground: 120 30% 0%;
     --muted: 120 15% 85%;
-    --muted-foreground: 120 20% 40%;
+    --muted-foreground: 120 20% 25%;
     --accent: 30 90% 50%;
     --accent-foreground: 30 10% 10%;
     --destructive: 0 84.2% 60.2%;
@@ -30,6 +30,7 @@
     --chart-4: 30 80% 50%;
     --chart-5: 60 70% 45%;
   }
+  /* Darkmode is NYI*/
   .dark {
     --background: 120 20% 10%;
     --foreground: 120 10% 95%;

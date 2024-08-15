@@ -12,7 +12,7 @@ import { loginFormSchema } from "~/lib/zodSchemas/authFormSchemas";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { commitSession, getSession } from "~/sessions";
-import { Card, CardHeader, CardTitle } from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import FavIcon from "~/components/icons/favIcon";
 
 export const meta: MetaFunction = () => {
@@ -92,7 +92,7 @@ export default function Index() {
           <img
             src="/titleOpt.svg"
             alt="Munchlify title"
-            className="w-auto h-auto"
+            className="w-auto h-auto xl:w-[320px]"
           />
           <div className="space-y-4 lg:space-y-0 lg:space-x-4 lg:grid lg:grid-flow-col lg:grid-cols-2 w-full">
             <Card className="bg-card/85 backdrop-blur-sm w-full">
@@ -102,13 +102,15 @@ export default function Index() {
                 </CardTitle>
                 <FavIcon className="hidden lg:block" />
               </CardHeader>
-              <p className="text-center p-2 ">
-                <span className="text-md md:text-lg block">
-                  {
-                    "Plan your meals effortlessly and discover new recipes—all in one place. Let's make meal planning a breeze!"
-                  }
-                </span>
-              </p>
+              <CardContent>
+                <p>
+                  <span className="text-md md:text-lg block">
+                    {
+                      "Plan your meals effortlessly and discover new recipes—all in one place. Let's make meal planning a breeze!"
+                    }
+                  </span>
+                </p>
+              </CardContent>
             </Card>
             <LoginForm error={error} />
           </div>
