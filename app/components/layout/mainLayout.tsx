@@ -39,9 +39,10 @@ function InfoHeader({ username }: { username?: string }) {
         {username ? (
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button className="p-2 aspect-square rounded-full md:rounded-md md:min-w-20">{`${
-                screenSize.width >= 768 ? "Logout" : "X"
-              }`}</Button>
+              <Button className="p-2 aspect-square rounded-full md:rounded-md md:min-w-20">
+                <span className="md:hidden">X</span>
+                <span className="hidden md:inline">Logout</span>
+              </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogTitle>Log out?</DialogTitle>
