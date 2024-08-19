@@ -29,8 +29,8 @@ function InfoHeader({ username }: { username?: string }) {
           <FavIcon className="size-10" />
         )}
       </Link>
-      <div className="grid grid-flow-col gap-3 items-center">
-        <div className="grid grid-flow-col gap-x-1">
+      <div className="grid grid-flow-col gap-3 items-center md:self-start md:pt-4">
+        <div className="grid grid-flow-col gap-x-1 md:align-top">
           <p className="md:text-lg">Welcome, </p>
           <Link className="text-accent underline md:text-lg" to={"/user"}>
             {username || "Guest"}
@@ -134,49 +134,46 @@ function Nav() {
 
   return (
     <nav className="items-center hidden md:flex w-full justify-center">
-      <div aria-hidden className="shadow-md flex-grow border-b-1 h-full" />
+      <div
+        aria-hidden
+        className="shadow-md border-b flex-grow border-b-1 h-full"
+      />
       <Button
         variant={pathname === "/meals" ? "ghost" : "default"}
-        className={`rounded-br-none rounded-bl-none border border-transparent shadow-md hover:bg-background hover:text-foreground hover:border-primary hover:border-b-transparent ${
-          pathname === "/meals"
-            ? "border-primary border-b-transparent shadow-none"
-            : ""
+        className={`rounded-br-none rounded-bl-none border shadow-md hover:bg-background hover:text-foreground ${
+          pathname === "/meals" ? "border-b-transparent shadow-inner" : ""
         }`}
         asChild
       >
         <Link to={"/meals"}>Meals</Link>
       </Button>
-      <div aria-hidden className="shadow-md w-2 border-b-1 h-full" />
+      <div aria-hidden className="shadow-md w-2 border-b h-full" />
       <Button
         variant={pathname === "/recipes" ? "ghost" : "default"}
-        className={`rounded-br-none rounded-bl-none border border-transparent shadow-md hover:bg-background hover:text-foreground hover:border-primary hover:border-b-transparent ${
-          pathname === "/recipes"
-            ? "border-primary border-b-transparent shadow-none"
-            : ""
+        className={`rounded-br-none rounded-bl-none border shadow-md hover:bg-background hover:text-foreground ${
+          pathname === "/recipes" ? "border-b-transparent shadow-inner" : ""
         }`}
         asChild
       >
         <Link to={"/recipes"}>Recipes</Link>
       </Button>
-      <div aria-hidden className="shadow-md w-2 border-b-1 h-full" />
+      <div aria-hidden className="shadow-md w-2 border-b h-full" />
       <Button
         variant={pathname === "/recipes/library" ? "ghost" : "default"}
-        className={`rounded-br-none rounded-bl-none border border-transparent shadow-md hover:bg-background hover:text-foreground hover:border-primary hover:border-b-transparent ${
+        className={`rounded-br-none rounded-bl-none border shadow-md hover:bg-background hover:text-foreground ${
           pathname === "/recipes/library"
-            ? "border-primary border-b-transparent shadow-none"
+            ? "border-b-transparent shadow-inner"
             : ""
         }`}
         asChild
       >
         <Link to={"/recipes/library"}>Recipe Library</Link>
       </Button>
-      <div aria-hidden className="shadow-md w-2 border-b-1 h-full" />
+      <div aria-hidden className="shadow-md w-2 border-b h-full" />
       <Button
         variant={pathname === "/recipes/add" ? "ghost" : "default"}
-        className={`rounded-br-none rounded-bl-none border border-transparent shadow-md hover:bg-background hover:text-foreground hover:border-primary hover:border-b-transparent ${
-          pathname === "/recipes/add"
-            ? "border-primary border-b-transparent shadow-none"
-            : ""
+        className={`rounded-br-none rounded-bl-none border shadow-md hover:bg-background hover:text-foreground ${
+          pathname === "/recipes/add" ? "border-b-transparent shadow-inner" : ""
         }`}
         asChild
       >
