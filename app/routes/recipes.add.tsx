@@ -170,7 +170,12 @@ export default function AddRecipe() {
           <Form method="post" className="space-y-4" ref={formRef}>
             <div>
               <Label htmlFor="name">Name</Label>
-              <Input id="name" name="name" placeholder="Recipe Name"></Input>
+              <Input
+                id="name"
+                name="name"
+                placeholder="Recipe Name"
+                autoComplete="off"
+              ></Input>
               {localErrors?.fieldErrors.name && (
                 <p className="text-destructive">
                   {localErrors.fieldErrors.name}
@@ -229,9 +234,11 @@ export default function AddRecipe() {
               )}
             </div>
             <div>
-              <Label htmlFor="types">Type(s):</Label>
+              <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 pb-1 pt-2">
+                {"Type(s)"}
+              </p>
               <Card className="p-2">
-                <fieldset id="types" className="grid grid-cols-2 gap-4">
+                <fieldset className="grid grid-cols-2 gap-4">
                   <div className="flex items-center gap-2">
                     <Checkbox id="t1" name="types[]" value="breakfast" />
                     <Label htmlFor="t1" className="text-lg">
