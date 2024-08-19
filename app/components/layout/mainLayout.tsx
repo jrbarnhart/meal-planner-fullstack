@@ -11,23 +11,19 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import FavIcon from "../icons/favIcon";
-import useScreenSize from "~/lib/hooks/useScreenSize";
 
 function InfoHeader({ username }: { username?: string }) {
   const [open, setOpen] = useState(false);
-  const screenSize = useScreenSize();
+
   return (
     <div className="px-4 py-2 shadow-md md:shadow-none flex justify-between items-center 2xl:max-w-[1920px] 2xl:w-full 2xl:justify-self-center 2xl:py-0">
       <Link to={"/"}>
-        {screenSize.width >= 1536 ? (
-          <img
-            src="/titleOpt.svg"
-            alt="Munchlify title"
-            className="w-24 h-auto"
-          />
-        ) : (
-          <FavIcon className="size-10" />
-        )}
+        <img
+          src="/titleOpt.svg"
+          alt="Munchlify title"
+          className="hidden lg:inline w-24 h-auto"
+        />
+        <FavIcon className="size-10 lg:hidden" />
       </Link>
       <div className="grid grid-flow-col gap-3 items-center md:self-start md:pt-4">
         <div className="grid grid-flow-col gap-x-1 md:align-top">
