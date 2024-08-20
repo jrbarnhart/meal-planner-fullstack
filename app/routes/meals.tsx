@@ -1,5 +1,4 @@
 import DayInterface from "~/components/meals/dayInterface";
-import RouteContent from "~/components/layout/routeContent";
 import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
@@ -222,7 +221,7 @@ export default function Meals() {
   }, [actionData]);
 
   return (
-    <RouteContent>
+    <div className="grid grid-rows-2 items-center justify-items-center content-center gap-2 p-3 h-full overflow-hidden">
       <Calendar
         mode="single"
         selected={selectedDate}
@@ -236,6 +235,6 @@ export default function Meals() {
         isLoggedIn={isLoggedIn}
         setLocalStorageVersion={setLocalStorageVersion}
       />
-    </RouteContent>
+    </div>
   );
 }

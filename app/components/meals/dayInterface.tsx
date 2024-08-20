@@ -1,4 +1,4 @@
-import { formatDateForTitle } from "~/lib/utils";
+import { cn, formatDateForTitle } from "~/lib/utils";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Separator } from "../ui/separator";
-import { SetStateAction, useRef, useState } from "react";
+import { HTMLAttributes, SetStateAction, useRef, useState } from "react";
 import {
   addRecipeToPlan,
   createLocalMealPlan,
@@ -147,17 +147,25 @@ export default function DayInterface({
   recipes: Recipe[] | null;
   isLoggedIn: boolean;
   setLocalStorageVersion: React.Dispatch<SetStateAction<number>>;
-}) {
+} & HTMLAttributes<HTMLDivElement>) {
   const {
     selectedDate,
     currentMealPlans,
     recipes,
     isLoggedIn,
     setLocalStorageVersion,
+    className,
+    ...divAttributes
   } = props;
 
   return (
-    <Card className="p-2 w-full h-full overflow-hidden flex flex-col">
+    <Card
+      className={cn(
+        "p-2 w-full h-full overflow-hidden flex flex-col",
+        className
+      )}
+      {...divAttributes}
+    >
       <CardHeader className="p-1 text-lg font-semibold flex items-center">
         <CardTitle>{formatDateForTitle(selectedDate)}</CardTitle>
         <CardDescription className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr] w-full">
@@ -168,7 +176,7 @@ export default function DayInterface({
         </CardDescription>
       </CardHeader>
       <Separator />
-      <CardContent className="p-2 pb-16 grid gap-y-2 overflow-y-scroll h-full">
+      <CardContent className="p-2 pb-16 grid grid-rows-[min-content] gap-y-3 overflow-y-scroll h-full">
         {(() => {
           const meal = currentMealPlans?.find(
             (meal) =>
