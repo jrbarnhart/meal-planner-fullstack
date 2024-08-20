@@ -29,11 +29,13 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-3", className)}
+      className={cn("p-1", className)}
       classNames={{
-        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-        month: "space-y-4",
-        caption: "flex justify-center pt-1 relative items-center",
+        root: "flex flex-col w-full max-w-[768px] h-full",
+        months:
+          "flex-grow flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 w-full",
+        month: "flex flex-col space-y-4 w-full p-4",
+        caption: "flex justify-center relative items-center",
         caption_label: "text-sm md:text-lg font-medium",
         nav: "space-x-1 flex items-center",
         nav_button: cn(
@@ -42,14 +44,15 @@ function Calendar({
         ),
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
-        table: "w-full border-collapse space-y-1",
+        table: "flex-grow flex flex-col w-full border-collapse space-y-1",
+        tbody: "flex-grow flex flex-col",
         head_row: "flex",
         head_cell:
-          "text-muted-foreground rounded-md w-9 md:w-16 font-normal text-[0.8rem] md:text-base",
-        row: "flex w-full mt-2",
-        cell: "h-9 w-9 md:size-16 text-center text-sm md:text-lg p-0 relative rounded-md [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+          "text-muted-foreground rounded-md w-full font-normal text-[0.8rem] md:text-base",
+        row: "flex-grow flex w-full mt-2",
+        cell: "flex flex-col w-full text-center text-sm md:text-lg p-0 relative rounded-md [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
         day: cn(
-          "h-9 w-9 md:size-16 p-0 font-normal aria-selected:opacity-100 rounded-md"
+          "flex-grow w-full p-0 font-normal aria-selected:opacity-100 rounded-md"
         ),
         day_range_end: "day-range-end",
         day_selected:
@@ -61,6 +64,7 @@ function Calendar({
         day_range_middle:
           "aria-selected:bg-accent aria-selected:text-accent-foreground",
         day_hidden: "invisible",
+
         ...classNames,
       }}
       modifiers={{ hasMealPlan: mealPlanDays }}
