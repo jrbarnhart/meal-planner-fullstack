@@ -1,13 +1,6 @@
 import { cn, formatDateForTitle } from "~/lib/utils";
 import { Button } from "../ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
-import { Separator } from "../ui/separator";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { HTMLAttributes, SetStateAction, useRef, useState } from "react";
 import {
   addRecipeToPlan,
@@ -30,13 +23,13 @@ function MealEntry({
 }) {
   const { recipe, isLoggedIn, mealPlan, handleDeleteClickLocal } = props;
   return (
-    <div className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr] items-center text-nowrap">
+    <div className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr] md:grid-rows-[1fr_min-content] items-center text-nowrap w-full md:border-b">
       <Link to={`/recipes/${recipe.id}`} className="truncate text-accent">
         {recipe.name}
       </Link>
       <p>{`${recipe.time} min`}</p>
       <p>{recipe.feeds}</p>
-      <Form method="post">
+      <Form method="post" className="justify-self-end">
         <input type="hidden" name="deleteId" value={recipe.id} />
         <input type="hidden" name="mealPlanId" value={mealPlan.id} />
         {isLoggedIn ? (
@@ -56,6 +49,9 @@ function MealEntry({
           </Button>
         )}
       </Form>
+      <div className="hidden md:inline row-start-2 col-span-full pb-2">
+        <p className="text-wrap line-clamp-2 italic">{recipe.description}</p>
+      </div>
     </div>
   );
 }
@@ -104,7 +100,7 @@ function AddRecipeSelect({
   const formRef = useRef(null);
 
   return (
-    <Form method="post" ref={formRef}>
+    <Form method="post" ref={formRef} className="w-full">
       <input type="hidden" name="date" value={date.toISOString()} />
       <select
         name="recipeId"
@@ -161,22 +157,21 @@ export default function DayInterface({
   return (
     <Card
       className={cn(
-        "p-2 w-full h-full overflow-hidden flex flex-col",
+        "p-2 w-full max-w-[768px] h-full overflow-hidden flex flex-col",
         className
       )}
       {...divAttributes}
     >
-      <CardHeader className="p-1 text-lg font-semibold flex items-center">
+      <CardHeader className="p-1 text-lg font-semibold flex items-center border-b">
         <CardTitle>{formatDateForTitle(selectedDate)}</CardTitle>
-        <CardDescription className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr] w-full">
-          <span>Recipe Name</span>
-          <span>Prep Time</span>
-          <span>Feeds</span>
-          <span>Remove</span>
-        </CardDescription>
+        <p className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr] text-sm text-muted-foreground w-full">
+          <span>Name:</span>
+          <span>Ready in:</span>
+          <span>Feeds:</span>
+          <span className="justify-self-end">Remove</span>
+        </p>
       </CardHeader>
-      <Separator />
-      <CardContent className="p-2 pb-16 grid grid-rows-[min-content] gap-y-3 overflow-y-scroll h-full">
+      <CardContent className="p-2 flex flex-col gap-y-3 overflow-y-scroll h-full">
         {(() => {
           const meal = currentMealPlans?.find(
             (meal) =>
