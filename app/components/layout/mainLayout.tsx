@@ -25,7 +25,7 @@ function InfoHeader({ username }: { username?: string }) {
         />
         <FavIcon className="size-10 lg:hidden" />
       </Link>
-      <div className="grid grid-flow-col gap-3 items-center md:self-start bg-background shadow-inner border pr-1 pl-2 py-1 md:p-2 rounded-l-[25px] rounded-r-[25px] md:rounded-md">
+      <div className="grid grid-flow-col gap-3 items-center md:self-start bg-background shadow-inner border pr-1 pl-2 py-1 md:p-2 rounded-l-[25px] rounded-r-[25px] md:rounded-md md:my-2">
         <div className="grid grid-flow-col gap-x-1 md:align-top">
           <p className="md:text-lg">Welcome, </p>
           <Link className="text-accent underline md:text-lg pr-1" to={"/user"}>
@@ -35,7 +35,7 @@ function InfoHeader({ username }: { username?: string }) {
         {username ? (
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button className="p-2 aspect-square rounded-full md:rounded-md md:min-w-20">
+              <Button className="p-2 aspect-square rounded-full md:rounded-md md:min-w-20 md:h-9">
                 <span className="md:hidden">X</span>
                 <span className="hidden md:inline">Logout</span>
               </Button>
