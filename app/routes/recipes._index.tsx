@@ -116,11 +116,11 @@ export default function Recipes() {
 
   return (
     <RouteContent>
-      <div className="flex items-center justify-between w-full">
+      <div className="flex items-center justify-between w-full max-w-[768px]">
         <AddRecipeButton />
         <h1 className="text-xl">My Recipes</h1>
       </div>
-      <Card className="w-full h-full overflow-hidden">
+      <Card className="w-full h-full overflow-hidden max-w-[768px]">
         <CardHeader>
           <CardDescription className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr]">
             <span>Name</span>

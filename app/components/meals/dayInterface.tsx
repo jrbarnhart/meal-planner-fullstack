@@ -25,7 +25,7 @@ function MealEntry({
   return (
     <div className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr] md:grid-rows-[1fr_min-content] items-center text-nowrap w-full md:border-b">
       <Link to={`/recipes/${recipe.id}`} className="truncate text-accent">
-        {recipe.name}
+        {recipe.name[0].toUpperCase() + recipe.name.slice(1)}
       </Link>
       <p>{`${recipe.time} min`}</p>
       <p>{recipe.feeds}</p>

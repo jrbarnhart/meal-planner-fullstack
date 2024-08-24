@@ -17,7 +17,9 @@ export default function RecipeEntry({
   const { id, name, time, feeds } = recipe;
   return (
     <Card className="grid grid-flow-col grid-cols-[4fr_3fr_2fr_1fr] items-center p-2">
-      <p className="truncate">{name[0].toUpperCase() + name.slice(1)}</p>
+      <Link to={`/recipes/${recipe.id}`} className="truncate text-accent">
+        {name[0].toUpperCase() + name.slice(1)}
+      </Link>
       <p>{`${time} min`}</p>
       <p>{feeds}</p>
       <Popover>
