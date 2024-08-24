@@ -15,7 +15,6 @@ import {
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { prisma } from "~/client";
-import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -217,14 +216,16 @@ export default function RecipeLibrary() {
   const selectedTime = searchParams.get("time") ?? MAX_TIME.toString();
 
   return (
-    <RouteContent>
-      <div className="flex items-center justify-between gap-3 w-full">
+    <div className="flex flex-col items-center h-full overflow-hidden">
+      <div className="flex items-center justify-between gap-3 w-full max-w-[768px] p-3">
         <Button asChild>
-          <Link to={"/recipes"}>My Recipes</Link>
+          <Link to={"/recipes"} className="w-32">
+            My Recipes
+          </Link>
         </Button>
         <Popover>
           <PopoverTrigger asChild>
-            <Button className="flex-grow">Filter</Button>
+            <Button className="flex-grow max-w-32 mr-auto">Filter</Button>
           </PopoverTrigger>
           <PopoverContent>
             <Form
@@ -298,9 +299,13 @@ export default function RecipeLibrary() {
         </Popover>
         <h1 className="text-xl">Recipe Library</h1>
       </div>
-      <div className="overflow-y-auto space-y-2">
+      <div className="w-full border-b shadow-sm" />
+      <div
+        className="overflow-y-scroll space-y-2 w-full flex flex-col items-center p-3"
+        style={{ scrollbarGutter: "stable both-edges" }}
+      >
         {filteredRecipes.map((recipe) => (
-          <Card key={recipe.id}>
+          <Card key={recipe.id} className="w-full max-w-[768px]">
             <CardHeader>
               <CardTitle>{recipe.name}</CardTitle>
               <CardDescription className="flex gap-3">
@@ -358,6 +363,6 @@ export default function RecipeLibrary() {
           </Card>
         ))}
       </div>
-    </RouteContent>
+    </div>
   );
 }
