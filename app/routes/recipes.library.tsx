@@ -217,7 +217,7 @@ export default function RecipeLibrary() {
 
   return (
     <div className="flex flex-col items-center h-full overflow-hidden">
-      <div className="flex items-center justify-between gap-3 w-full max-w-[768px] py-3">
+      <div className="flex items-center justify-between gap-3 w-full max-w-[768px] p-3 min-[792px]:px-0">
         <Button asChild>
           <Link to={"/recipes"} className="w-32">
             My Recipes
