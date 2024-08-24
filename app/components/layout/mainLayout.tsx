@@ -25,7 +25,7 @@ function InfoHeader({ username }: { username?: string }) {
         />
         <FavIcon className="size-10 lg:hidden" />
       </Link>
-      <div className="grid grid-flow-col gap-3 items-center md:self-start md:pt-4">
+      <div className="grid grid-flow-col gap-3 items-center md:self-start bg-background shadow-inner border pr-1 pl-2 py-1 md:p-2 rounded-l-[25px] rounded-r-[25px] md:rounded-md">
         <div className="grid grid-flow-col gap-x-1 md:align-top">
           <p className="md:text-lg">Welcome, </p>
           <Link className="text-accent underline md:text-lg" to={"/user"}>
@@ -137,8 +137,10 @@ function Nav() {
       />
       <Button
         variant={pathname === "/meals" ? "ghost" : "default"}
-        className={`rounded-br-none rounded-bl-none border shadow-md hover:bg-background hover:text-foreground ${
-          pathname === "/meals" ? "border-b-transparent shadow-inner" : ""
+        className={`rounded-br-none rounded-bl-none border-b shadow-md hover:bg-background hover:text-foreground ${
+          pathname === "/meals"
+            ? "border-b-transparent shadow-inner bg-background"
+            : ""
         }`}
         asChild
       >
@@ -147,8 +149,10 @@ function Nav() {
       <div aria-hidden className="shadow-md w-2 border-b h-full" />
       <Button
         variant={pathname === "/recipes" ? "ghost" : "default"}
-        className={`rounded-br-none rounded-bl-none border shadow-md hover:bg-background hover:text-foreground ${
-          pathname === "/recipes" ? "border-b-transparent shadow-inner" : ""
+        className={`rounded-br-none rounded-bl-none border-b shadow-md hover:bg-background hover:text-foreground ${
+          pathname === "/recipes"
+            ? "border-b-transparent shadow-inner bg-background"
+            : ""
         }`}
         asChild
       >
@@ -157,9 +161,9 @@ function Nav() {
       <div aria-hidden className="shadow-md w-2 border-b h-full" />
       <Button
         variant={pathname === "/recipes/library" ? "ghost" : "default"}
-        className={`rounded-br-none rounded-bl-none border shadow-md hover:bg-background hover:text-foreground ${
+        className={`rounded-br-none rounded-bl-none border-b shadow-md hover:bg-background hover:text-foreground ${
           pathname === "/recipes/library"
-            ? "border-b-transparent shadow-inner"
+            ? "border-b-transparent shadow-inner bg-background"
             : ""
         }`}
         asChild
@@ -169,8 +173,10 @@ function Nav() {
       <div aria-hidden className="shadow-md w-2 border-b h-full" />
       <Button
         variant={pathname === "/recipes/add" ? "ghost" : "default"}
-        className={`rounded-br-none rounded-bl-none border shadow-md hover:bg-background hover:text-foreground ${
-          pathname === "/recipes/add" ? "border-b-transparent shadow-inner" : ""
+        className={`rounded-br-none rounded-bl-none border-b shadow-md hover:bg-background hover:text-foreground ${
+          pathname === "/recipes/add"
+            ? "border-b-transparent shadow-inner bg-background"
+            : ""
         }`}
         asChild
       >
@@ -190,12 +196,17 @@ export default function MainLayout({
 }) {
   const { pathname } = useLocation();
   return (
-    <div className="relative h-full grid grid-rows-[min-content_1fr] md:grid-rows-[min-content_min-content_1fr] grid-cols-1 overflow-hidden">
+    <div className="relative h-full grid grid-rows-[min-content_1fr] md:grid-rows-[min-content_1fr] grid-cols-1 overflow-hidden">
       {pathname !== "/" && pathname !== "/signup" ? (
-        <>
+        <div className="grid relative">
           <InfoHeader username={username} />
           <Nav />
-        </>
+          <div
+            className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat -z-10"
+            style={{ backgroundImage: "url('/splash.jpeg')" }}
+          ></div>
+          <div className="absolute inset-0 w-full h-full -z-10 bg-white opacity-70 backdrop-blur-md"></div>
+        </div>
       ) : null}
       {children}
       {pathname !== "/" && pathname !== "/signup" ? <MobileNav /> : null}
