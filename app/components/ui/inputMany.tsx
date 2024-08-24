@@ -17,7 +17,7 @@ export default function InputMany({
   const { inputRef, name, label, placeholder, values, setValues } = props;
 
   return (
-    <div>
+    <div className="grid gap-y-2">
       <Label htmlFor={`${name}Input`}>{label}</Label>
       <Input
         ref={inputRef}
@@ -60,7 +60,7 @@ export default function InputMany({
           }
         }}
         variant={"secondary"}
-        className="my-3 w-full"
+        className="my-3 w-full md:max-w-32 md:justify-self-end"
       >
         Add
       </Button>

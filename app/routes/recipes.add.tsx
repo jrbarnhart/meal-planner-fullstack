@@ -177,7 +177,7 @@ export default function AddRecipe() {
           <CardDescription>Add a custom recipe of your own.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form method="post" className="space-y-4" ref={formRef}>
+          <Form method="post" className="space-y-4 grid" ref={formRef}>
             <div>
               <Label htmlFor="name">Name</Label>
               <Input
@@ -396,7 +396,10 @@ export default function AddRecipe() {
             </div>
             {isLoggedIn ? (
               <>
-                <Button type="submit" className="w-full">
+                <Button
+                  type="submit"
+                  className="w-full md:max-w-32 md:justify-self-end"
+                >
                   Add Recipe
                 </Button>
                 {actionData?.error && (
@@ -407,7 +410,7 @@ export default function AddRecipe() {
               <Button
                 onClick={(e) => handleLocalSubmit(e, formRef)}
                 type="button"
-                className="w-full"
+                className="w-full md:max-w-32 md:justify-self-end"
               >
                 Add Local Recipe
               </Button>
