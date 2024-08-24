@@ -16,7 +16,7 @@ export default function AddRecipeButton() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add Recipe</Button>
+        <Button className="w-32">Add Recipe</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

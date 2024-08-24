@@ -17,7 +17,12 @@ import { z } from "zod";
 import { prisma } from "~/client";
 import RouteContent from "~/components/layout/routeContent";
 import { Button } from "~/components/ui/button";
-import { Card, CardContent } from "~/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+} from "~/components/ui/card";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import InputMany from "~/components/ui/inputMany";
@@ -161,11 +166,16 @@ export default function AddRecipe() {
     <RouteContent>
       <div className="w-full flex justify-between items-center max-w-[768px]">
         <Button asChild>
-          <Link to={"/recipes"}>My Recipes</Link>
+          <Link to={"/recipes"} className="w-32">
+            My Recipes
+          </Link>
         </Button>
         <h1 className="text-xl">Add a New Recipe</h1>
       </div>
       <Card className="w-full overflow-y-auto max-w-[768px]">
+        <CardHeader>
+          <CardDescription>Add a custom recipe of your own.</CardDescription>
+        </CardHeader>
         <CardContent>
           <Form method="post" className="space-y-4" ref={formRef}>
             <div>
