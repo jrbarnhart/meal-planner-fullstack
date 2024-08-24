@@ -154,10 +154,10 @@ export default function UserDetails() {
 
   return (
     <RouteContent>
-      <div className="w-full flex justify-between items-center">
+      <div className="w-full flex justify-between items-center max-w-[768px]">
         <h1 className="text-xl ml-auto">User Details</h1>
       </div>
-      <Card className="w-full">
+      <Card className="w-full max-w-[768px]">
         <CardHeader>
           <CardTitle>
             {isLoggedIn ? foundUser?.name ?? "User" : "Guest"}

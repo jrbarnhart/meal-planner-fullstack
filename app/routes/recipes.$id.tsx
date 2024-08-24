@@ -51,13 +51,13 @@ export default function RecipeDetails() {
 
   return (
     <RouteContent>
-      <div className="w-full flex justify-between items-center">
+      <div className="w-full flex justify-between items-center max-w-[768px]">
         <Button asChild>
           <Link to={"/recipes"}>My Recipes</Link>
         </Button>
         <h1 className="text-xl">Recipe Details</h1>
       </div>
-      <Card className="w-full overflow-y-scroll">
+      <Card className="w-full overflow-y-scroll max-w-[768px]">
         <CardHeader>
           <CardTitle>{recipe.name}</CardTitle>
           <CardDescription>
