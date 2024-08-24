@@ -159,13 +159,13 @@ export default function AddRecipe() {
 
   return (
     <RouteContent>
-      <div className="w-full flex justify-between items-center">
+      <div className="w-full flex justify-between items-center max-w-[768px]">
         <Button asChild>
           <Link to={"/recipes"}>My Recipes</Link>
         </Button>
         <h1 className="text-xl">Add a New Recipe</h1>
       </div>
-      <Card className="w-full overflow-y-auto">
+      <Card className="w-full overflow-y-auto max-w-[768px]">
         <CardContent>
           <Form method="post" className="space-y-4" ref={formRef}>
             <div>
