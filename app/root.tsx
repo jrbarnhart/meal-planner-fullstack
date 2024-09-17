@@ -1,6 +1,5 @@
 import {
   isRouteErrorResponse,
-  Link,
   Links,
   Meta,
   Outlet,
@@ -21,7 +20,6 @@ import {
 import { commitSession, destroySession, getSession } from "./sessions";
 import { prisma } from "./client";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
-import FavIcon from "./components/icons/favIcon";
 
 export const links: LinksFunction = () => {
   return [
