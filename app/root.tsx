@@ -1,10 +1,13 @@
 import {
+  isRouteErrorResponse,
+  Link,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useRouteError,
 } from "@remix-run/react";
 import "./tailwind.css";
 import MainLayout from "./components/layout/mainLayout";
@@ -17,6 +20,8 @@ import {
 } from "@remix-run/node";
 import { commitSession, destroySession, getSession } from "./sessions";
 import { prisma } from "./client";
+import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
+import FavIcon from "./components/icons/favIcon";
 
 export const links: LinksFunction = () => {
   return [
@@ -70,6 +75,39 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const isResponse = isRouteErrorResponse(error);
+  return (
+    <>
+      <div className="w-full flex justify-center p-8">
+        <Card className="max-w-2xl flex flex-col">
+          <CardHeader>
+            <CardTitle>Sorry, there was an error.</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isResponse ? (
+              <div>
+                <p className="text-lg">Error: {error.status}</p>
+              </div>
+            ) : (
+              <div>
+                <p className="text-lg">Error: Unknown</p>
+              </div>
+            )}
+            <div className="flex">
+              <a href="/" className="text-lg font-bold text-accent">
+                {"Click to return Home."}
+              </a>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+      <Scripts />
+    </>
   );
 }
 
