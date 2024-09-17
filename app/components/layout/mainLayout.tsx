@@ -69,31 +69,33 @@ function MobileNav() {
 
   return (
     <Card
-      className={`absolute md:hidden bottom-1/4 left-0 p-2 bg-card transition-all duration-300 ease-in-out rounded-l-none ${
-        isOpen
-          ? "w-48"
-          : "w-20 shadow-none border-transparent bg-transparent opacity-55"
+      className={`absolute md:hidden top-0 left-16 p-2 bg-transparent border-none shadow-none transition-all duration-300 ease-in-out rounded-l-none ${
+        isOpen ? "h-48" : "h-20"
       }`}
     >
-      <nav className="flex items-center gap-2">
-        <Button
-          className={`h-28 flex-shrink-0 w-14 ${isOpen ? "" : "opacity-35"}`}
-          onClick={() => setIsOpen((prev) => !prev)}
-          asChild
+      <Button
+        className={`h-12 flex-shrink-0 w-14 self-start mb-1`}
+        onClick={() => setIsOpen((prev) => !prev)}
+        asChild
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="#e8eaed"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-            fill="#e8eaed"
-          >
-            <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
-          </svg>
-        </Button>
+          <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
+        </svg>
+      </Button>
+      <nav
+        className={`p-2 flex flex-col items-center gap-2 rounded-md ${
+          isOpen ? "bg-card border shadow-md" : "bg-transparent"
+        }`}
+      >
         <div
-          className={`flex flex-col space-y-2 overflow-hidden transition-all duration-300 ${
-            isOpen ? "w-44 opacity-100" : "w-0 opacity-0"
+          className={`w-44 flex flex-col space-y-2 overflow-hidden transition-all duration-300 ${
+            isOpen ? "h-auto opacity-100" : "h-0 opacity-0"
           }`}
         >
           <Button
