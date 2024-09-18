@@ -14,5 +14,4 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
-  base: "https://joshuarbarnhart.com/meal-planner/",
 });
