@@ -98,7 +98,7 @@ export function ErrorBoundary() {
               </div>
             )}
             <div className="flex">
-              <a href="/" className="text-lg font-bold text-accent">
+              <a href="/meal-planner" className="text-lg font-bold text-accent">
                 {"Click to return Home."}
               </a>
             </div>
