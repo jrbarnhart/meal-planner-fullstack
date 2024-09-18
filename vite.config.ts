@@ -7,7 +7,7 @@ installGlobals();
 
 export default defineConfig({
   server: { port: 4000 },
-  base: "/meal-planner",
+  base: "/meal-planner/",
   plugins: [
     remix({
       basename: "/meal-planner",
