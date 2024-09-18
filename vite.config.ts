@@ -7,7 +7,7 @@ installGlobals();
 
 export default defineConfig({
   server: { port: 4000 },
-  base: process.env.NODE_ENV === "production" ? "/meal-planner/" : undefined,
+  base: "/meal-planner/",
   plugins: [
     remix({
       basename: "/meal-planner",

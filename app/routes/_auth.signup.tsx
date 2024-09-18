@@ -71,7 +71,7 @@ export default function CreateAccount() {
       <div className="flex-grow flex flex-col items-center overflow-y-auto p-3 z-10 w-full">
         <div className="flex flex-col items-center space-y-4 max-w-[456px] lg:max-w-[768px]">
           <img
-            src="/titleOpt.svg"
+            src="/meal-planner/titleOpt.svg"
             alt="Munchlify title"
             className="w-auto h-auto hidden lg:block xl:w-[320px]"
           />
@@ -103,7 +103,7 @@ export default function CreateAccount() {
       </div>
       <div
         className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat -z-10"
-        style={{ backgroundImage: "url('/splash.jpeg')" }}
+        style={{ backgroundImage: "url('/meal-planner/splash.jpeg')" }}
       ></div>
     </div>
   );

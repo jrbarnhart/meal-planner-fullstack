@@ -19,7 +19,7 @@ function InfoHeader({ username }: { username?: string }) {
     <div className="px-4 py-2 shadow-md md:shadow-none flex justify-between items-center 2xl:max-w-[1920px] 2xl:w-full 2xl:justify-self-center 2xl:py-0">
       <Link to={"/"}>
         <img
-          src="/titleOpt.svg"
+          src="/meal-planner/titleOpt.svg"
           alt="Munchlify title"
           className="hidden lg:inline w-24 h-auto"
         />
@@ -205,7 +205,7 @@ export default function MainLayout({
           <Nav />
           <div
             className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat -z-10"
-            style={{ backgroundImage: "url('/splash.jpeg')" }}
+            style={{ backgroundImage: "url('/meal-planner/splash.jpeg')" }}
           ></div>
           <div className="absolute inset-0 w-full h-full -z-10 bg-white opacity-70 backdrop-blur-md"></div>
         </div>
