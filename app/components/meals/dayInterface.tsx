@@ -31,11 +31,6 @@ function MealEntry({
       <p>{recipe.feeds}</p>
       <Form method="post" className="justify-self-end">
         <input type="hidden" name="deleteId" value={recipe.id} />
-        <input
-          type="hidden"
-          name="timezone"
-          value={Intl.DateTimeFormat().resolvedOptions().timeZone}
-        />
         <input type="hidden" name="mealPlanId" value={mealPlan.id} />
         {isLoggedIn ? (
           <Button type="submit" variant={"outline"} className="text-red-500">

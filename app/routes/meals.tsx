@@ -84,11 +84,8 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const { date, recipeId } = zodResults.data;
-  const timezone = formData.get("timezone")?.toString() ?? "UTC";
-  const userDate = new Date(
-    date.toLocaleString("en-US", { timeZone: timezone })
-  );
-  const normalizedDate = new Date(userDate);
+
+  const normalizedDate = new Date(date);
   normalizedDate.setHours(0, 0, 0, 0);
 
   // Is there a meal plan for this day?
