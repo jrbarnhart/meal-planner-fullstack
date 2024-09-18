@@ -8,12 +8,14 @@ import { signupFormSchema } from "~/lib/zodSchemas/authFormSchemas";
 import bcrypt from "bcryptjs";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import FavIcon from "~/components/icons/favIcon";
+import { commitSession, getSession } from "~/sessions";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const name = String(formData.get("name"));
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
+
   const newAccountData: z.infer<typeof signupFormSchema> = {
     name,
     email,
@@ -49,10 +51,15 @@ export async function action({ request }: ActionFunctionArgs) {
       data: { email: parsedEmail, name: parsedName, passHash: hashedPassword },
     });
 
-    // Log in the new user here
-    console.log(newUser);
+    // Log in the new user
+    const session = await getSession(request.headers.get("Cookie"));
+    session.set("userId", newUser.id.toString());
 
-    return redirect("/meals");
+    return redirect("/meals", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   } catch (error) {
     console.log(error);
     const errors: ActionError = {
