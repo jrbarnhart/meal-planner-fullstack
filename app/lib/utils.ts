@@ -58,6 +58,18 @@ export function formatDateForTitle(date: Date): string {
   return `${month} ${day}${suffix(day)}`;
 }
 
+export function normalizeToMidnight(date: Date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+export function dateToUTC(date: Date) {
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+}
+
+export function UTCToLocal(date: Date) {
+  return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+}
+
 export function calculateComplexity(recipe: Recipe) {
   const { time } = recipe;
   const totalRequirements = recipe.requirements.length;
