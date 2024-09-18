@@ -83,10 +83,10 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const { date, recipeId } = zodResults.data;
-
+  console.log("date: ", date);
   const normalizedDate = new Date(date);
   normalizedDate.setHours(0, 0, 0, 0);
-
+  console.log("normalized: ", normalizedDate);
   // Is there a meal plan for this day?
   const existingMealPlan = await prisma.mealPlan.findUnique({
     where: { userId_date: { userId, date: normalizedDate } },
