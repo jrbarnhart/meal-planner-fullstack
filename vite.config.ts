@@ -5,6 +5,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   plugins: [
     remix({
+      basename: "/meal-planner",
       future: {
         v3_fetcherPersist: true,
         v3_relativeSplatPath: true,
@@ -13,5 +14,5 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
-  base: "/meal-planner/",
+  base: "https://joshuarbarnhart.com/meal-planner/",
 });
