@@ -25,10 +25,13 @@ function InfoHeader({ username }: { username?: string }) {
         />
         <FavIcon className="size-10 lg:hidden" />
       </Link>
-      <div className="grid grid-flow-col gap-3 items-center md:self-start bg-background shadow-inner border pr-1 pl-2 py-1 md:p-2 rounded-l-[25px] rounded-r-[25px] md:rounded-md md:my-2">
+      <div className="max-w-52 h-[52px] sm:max-w-max grid grid-flow-col gap-3 items-center md:self-start bg-background shadow-inner border pr-1 pl-2 py-1 md:p-2 rounded-l-[25px] rounded-r-[25px] md:rounded-md md:my-2">
         <div className="grid grid-flow-col gap-x-1 md:align-top">
           <p className="md:text-lg">Welcome, </p>
-          <Link className="text-accent underline md:text-lg pr-1" to={"/user"}>
+          <Link
+            className="text-accent underline md:text-lg pr-1 text-nowrap truncate"
+            to={"/user"}
+          >
             {username || "Guest"}
           </Link>
         </div>
@@ -69,7 +72,7 @@ function MobileNav() {
 
   return (
     <Card
-      className={`absolute md:hidden top-0 left-16 p-2 pt-1 bg-transparent border-none shadow-none transition-all duration-300 ease-in-out rounded-l-none ${
+      className={`absolute md:hidden top-0 left-16 p-2 pt-[10px] bg-transparent border-none shadow-none transition-all duration-300 ease-in-out rounded-l-none ${
         isOpen ? "h-48" : "h-20"
       }`}
     >
