@@ -12,7 +12,7 @@ import {
 import { Recipe } from "@prisma/client";
 import { prisma } from "~/client";
 import { MealPlanFull } from "~/lib/prisma/mealPlanTypes";
-import { dateToUTC, normalizeToMidnight } from "~/lib/utils";
+import { dateToUTC, normalizeToMidnight, UTCToLocal } from "~/lib/utils";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -127,7 +127,7 @@ export default function Meals() {
   const mealPlansWithDates =
     mealPlans?.map((plan) => ({
       ...plan,
-      date: new Date(plan.date),
+      date: UTCToLocal(new Date(plan.date)),
     })) ?? null;
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -192,7 +192,7 @@ export default function Meals() {
       const updatedMealPlan = actionData.updatedMealPlan;
       const updatedPlanWithDate = {
         ...updatedMealPlan,
-        date: new Date(updatedMealPlan.date),
+        date: UTCToLocal(new Date(updatedMealPlan.date)),
       };
 
       setCurrentMealPlans((prev) => {

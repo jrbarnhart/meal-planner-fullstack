@@ -22,6 +22,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
+import { UTCToLocal } from "~/lib/utils";
 
 import { mealPlanArraySchema } from "~/lib/zodSchemas/mealPlanSchema";
 import { recipeArraySchema } from "~/lib/zodSchemas/recipeSchema";
@@ -81,7 +82,7 @@ export default function UserDetails() {
   const mealPlansWithDates =
     mealPlans?.map((plan) => ({
       ...plan,
-      date: new Date(plan.date),
+      date: UTCToLocal(new Date(plan.date)),
     })) ?? null;
 
   const [currentMealPlans, setCurrentMealPlans] = useState<MealPlan[] | null>(
