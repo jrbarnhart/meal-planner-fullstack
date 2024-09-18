@@ -51,6 +51,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const deleteId = parseInt(formData.get("deleteId")?.toString() ?? "");
   const mealPlanId = parseInt(formData.get("mealPlanId")?.toString() ?? "");
+
   if (!isNaN(deleteId) && !isNaN(mealPlanId)) {
     try {
       const updatedMealPlan = await prisma.mealPlan.update({
@@ -83,10 +84,13 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const { date, recipeId } = zodResults.data;
-  console.log("date: ", date);
-  const normalizedDate = new Date(date);
+  const timezone = formData.get("timezone")?.toString() ?? "UTC";
+  const userDate = new Date(
+    date.toLocaleString("en-US", { timeZone: timezone })
+  );
+  const normalizedDate = new Date(userDate);
   normalizedDate.setHours(0, 0, 0, 0);
-  console.log("normalized: ", normalizedDate);
+
   // Is there a meal plan for this day?
   const existingMealPlan = await prisma.mealPlan.findUnique({
     where: { userId_date: { userId, date: normalizedDate } },
