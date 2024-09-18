@@ -79,6 +79,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export function ErrorBoundary() {
   const error = useRouteError();
   const isResponse = isRouteErrorResponse(error);
+  console.error(error);
   return (
     <>
       <div className="w-full flex justify-center p-8">
