@@ -17,8 +17,8 @@ import FavIcon from "~/components/icons/favIcon";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Munchlify" },
+    { name: "description", content: "Welcome to Munchlify!" },
   ];
 };
 
