@@ -6,7 +6,6 @@ export default defineConfig({
   base: process.env.NODE_ENV === "production" ? "/meal-planner/" : undefined,
   plugins: [
     remix({
-      basename: "/meal-planner",
       future: {
         v3_fetcherPersist: true,
         v3_relativeSplatPath: true,
