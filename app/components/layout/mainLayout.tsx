@@ -69,7 +69,7 @@ function MobileNav() {
 
   return (
     <Card
-      className={`absolute md:hidden top-0 left-16 p-2 bg-transparent border-none shadow-none transition-all duration-300 ease-in-out rounded-l-none ${
+      className={`absolute md:hidden top-0 left-16 p-2 pt-1 bg-transparent border-none shadow-none transition-all duration-300 ease-in-out rounded-l-none ${
         isOpen ? "h-48" : "h-20"
       }`}
     >
