@@ -12,7 +12,7 @@ import {
 import { Recipe } from "@prisma/client";
 import { prisma } from "~/client";
 import { MealPlanFull } from "~/lib/prisma/mealPlanTypes";
-import { dateToUTC, normalizeToMidnight, UTCToLocal } from "~/lib/utils";
+import { UTCToLocal } from "~/lib/utils";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -86,13 +86,9 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const { date, recipeId } = zodResults.data;
 
-  // Convert to midnight, then UTC before storing
-  const normalizedDate = normalizeToMidnight(date);
-  const dateUTC = dateToUTC(normalizedDate);
-
   // Is there a meal plan for this day?
   const existingMealPlan = await prisma.mealPlan.findUnique({
-    where: { userId_date: { userId, date: dateUTC } },
+    where: { userId_date: { userId, date } },
   });
   try {
     // If no then create the meal plan with the recipe added with nesting
@@ -100,7 +96,7 @@ export async function action({ request }: ActionFunctionArgs) {
       const updatedMealPlan = await prisma.mealPlan.create({
         data: {
           userId,
-          date: dateUTC,
+          date,
           recipes: { connect: { id: recipeId } },
         },
         include: { recipes: true },
@@ -109,7 +105,7 @@ export async function action({ request }: ActionFunctionArgs) {
     } else {
       // If yes then add the recipe to the plan
       const updatedMealPlan = await prisma.mealPlan.update({
-        where: { userId_date: { userId, date: dateUTC } },
+        where: { userId_date: { userId, date } },
         data: { recipes: { connect: { id: recipeId } } },
         include: { recipes: true },
       });

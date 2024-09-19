@@ -1,4 +1,9 @@
-import { cn, formatDateForTitle } from "~/lib/utils";
+import {
+  cn,
+  dateToUTC,
+  formatDateForTitle,
+  normalizeToMidnight,
+} from "~/lib/utils";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { HTMLAttributes, SetStateAction, useRef, useState } from "react";
@@ -101,7 +106,11 @@ function AddRecipeSelect({
 
   return (
     <Form method="post" ref={formRef} className="w-full">
-      <input type="hidden" name="date" value={date.toISOString()} />
+      <input
+        type="hidden"
+        name="date"
+        value={dateToUTC(normalizeToMidnight(date)).toISOString()}
+      />
       <select
         name="recipeId"
         value={selectedRecipe}
