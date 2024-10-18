@@ -83,7 +83,7 @@ I chose Remix for my framework primarily because I liked its clear separation be
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To get a local copy up and running follow these steps.
+To get a local copy up and running follow these steps:
 
 ### Prerequisites
 
