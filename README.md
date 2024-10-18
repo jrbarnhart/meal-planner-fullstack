@@ -4,7 +4,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/jrbarnhart/game-of-life">
+  <a href="https://github.com/jrbarnhart/meal-planner-fullstack">
     <img src="public/titleOpt.svg" alt="Title Logo" width="256" height="256">
   </a>
 
