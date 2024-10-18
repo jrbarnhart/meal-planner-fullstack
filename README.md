@@ -11,7 +11,7 @@
 <h3 align="center">Munchlify - A Meal Planner App</h3>
 
   <p align="center">
-    This is a meal planning application built using the full-stack framework Remix. It allows both users to select recipes and add them to chosen days on a calendar to make a meal plan.
+    This is a meal planning application built using the full-stack framework Remix. It allows users to select recipes and add them to chosen days on a calendar to make a meal plan.
     <br />
     <br />
     <a href="https://joshuarbarnhart.com/meal-planner">View Demo</a>
@@ -93,17 +93,34 @@ If you want to use the application outside of Preview Mode then you must have yo
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/jrbarnhart/game-of-life.git
+   git clone https://github.com/jrbarnhart/meal-planner-fullstack.git
    ```
 2. Install NPM packages
    ```sh
    npm install
    ```
-3. Start the dev server
+3. Add a .env file in the root directory and add your own evnironment variables to the file.
+   ```sh
+   # Used for session management
+    SESSION_SECRET="yourarbitrarysecret"
+   # Used to connect to PostgreSQL database
+    DATABASE_URL="postgresql://postgresuser:postgrespassword@localhost:5432/databasename"
+   # Used to create a default user to add default recipes to DB
+    DEFAULT_USER_PASSWORD="arbitraryPassword"
+   ```
+4. Apply Prisma schema to your Postgres database
+   ```sh
+    npx prisma migrate dev
+   ```
+5. Optionally, add the default recipes to the database
+   ```sh
+    node populateDb.mjs
+   ```
+6. Start the dev server
    ```sh
    npm run dev
    ```
-4. Navigate to the address in the terminal
+7. Navigate to the address in the terminal using your web browser
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -119,11 +136,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Joshua Barnhart - joshua.r.barnhart@gmail.com
+[My Portfolio](https://joshuarbarnhart.com)
 
 [LinkedIn](https://linkedin.com/in/joshuarbarnhart)
-
-Project Link: [https://github.com/jrbarnhart/game-of-life](https://github.com/jrbarnhart/game-of-life)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
